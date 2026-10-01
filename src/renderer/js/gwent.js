@@ -1,4 +1,4 @@
-"use strict"
+﻿"use strict"
 
 class Enum {constructor(val){this.val = val;} toString(){return this.val;}};
 
@@ -1964,82 +1964,31 @@ class UI {
 	}
 	
 	// Initializes the youtube background music object
-	initYouTube(){
-		this.youtube = new YT.Player('youtube', {
-			videoId: "UE9fPWy1_o4",
-			playerVars:  { "autoplay" : 1, "controls" : 0, "loop" : 1, "playlist" : "UE9fPWy1_o4", "rel" : 0, "version" : 3, "modestbranding" : 1 },
-			events: { 'onStateChange': initButton }
-		});
-		
-		function initButton(){
-			if (ui.ytActive !== undefined)
-				return;
-			ui.ytActive = true;
-			ui.youtube.playVideo();
-			let timer = setInterval( () => {
-				if (ui.youtube.getPlayerState() !== YT.PlayerState.PLAYING)
-					ui.youtube.playVideo();
-				else {
-					clearInterval(timer);
-					ui.toggleMusic_elem?.classList.remove("fade");
-					if (!Settings.music.isEnabled())
-					{
-						setTimeout(()=>ui.toggleMusic(), 10);
-					}
-				}
-			}, 500);
-		}
+	initAudio(){
+		this.youtube = document.getElementById('game-music');
+		if(this.youtube) this.youtube.volume = 0.5;
+		if(Settings.music.isEnabled() && this.youtube) this.youtube.play().catch(e=>console.log('Audio blocked', e));
 	}
 	
-	// Called when client toggles the music
 	toggleMusic(){
-		const isPlaying = this.youtube?.getPlayerState() === YT.PlayerState.PLAYING;
-		if (isPlaying) {
-			this.youtube?.pauseVideo();
-			this.toggleMusic_elem?.classList.add("fade");
-		} else {
-			this.youtube?.playVideo();
-			this.toggleMusic_elem?.classList.remove("fade");
-		}
-		Settings.music.setEnabled(!isPlaying);
+		Settings.music.toggle();
+		if(Settings.music.isEnabled()) this.youtube?.play(); else this.youtube?.pause();
 	}
 
 	toggleNotifications() {
 		Settings.notifications.toggle();
-		const useNotificaitons = Settings.notifications.isEnabled();
-		if (useNotificaitons)
-		{
-			this.toggleNotifications_elem?.classList.remove("fade");
-		}
-		else
-		{
-			this.toggleNotifications_elem?.classList.add("fade");
-		}
 	}
 
 	toggleSFX() {
 		Settings.soundEffects.toggle();
-		const useSFX = Settings.soundEffects.isEnabled();
-		if (useSFX)
-		{
-			this.toggleSFX_elem?.classList.remove("fade");
-		}
-		else
-		{
-			this.toggleSFX_elem?.classList.add("fade");
-		}
 	}
 	
-	// Enables or disables backgorund music 
 	setYouTubeEnabled(enable){
 		if (this.ytActive === enable)
 			return;
-		if (enable && !this.mute)
-			ui.youtube.playVideo();
-		else
-			ui.youtube.pauseVideo();
+		if(enable && Settings.music.isEnabled()) this.youtube?.play(); else this.youtube?.pause();
 		this.ytActive = enable;
-}
+	}
 	
 	// Called when the player selects a selectable card
 	async selectCard(card) {
@@ -2609,8 +2558,8 @@ class DeckMaker {
 		const btnPrev = document.getElementById("faction-prev");
 		const btnNext = document.getElementById("faction-next");
 		if (btnPrev && btnNext) {
-			btnPrev.innerHTML = "? " + factions[keys[prevIndex]].name + " [L1]";
-			btnNext.innerHTML = "[R1] " + factions[keys[nextIndex]].name + " ?";
+			btnPrev.innerHTML = "? " + factions[keys[prevIndex]].name + " [1]";
+			btnNext.innerHTML = "[3] " + factions[keys[nextIndex]].name + " ?";
 			btnPrev.onclick = () => this.loadFactionDeck(keys[prevIndex]);
 			btnNext.onclick = () => this.loadFactionDeck(keys[nextIndex]);
 		}
@@ -3521,9 +3470,7 @@ function sleepUntil(predicate, ms) {
 }
 
 // Initializes the interractive YouTube object
-function onYouTubeIframeAPIReady() {
-	ui.initYouTube();
-}
+window.addEventListener("DOMContentLoaded", () => { ui.initAudio(); });
 
 /*----------------------------------------------------*/
 
@@ -3589,3 +3536,11 @@ document.getElementById('menu-exit').addEventListener('click', () => { require('
 
 
 document.getElementById('back-to-menu-btn').addEventListener('click', () => { location.reload(); });
+
+
+document.addEventListener('keydown', (e) => {
+	if(document.getElementById('deck-customization').classList.contains('hide')) return;
+	if(e.key === '1') document.getElementById('faction-prev')?.click();
+	if(e.key === '3') document.getElementById('faction-next')?.click();
+});
+
