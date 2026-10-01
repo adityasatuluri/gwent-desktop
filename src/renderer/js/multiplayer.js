@@ -271,6 +271,12 @@ class Multiplayer {
                     ui.popup("OK", () => {
                         this.startGameWithOpponent();
                     }, false, null, "CONNECTED", "Connected to " + this.opponentName + "! Ready to play?");
+                } else if (msg.type === 'DECK_READY') {
+                    this.opponentDeck = msg.deck;
+                    this.checkDecksReady();
+                } else if (msg.type === 'START_GAME_SYNC') {
+                    this.sharedSeed = msg.seed;
+                    this.beginSyncedGame();
                 }
         } catch(e) {
             console.error("Failed to parse network message", e);
@@ -278,17 +284,78 @@ class Multiplayer {
     }
     
     startGameWithOpponent() {
-        // Hide lobby and transition to game view
-        NavigationManager.showScreen('game-view');
-        
-        // As a proof of concept, add a match history record
-        this.addHistory(this.opponentName, 'draw');
-        
-        // We need a major refactor of gwent.js to actually drive gameplay over network.
-        // For this step, we just alert the user that gameplay sync is a WIP.
-        if (typeof ui !== 'undefined') {
-            ui.popup("RETURN TO MENU", () => location.reload(), false, null, "MULTIPLAYER ALPHA", "You have successfully connected via LAN with " + this.opponentName + "!\n\nNote: Full gameplay state synchronization is extremely complex and currently being implemented. For now, the connection is established and the match is recorded.");
+        // Transition to deck customization instead of directly to game!
+        NavigationManager.showScreen('deck-customization');
+        if (typeof dm !== 'undefined') {
+            dm.state = GameState.CUSTOMIZE; // Assuming dm is global DeckMaker
         }
+    }
+
+    sendDeck(deckData) {
+        this.myDeck = deckData;
+        this.send({ type: 'DECK_READY', deck: deckData });
+        this.checkDecksReady();
+    }
+
+    checkDecksReady() {
+        if (this.myDeck && this.opponentDeck) {
+            if (Popup.curr) Popup.curr.clear(); // Close 'Waiting for opponent'
+            
+            // Re-initialize player_op with opponent's actual deck!
+            // Wait, player_op is global. We set it up.
+            player_op.deckData = this.opponentDeck;
+            player_op.name = this.opponentName;
+            
+            // Re-construct opponent deck explicitly using their provided data
+            player_op.deck = new Deck(player_op, this.opponentDeck);
+            
+            // If I am the host, I generate the RNG seeds
+            if (this.isHosting) {
+                this.sharedSeed = Math.floor(Math.random() * 1000000);
+                this.send({ type: 'START_GAME_SYNC', seed: this.sharedSeed });
+                this.beginSyncedGame();
+            }
+        }
+    }
+
+    beginSyncedGame() {
+        Math.seed = this.sharedSeed; // Ensure RNG is synced for deck shuffle
+        
+        // Re-initialize player_op completely with opponent's actual deck
+        // We do it here so the seed is already set! Wait, no, Player constructor creates the Deck and it doesn't shuffle yet. game.startGame() calls initPlayers which calls deck.shuffle!
+        player_op = new Player(1, this.opponentName, this.opponentDeck);
+        
+        NavigationManager.showScreen('game-view');
+        // Override Math.random for deterministic shuffling? No, we will just sync the shuffled arrays, 
+        // but since we are modifying things, it's easier to just shuffle locally and send the array, 
+        // OR implement a tiny seeded RNG.
+        
+        // Setup Network Controller for player_op
+        player_op.controller = new NetworkController(player_op);
+        
+        // Setup Network Hooks for player_me
+        this.setupNetworkHooks();
+        
+        game.startGame();
+    }
+
+    setupNetworkHooks() {
+        // Intercept player_me actions
+        const ogMoveTo = board.moveTo;
+        board.moveTo = async (card, row, source) => {
+            if (card.holder === player_me && this.isGameActive) {
+                // Determine card index in source to sync accurately
+                const sourceIdx = source.cards.indexOf(card);
+                this.send({ type: 'MOVE_TO', sourceId: source.id, sourceIdx: sourceIdx, rowId: row.id });
+            }
+            return await ogMoveTo.call(board, card, row, source);
+        };
+        
+        const ogPass = player_me.passRound;
+        player_me.passRound = async () => {
+            if (this.isGameActive) this.send({ type: 'PASS_ROUND' });
+            return await ogPass.call(player_me);
+        };
     }
 }
 

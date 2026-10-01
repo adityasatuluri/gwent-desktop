@@ -13,6 +13,13 @@ const addMouseEnterSFXBySelector = selector => {
 	e.addEventListener('mouseenter', CLICK_EVENT_SFX));
 };
 
+// Seeded PRNG for Multiplayer Sync
+Math.seed = 1;
+Math.seededRandom = function() {
+    let x = Math.sin(Math.seed++) * 10000;
+    return x - Math.floor(x);
+};
+
 class Controller {}
 
 // Makes decisions for the AI opponent player
