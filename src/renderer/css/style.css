@@ -1710,7 +1710,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 #menu-bg {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover;
-  transform: scaleX(-1);
+  transform: none;
   animation: menuFadeIn 1.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
 
@@ -1807,10 +1807,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
   color: rgba(255,255,255,0.38);
   letter-spacing: 0.15vw;
   text-transform: uppercase;
-  animation: hintFade 2s ease 1.6s both;
-}
-
-/* ================================================================
+  animation: hi/* ================================================================
    SETTINGS PANEL
    ================================================================ */
 #settings-menu {
@@ -1821,68 +1818,142 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 
 #settings-bg {
   position: absolute; inset: 0;
-  background: url('../assets/img/edited_witcher3.jpg') center/cover no-repeat;
-  filter: blur(6px) brightness(0.3) saturate(0.7);
-  transform: scale(1.07);
+  background: rgba(0,0,0,0.85); /* Darken everything */
 }
 
-#settings-panel {
-  position: absolute;
-  top: 0; left: 0;
-  width: 44vw; height: 100%;
-  background: linear-gradient(to right, rgba(0,0,0,0.96) 60%, rgba(0,0,0,0.0) 100%);
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 0 5vw;
-  animation: settingIn 0.4s cubic-bezier(0.25,0.8,0.25,1) forwards;
-}
-#settings-title {
-  font-size: 2.3vw; color: #eedfa0;
-  letter-spacing: 0.55vw; text-transform: uppercase;
-  margin-bottom: 2.8vw;
-  text-shadow: 0 0 1.5vw rgba(218,165,32,0.4);
+#settings-layout {
+  position: absolute; inset: 0;
+  display: flex;
+  padding: 8% 10%;
 }
 
-/* Settings rows use the same ornate button frame */
-.setting-row {
-  position: relative; cursor: pointer;
-  width: 30vw; height: 4.3vw;
-  margin-bottom: 1vw;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2.5vw;
-  background: url('../assets/svg/btn_normal.svg') center / 100% 100% no-repeat;
-  transition: transform 0.18s ease, filter 0.18s ease;
+/* Sidebar */
+#settings-sidebar {
+  width: 25%;
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding-right: 4vw;
 }
-.setting-row::before { display: none; }
-
-.setting-row.active,
-.setting-row:hover {
-  background-image: url('../assets/svg/btn_active.svg');
-  transform: translateX(6px) scale(1.03);
+#settings-logo {
+  width: 14vw;
+  margin-bottom: 1.5vw;
 }
-
-.setting-label {
-  font-family: 'Cinzel', serif;
-  font-size: 1.05vw; color: rgba(220,190,110,0.72);
-  text-transform: uppercase; letter-spacing: 0.22vw;
+#settings-category-title {
+  color: #a49687;
+  font-size: 0.8vw;
+  text-align: center;
+  margin-bottom: 2vw;
+  letter-spacing: 0.1vw;
+  font-weight: 400;
+  line-height: 1.4;
+}
+#settings-categories {
+  list-style: none; margin: 0; padding: 0;
+  width: 100%;
+}
+.cat-item {
+  color: rgba(200, 200, 200, 0.5);
+  font-size: 1vw;
+  text-align: center;
+  padding: 0.8vw 0;
+  cursor: pointer;
+  letter-spacing: 0.1vw;
   transition: color 0.15s;
 }
-.setting-row.active .setting-label,
-.setting-row:hover  .setting-label { color: #fffae0; }
-
-.setting-value  { pointer-events: none; }
-.setting-toggle {
-  font-family: 'Cinzel', serif;
-  font-size: 0.95vw; font-weight: 700; letter-spacing: 0.1vw;
+.cat-item.active, .cat-item:hover {
+  color: #e8c97a;
 }
-.setting-toggle.on  { color: #60f0b8; text-shadow: 0 0 0.7vw rgba(0,220,160,0.75); }
-.setting-toggle.off { color: rgba(255,90,90,0.9); }
-.hidden-check { display: none; }
+#settings-back-btn {
+  margin-top: 2vw;
+}
 
-#settings-hint {
-  margin-top: 2.5vw;
-  font-family: 'Cinzel', serif;
-  font-size: 0.75vw; color: rgba(255,255,255,0.28);
-  letter-spacing: 0.14vw; text-transform: uppercase;
+/* Content */
+#settings-content {
+  flex: 1;
+  background: transparent;
+  padding-left: 3vw;
+  border-left: 2px solid rgba(255,255,255,0.05);
+}
+#settings-items {
+  display: flex; flex-direction: column;
+}
+
+/* Settings rows (Witcher 3 style) */
+.setting-row {
+  display: flex !important; justify-content: space-between !important; align-items: center !important;
+  padding: 1vw 1.5vw !important;
+  border: 1px solid transparent !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+  background: none !important;
+}
+.setting-row::before { display: none !important; }
+.setting-row:first-child {
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
+}
+.setting-row.active, .setting-row:hover {
+  border: 1px solid rgba(255,255,255,0.8) !important;
+  outline: 1px solid rgba(255,255,255,0.8) !important;
+  outline-offset: -3px !important;
+  background: rgba(255,255,255,0.03) !important;
+  transform: none !important;
+}
+.setting-label {
+  color: rgba(200, 200, 200, 0.7) !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 0.9vw !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+.setting-row.active .setting-label, .setting-row:hover .setting-label {
+    color: white !important;
+}
+.setting-value {
+  color: #fff !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 0.9vw !important;
+  display: flex !important; align-items: center !important; gap: 1vw !important;
+  pointer-events: none !important;
+}
+.setting-toggle {
+  color: #fff !important;
+  font-family: Arial, sans-serif !important;
+  text-shadow: none !important;
+  font-weight: normal !important;
+  letter-spacing: 0 !important;
+}
+.setting-toggle.on { color: #fff !important; text-shadow: none !important; }
+.setting-toggle.off { color: rgba(255,255,255,0.4) !important; }
+
+/* Visual slider for toggles */
+.setting-toggle::after {
+  content: '';
+  display: inline-block;
+  width: 3vw; height: 0.6vw;
+  background: rgba(255,255,255,0.1);
+  margin-left: 1vw;
+  border-radius: 0.1vw;
+  position: relative;
+  vertical-align: middle;
+}
+.setting-toggle.on::after {
+  background: rgba(255,255,255,0.6);
+  box-shadow: inset -1.5vw 0 0 rgba(255,255,255,0.9);
+}
+.setting-toggle.off::after {
+  box-shadow: inset 1.5vw 0 0 rgba(255,255,255,0.3);
+}
+
+.setting-row.flash {
+  animation: flashItem 0.18s ease-out forwards;
+}
+
+.hidden-check { display: none !important; }
+rcase;
 }
 
 /* ── Back-to-menu button (in-game) ──────────────────────────── */
@@ -2003,6 +2074,9 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 
 
 .invisible { opacity: 0 !important; pointer-events: none !important; }
+
+
+
 
 
 
