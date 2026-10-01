@@ -2014,3 +2014,6 @@ main { background-image: url('../assets/img/boardtest8.png'); }
   background: linear-gradient(to right, #8a704a, #f5d060, #8a704a);
 }
 
+
+.invisible { opacity: 0 !important; pointer-events: none !important; }
+

@@ -2301,6 +2301,7 @@ class Carousel {
 		if (!Carousel.elem) {
 			Carousel.elem = document.getElementById("carousel");
 			Carousel.elem.addEventListener("click", () => Carousel.curr?.cancel(), false); Carousel.elem.children[0].addEventListener("click", (e) => e.stopPropagation(), false);
+			Carousel.elem.addEventListener('wheel', (e) => { if (Carousel.curr && !Carousel.curr.cancelled) { Carousel.curr.shift(e, e.deltaY > 0 ? 1 : -1); } }, {passive: false});
 		}
 		this.elem = Carousel.elem;
 		document.getElementsByTagName("main")[0].classList.remove("noclick");
@@ -2405,11 +2406,11 @@ class Carousel {
 			if (curr >= 0 && curr < this.indices.length) {
 				let card = this.container.cards[this.indices[curr]];
 				this.previews[i].style.backgroundImage = largeURL(card.faction + "_" + card.filename);
-				this.previews[i].classList.remove("hide");
+				this.previews[i].classList.remove("invisible");
 				this.previews[i].classList.remove("noclick");
 			} else {
 				this.previews[i].style.backgroundImage = "";
-				this.previews[i].classList.add("hide");
+				this.previews[i].classList.add("invisible");
 				this.previews[i].classList.add("noclick");
 			}
 		}
@@ -3707,6 +3708,9 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   });
 
 })();
+
+
+
 
 
 
