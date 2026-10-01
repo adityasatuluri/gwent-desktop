@@ -42,3 +42,5 @@ ipcMain.on('toggle-fullscreen', (event) => {
     mainWindow.setFullScreen(next);
     settings.setFullscreen(next);
 });
+
+ipcMain.on('exit-app', () => { app.quit(); });

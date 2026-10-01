@@ -1575,3 +1575,35 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 
 
 
+
+/* Main Menu */
+#main-menu { position: absolute; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); z-index: 200; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.menu-container { text-align: center; }
+.game-title { font-size: 6vw; color: goldenrod; text-shadow: 0 0 10px rgba(218,165,32,0.8); margin-bottom: 3vw; letter-spacing: 0.5vw; }
+.menu-btn { display: block; width: 20vw; margin: 1vw auto; padding: 1vw; font-size: 1.5vw; background: rgba(0,0,0,0.6); border: 2px solid goldenrod; color: #fff; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+.menu-btn:hover { background: goldenrod; color: #000; transform: scale(1.05); }
+#main-menu.hide { display: none !important; }
+
+#faction-header { display: flex; align-items: center; justify-content: center; gap: 2vw; margin-top: -3vw; }
+.faction-nav { background: none; border: none; color: #dedede; font-size: 1vw; cursor: pointer; }
+.faction-nav:hover { color: goldenrod; }
+#faction-title { display: flex; align-items: center; gap: 0.5vw; }
+#faction-icon { height: 2vw; }
+
+.all-cards { font-size: 0.8vw; color: #aaa; text-transform: uppercase; font-weight: normal; }
+
+#deck-customization { background-color: #0c0c0c !important; }
+.card-array { height: 75% !important; top: 20% !important; }
+#card-leader { top: 20% !important; left: 45.5% !important; height: 25% !important; width: 9% !important; }
+#deck-stats { top: 48% !important; left: 44.5% !important; width: 11% !important; }
+#faction-header { margin-top: 1vw !important; }
+.card-container-header { position: absolute; top: 12%; width: 35%; display: flex; flex-direction: column; text-align: left; }
+#card-bank-header { left: 4vw; }
+#card-deck-header { right: 4vw; text-align: right; }
+.all-cards { color: #a49687; font-size: 1vw; }
+.card-contianer-title { position: static !important; width: auto !important; height: auto !important; }
+.deck-options { display: none !important; } /* Hide old options for now */
+
+#card-bank-title { top: 10% !important; left: 4% !important; text-align: left !important; }
+#card-deck-title { top: 10% !important; left: auto !important; right: 4% !important; text-align: right !important; }
+.card-contianer-title { position: absolute !important; width: auto !important; height: auto !important; }

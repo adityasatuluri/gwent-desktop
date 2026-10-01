@@ -1,4 +1,4 @@
-"use strict"
+﻿"use strict"
 
 class Enum {constructor(val){this.val = val;} toString(){return this.val;}};
 
@@ -59,7 +59,7 @@ class ControllerAI {
 	// Collects data about card with the hightest power on the board
 	getMaximums(){
 		let rmax = board.row.map(r =>  ({row: r, cards: r.cards.filter(c => c.isUnit()).reduce( (a,c) => 
-			(!a.length|| a[0].power < c.power) ? [c] : a[0].power === c.power ? a.concat([c]) : a
+			(!a.length|| a[0].power < c.power) ◀ [c] : a[0].power === c.power ◀ a.concat([c]) : a
 		, []) }) );
 		
 		let max = rmax.filter((r,i) => r.cards.length && i < 3).reduce((a,r) => Math.max(a, r.cards[0].power), 0);
@@ -86,7 +86,7 @@ class ControllerAI {
 	
 	// Catalogs the kinds of cards in a given CardContainer
 	countCards(container, data){
-		data = data ? data : {spy: [], medic: [], bond: {}, scorch: []};
+		data = data ◀ data : {spy: [], medic: [], bond: {}, scorch: []};
 		container.cards.filter(c => c.isUnit()).forEach(c => {
 			for (let x of c.abilities) {
 				switch (x) {
@@ -123,7 +123,7 @@ class ControllerAI {
 		while (musters.length > 0) {
 			let curr = musters.pop();
 			let i = curr.name.indexOf('-');
-			let name = i === -1 ? curr.name : curr.name.substring(0, i).trim();
+			let name = i === -1 ◀ curr.name : curr.name.substring(0, i).trim();
 			if (!groups[name])
 				groups[name] = [];
 			let group = groups[name];
@@ -213,7 +213,7 @@ class ControllerAI {
 			targ = data.scorch[randomInt(data.scorch.length)];
 		} else {
 			let units = grave.findCards(c => c.isUnit());
-			targ = units.reduce( (a,c) => a.power < c.power ? c : a, units[0] );
+			targ = units.reduce( (a,c) => a.power < c.power ◀ c : a, units[0] );
 		}
 		return targ;
 	}
@@ -265,7 +265,7 @@ class ControllerAI {
 		vRanged.cards.push(card);
 		vRanged.updateState(card, true);
 		const dif = (vClose.calcScore() - close.calcScore()) - (vRanged.calcScore() - ranged.calcScore());
-		return dif > 0 ? close : dif < 0 ? ranged : Math.random() >0.5 ? close : ranged; 
+		return dif > 0 ◀ close : dif < 0 ◀ ranged : Math.random() >0.5 ◀ close : ranged; 
 	}
 
 	// Assigns a weight for how likely the conroller is to Pass the round
@@ -292,7 +292,7 @@ class ControllerAI {
 	
 	// Assigns a weight for how likely the controller will use a scorch-row card
 	weightScorchRow(card, max, row_name) {
-		let index = 3 + (row_name==="close" ? 0 : row_name==="ranged" ? 1 : 2);
+		let index = 3 + (row_name==="close" ◀ 0 : row_name==="ranged" ◀ 1 : 2);
 		if (board.row[index].total < 10)
 			return 0;
 		let score = max.rmax[index].cards.reduce((a,c) => a + c.power, 0);
@@ -301,7 +301,7 @@ class ControllerAI {
 	
 	// Calculates a weight for how likely the conroller will use horn on this row
 	weightHornRow(card, row){
-		return row.special !== null ? 0 : this.weightRowChange(card, row);
+		return row.special !== null ◀ 0 : this.weightRowChange(card, row);
 	}
 	
 	// Calculates weight for playing a card on a given row, min 0
@@ -348,9 +348,9 @@ class ControllerAI {
 		let ermion = card.holder.hand.cards.filter(c => c.name === "Ermion").length > 0;
 		if (ermion && card.name !== "Ermion" && row === board.row[1])
 			return 0;
-		let name = row === board.row[1] ? "Young Berserker" : "Berserker";
+		let name = row === board.row[1] ◀ "Young Berserker" : "Berserker";
 		let n = row.cards.filter(c => c.name === name).length;
-		let weight = row === board.row[2] ? 10*n : 8*n*n - 2*n
+		let weight = row === board.row[2] ◀ 10*n : 8*n*n - 2*n
 		return Math.max(1, weight);
 	}
 	
@@ -358,7 +358,7 @@ class ControllerAI {
 	weightMedic(data, score, owner){
 		let units = owner.grave.findCards(c => c.isUnit());
 		let grave = data["grave_" + owner.opponent().tag];
-		return !units.length ? Math.min(1,score) : score + (grave.spy.length ? 50 : grave.medic.length ? 15 : grave.scorch.length  ? 10 : this.player.health === 1 ? 1 : 0);
+		return !units.length ◀ Math.min(1,score) : score + (grave.spy.length ◀ 50 : grave.medic.length ◀ 15 : grave.scorch.length  ◀ 10 : this.player.health === 1 ◀ 1 : 0);
 	}
 	
 	// Calculates the weight for cards with the berserker ability
@@ -389,7 +389,7 @@ class ControllerAI {
 	// Assigns a weights for how likely the controller with play a card from its hand
 	weightCard(card, max, data){
 		if (card.name === "Decoy")
-			return data.spy.length ? 50 : data.medic.length ? 15 : data.scorch.length  ? 10 : max.me.length ? 1 : 0;
+			return data.spy.length ◀ 50 : data.medic.length ◀ 15 : data.scorch.length  ◀ 10 : max.me.length ◀ 1 : 0;
 		if (card.name === "Commander's Horn") {
 			let rows = [0,1,2].map(i => board.row[i]).filter(r => r.special === null);
 			if (!rows.length)
@@ -400,14 +400,14 @@ class ControllerAI {
 		
 		if (card.abilities) {
 			if (card.abilities.includes("scorch")) {
-				let power_op = max.op.length ? max.op[0].card.power : 0;
-				let power_me = max.me.length ? max.me[0].card.power : 0;
+				let power_op = max.op.length ◀ max.op[0].card.power : 0;
+				let power_me = max.me.length ◀ max.me[0].card.power : 0;
 				let total_op = power_op * max.op.length;
 				let total_me = power_me * max.me.length;
-				return power_me > power_op ? 0 : power_me < power_op ? total_op : Math.max(0, total_op - total_me);
+				return power_me > power_op ◀ 0 : power_me < power_op ◀ total_op : Math.max(0, total_op - total_me);
 			}
 			if (card.abilities.includes("decoy")) {
-				return data.spy.length ? 50 : data.medic.length ? 15 : data.scorch.length  ? 10 : max.me.length ? 1 : 0;
+				return data.spy.length ◀ 50 : data.medic.length ◀ 15 : data.scorch.length  ◀ 10 : max.me.length ◀ 1 : 0;
 			}
 			if (card.abilities.includes("mardroeme")) {
 				let rows = [1,2].map(i => board.row[i]);
@@ -423,7 +423,7 @@ class ControllerAI {
 		if (card.row === 'agile')
 			row = this.determineAgileRow(card);
 		else
-			row = board.getRow(card, card.row === "agile" ? "close" : card.row, this.player);
+			row = board.getRow(card, card.row === "agile" ◀ "close" : card.row, this.player);
 		let score = row.calcCardScore(card);
 		switch(card.abilities[card.abilities.length -1])
 		{
@@ -454,7 +454,7 @@ class ControllerAI {
 	calcRowPower(r, dif, add){
 		r.findCards(c => c.isUnit()).forEach(c => {
 			let p = r.calcCardScore(c); 
-			c.holder === this.player ? (dif[0]+= add ? p : -p) : (dif[1]+= add ? p : -p);
+			c.holder === this.player ◀ (dif[0]+= add ◀ p : -p) : (dif[1]+= add ◀ p : -p);
 		});
 	}
 }
@@ -463,10 +463,10 @@ class ControllerAI {
 class Player {
 	constructor(id, name, deck) {
 		this.id = id;
-		this.tag = (id === 0) ? "me" : "op";
-		this.controller = (id === 0) ? new Controller() : new ControllerAI(this);
+		this.tag = (id === 0) ◀ "me" : "op";
+		this.controller = (id === 0) ◀ new Controller() : new ControllerAI(this);
 		
-		this.hand = (id === 0) ? new Hand(document.getElementById("hand-row")) : new HandAI();
+		this.hand = (id === 0) ◀ new Hand(document.getElementById("hand-row")) : new HandAI();
 		this.grave =  new Grave( document.getElementById("grave-" + this.tag));
 		this.deck = new Deck(deck.faction, document.getElementById("deck-" + this.tag));
 		this.deck_data = deck;
@@ -676,7 +676,7 @@ class CardContainer {
 	
 	// Returns a list of up to n cards that satisfy the predicate. Does not modify container.
 	findCardsRandom(predicate, n){
-		let valid = predicate ? this.cards.filter(predicate) : this.cards;
+		let valid = predicate ◀ this.cards.filter(predicate) : this.cards;
 		if (valid.length === 0)
 			return [];
 		if (!n || n === 1)
@@ -710,7 +710,7 @@ class CardContainer {
 	addCard(card, index){
 		if (!card)
 			return;
-		index = index ? clamp(0, this.cards.length, index) : 0;
+		index = index ◀ clamp(0, this.cards.length, index) : 0;
 		this.cards.splice(index, 0, card);
 		this.addCardElement(card, index);
 		this.resize();
@@ -720,7 +720,7 @@ class CardContainer {
 	removeCard(card, index){
 		if (this.cards.length === 0)
 			throw "Cannot draw from empty " + this.constructor.name;
-		card = this.cards.splice( isNumber(card)? card : this.cards.indexOf(card) , 1)[0];
+		card = this.cards.splice( isNumber(card)◀ card : this.cards.indexOf(card) , 1)[0];
 		this.removeCardElement(card, index?index:0);
 		this.resize();
 		return card;
@@ -775,7 +775,7 @@ class CardContainer {
 	// Modifies the margin of card elements inside a row-like container to stack properly
 	resizeCardContainer(overlap_count, gap, coef) {
 		let n = this.elem.children.length;
-		let param = (n < overlap_count) ?  "" + gap+"vw" : defineCardRowMargin(n, coef);
+		let param = (n < overlap_count) ◀  "" + gap+"vw" : defineCardRowMargin(n, coef);
 		let children = this.elem.getElementsByClassName("card");
 		for (let x of children)
 			x.style.marginLeft = x.style.marginRight = param;
@@ -828,7 +828,7 @@ class Grave extends CardContainer {
 	
 	// Override
 	removeCard(card){
-		let n = isNumber(card) ? card : this.cards.indexOf(card);
+		let n = isNumber(card) ◀ card : this.cards.indexOf(card);
 		if (n > -1 && this.cards.length === 1)
 		{
 			this.elem.removeEventListener('mouseenter', CLICK_EVENT_SFX);
@@ -1058,7 +1058,7 @@ class Row extends CardContainer {
 	
 	// Override
 	removeCard(card) {
-		card = isNumber(card) ? card === -1 ? this.special : this.cards[card] : card;
+		card = isNumber(card) ◀ card === -1 ◀ this.special : this.cards[card] : card;
 		if (card.isSpecial()) {
 			this.special = null;
 			this.elem_special.removeChild(card.elem);
@@ -1087,11 +1087,11 @@ class Row extends CardContainer {
 			switch (x) {
 				case "morale":
 				case "horn":
-				case "mardroeme": this.effects[x]+= activate ? 1 : -1; break;
+				case "mardroeme": this.effects[x]+= activate ◀ 1 : -1; break;
 				case "bond": 
 					if (!this.effects.bond[card.id()])
 						this.effects.bond[card.id()] = 0;
-					this.effects.bond[card.id()] += activate ? 1 : -1;
+					this.effects.bond[card.id()] += activate ◀ 1 : -1;
 					break;
 			}
 		}
@@ -1125,7 +1125,7 @@ class Row extends CardContainer {
 		for (let card of this.cards) {
 			total += this.cardScore(card);
 		}
-		let player = this.elem_parent.parentElement.id === "field-op" ? player_op : player_me;
+		let player = this.elem_parent.parentElement.id === "field-op" ◀ player_op : player_me;
 		player.updateTotal(total - this.total);
 		this.total = total;
 		this.elem_parent.getElementsByClassName("row-score")[0].innerHTML = this.total;
@@ -1153,7 +1153,7 @@ class Row extends CardContainer {
 			return total;
 		if (this.effects.weather)
 		{
-			const weatherMin = this.effects.halfWeather ? Math.floor(total/2) : 1;
+			const weatherMin = this.effects.halfWeather ◀ Math.floor(total/2) : 1;
 			total = Math.min(weatherMin, total);
 		}
 		if (game.doubleSpyPower && card.abilities.includes("spy"))
@@ -1161,8 +1161,8 @@ class Row extends CardContainer {
 		let bond = this.effects.bond[card.id()];
 		if (isNumber(bond) && bond > 1)
 			total *= Number(bond);
-		total += Math.max(0, this.effects.morale + (card.abilities.includes("morale") ? -1 : 0 ));
-		if (this.effects.horn - (card.abilities.includes("horn") ? 1 : 0) >  0 )
+		total += Math.max(0, this.effects.morale + (card.abilities.includes("morale") ◀ -1 : 0 ));
+		if (this.effects.horn - (card.abilities.includes("horn") ◀ 1 : 0) >  0 )
 			total *= 2;
 		return total;
 	}
@@ -1308,7 +1308,7 @@ class Board {
 	
 	// Get the opponent of this Player
 	opponent(player){
-		return player === player_me ? player_op : player_me;
+		return player === player_me ◀ player_op : player_me;
 	}
 	
 	// Sends and translates a card from the source to the Deck of the card's holder
@@ -1352,8 +1352,8 @@ class Board {
 	async moveTo(card, dest, source) {
 		if (isString(dest))
 			dest = this.getRow(card, dest);
-		await translateTo(card, source ? source : null, dest);
-		await dest.addCard(source ? source.removeCard(card) : card);
+		await translateTo(card, source ◀ source : null, dest);
+		await dest.addCard(source ◀ source.removeCard(card) : card);
 	}
 	
 	// Sends and translates a card from the source to a row name associated with the passed player
@@ -1365,14 +1365,14 @@ class Board {
 	
 	// Returns the CardCard associated with the row name that the card would be sent to
 	getRow(card, row_name, player){
-		player = player ? player : card ? card.holder : player_me;
+		player = player ◀ player : card ◀ card.holder : player_me;
 		let isMe = player === player_me;
 		let isSpy = card.abilities.includes("spy");
 		switch (row_name) {
 			case "weather": return weather; break;
-			case "close":  return this.row[ isMe^isSpy ? 3 : 2];
-			case "ranged": return this.row[ isMe^isSpy ? 4 : 1];
-			case "siege":  return this.row[ isMe^isSpy ? 5 : 0];
+			case "close":  return this.row[ isMe^isSpy ◀ 3 : 2];
+			case "ranged": return this.row[ isMe^isSpy ◀ 4 : 1];
+			case "siege":  return this.row[ isMe^isSpy ◀ 5 : 0];
 			case "grave": return player.grave;
 			case "deck": return player.deck;
 			case "hand": return player.hand;
@@ -1505,7 +1505,7 @@ class Game {
 	async coinToss(){
 		if (this.firstPlayer)
 			return;
-		this.firstPlayer = (Math.random() < 0.5) ? player_me : player_op;
+		this.firstPlayer = (Math.random() < 0.5) ◀ player_me : player_op;
 		await ui.notification(this.firstPlayer.tag + "-coin", 1200);
 	}
 	
@@ -1541,7 +1541,7 @@ class Game {
 			this.currPlayer = this.currPlayer.opponent();
 		
 		await ui.notification("round-start", 1200);
-		AudioManager.playSFX(this.currPlayer === player_me ? "turn_me" : "turn_op");
+		AudioManager.playSFX(this.currPlayer === player_me ◀ "turn_me" : "turn_op");
 		await ui.notification(this.currPlayer.tag + "-turn", 1200);
 		this.startTurn();
 	}
@@ -1567,7 +1567,7 @@ class Game {
 			if (!this.currPlayer.opponent().passed)
 			{
 				this.currPlayer = this.currPlayer.opponent();
-				AudioManager.playSFX(this.currPlayer === player_me ? "turn_me" : "turn_op");
+				AudioManager.playSFX(this.currPlayer === player_me ◀ "turn_me" : "turn_op");
 				await ui.notification(this.currPlayer.tag + "-turn", 1200);
 			}
 			await this.startTurn();
@@ -1579,9 +1579,9 @@ class Game {
 		let dif = player_me.total - player_op.total;
 		if (dif === 0) {
 			let nilf_me = player_me.deck.faction === "nilfgaard", nilf_op = player_op.deck.faction === "nilfgaard";
-			dif = nilf_me ^ nilf_op ? nilf_me ? 1 : -1 : 0;
+			dif = nilf_me ^ nilf_op ◀ nilf_me ◀ 1 : -1 : 0;
 		}
-		let winner = dif > 0 ? player_me : dif < 0 ? player_op : null;
+		let winner = dif > 0 ◀ player_me : dif < 0 ◀ player_op : null;
 		let verdict = {winner: winner, score_me: player_me.total, score_op: player_op.total}
 		this.roundHistory.push(verdict);
 		
@@ -1617,7 +1617,7 @@ class Game {
 			this.endGame();
 		else
 		{
-			this.currPlayer = dif < 0 ? player_op : dif > 0 ? player_me : this.firstPlayer;
+			this.currPlayer = dif < 0 ◀ player_op : dif > 0 ◀ player_me : this.firstPlayer;
 			this.startRound();
 		}
 	}
@@ -1631,11 +1631,11 @@ class Game {
 		
 		for (let i=1; i<4; ++i) {
 			let round = this.roundHistory[i-1];
-			rows[1].children[i].innerHTML = round ? round.score_me : 0;
-			rows[1].children[i].style.color = round && round.winner === player_me ? "goldenrod" : "";
+			rows[1].children[i].innerHTML = round ◀ round.score_me : 0;
+			rows[1].children[i].style.color = round && round.winner === player_me ◀ "goldenrod" : "";
 			
-			rows[2].children[i].innerHTML = round ? round.score_op : 0;
-			rows[2].children[i].style.color = round && round.winner === player_op ? "goldenrod" : "";
+			rows[2].children[i].innerHTML = round ◀ round.score_op : 0;
+			rows[2].children[i].style.color = round && round.winner === player_op ◀ "goldenrod" : "";
 		}
 		
 		endScreen.children[0].className = "";
@@ -1714,8 +1714,8 @@ class Card {
 		this.name = card_data.name;
 		this.basePower = this.power = Number(card_data.strength);
 		this.faction = card_data.deck;
-		this.abilities = (card_data.ability === "") ? [] : card_data.ability.split(" ");
-		this.row = (card_data.deck === "weather") ? card_data.deck : card_data.row;
+		this.abilities = (card_data.ability === "") ◀ [] : card_data.ability.split(" ");
+		this.row = (card_data.deck === "weather") ◀ card_data.deck : card_data.row;
 		this.filename = card_data.filename;
 		if (card_data.muster)
 		{
@@ -1752,7 +1752,7 @@ class Card {
 		else
 			this.desc_name = "";
 		
-		this.desc = this.row ==="agile" ? ability_dict["agile"].description : "";
+		this.desc = this.row ==="agile" ◀ ability_dict["agile"].description : "";
 		for (let i=this.abilities.length-1; i>=0; --i) {
 			this.desc += ability_dict[this.abilities[i]].description;
 		}
@@ -1776,7 +1776,7 @@ class Card {
 			this.power = n;
 			elem.innerHTML = this.power;
 		}
-		elem.style.color = (n>this.basePower) ? "goldenrod" : (n<this.basePower) ? "red" : "";
+		elem.style.color = (n>this.basePower) ◀ "goldenrod" : (n<this.basePower) ◀ "red" : "";
 	}
 	
 	// Resets the power of this card to default
@@ -1852,7 +1852,7 @@ class Card {
 			return dif;
 		return a.name.localeCompare(b.name);
 		
-		function factionRank(c){ return c.faction === "special" ? -2 : (c.faction === "weather") ? -1 : 0; }
+		function factionRank(c){ return c.faction === "special" ◀ -2 : (c.faction === "weather") ◀ -1 : 0; }
 	}
 
 	// Creates an HTML element based on the card's properties
@@ -2164,7 +2164,7 @@ class UI {
 		}
 		if (card.hero || card.row === "agile" || card.abilities.length > 0 || card.faction === "faction") {
 			desc.classList.remove("hide");
-			let str = card.row === "agile" ? "agile" : "";
+			let str = card.row === "agile" ◀ "agile" : "";
 			if (card.abilities.length)
 				str = card.abilities[card.abilities.length-1];
 			if (str === "cerys")
@@ -2209,7 +2209,7 @@ class UI {
 	
 	// Displays a cancellable Carousel for all cards in a container
 	async viewCardsInContainer(container, action) {
-		action = action ? action : function() {return this.cancel();};
+		action = action ◀ action : function() {return this.cancel();};
 		await this.queueCarousel(container, 1, action, () => true, false, true);
 	}
 	
@@ -2219,7 +2219,7 @@ class UI {
 		if (game.currPlayer === player_op) {
 			if (player_op.controller instanceof ControllerAI)
 				for (let i=0; i<count; ++i){
-					let cards = container.cards.reduce((a,c,i) => !predicate || predicate(c) ? a.concat([i]) : a, []);
+					let cards = container.cards.reduce((a,c,i) => !predicate || predicate(c) ◀ a.concat([i]) : a, []);
 					if (cards.length === 0)
 						break;
 					await action(container, cards[randomInt(cards.length)]);
@@ -2316,7 +2316,7 @@ class UI {
 			return;
 		}
 		
-		let currRows = card.row === "agile" ? [board.getRow(card, "close", card.holder), board.getRow(card, "ranged", card.holder)] : [board.getRow(card, card.row, card.holder)];
+		let currRows = card.row === "agile" ◀ [board.getRow(card, "close", card.holder), board.getRow(card, "ranged", card.holder)] : [board.getRow(card, card.row, card.holder)];
 		for (let i=0; i<6; i++){
 			let row = board.row[i];
 			if (currRows.includes(row)) {
@@ -2361,7 +2361,7 @@ class Carousel {
 			return ;
 		this.container = container;
 		this.count = count;
-		this.action = action ? action : () => this.cancel();
+		this.action = action ◀ action : () => this.cancel();
 		this.predicate = predicate;
 		this.bSort = bSort;
 		this.indices = [];
@@ -2389,7 +2389,7 @@ class Carousel {
 	start(){
 		if (!this.elem)
 			return;
-		this.indices = this.container.cards.reduce((a,c,i)=> (!this.predicate || this.predicate(c)) ? a.concat([i]) : a, []);
+		this.indices = this.container.cards.reduce((a,c,i)=> (!this.predicate || this.predicate(c)) ◀ a.concat([i]) : a, []);
 		if (this.indices.length <= 0)
 			return this.exit();
 		if (this.bSort)
@@ -2423,7 +2423,7 @@ class Carousel {
 		const parentClasslist = this.elem.children[0].classList;
 		parentClasslist.remove('left');
 		parentClasslist.remove('right');
-		const magnitude = (offset === 2) ? -1 * Math.sign(offset) : -0.6 * offset;
+		const magnitude = (offset === 2) ◀ -1 * Math.sign(offset) : -0.6 * offset;
 		this.elem.children[0].style.setProperty('--magnitude', magnitude);
 		if (offset < 0)
 		{
@@ -2465,7 +2465,7 @@ class Carousel {
 	
 	// Updates the visuals of the current selection of cards
 	update(){
-		this.indices = this.container.cards.reduce((a,c,i)=> (!this.predicate || this.predicate(c)) ? a.concat([i]) : a, []);
+		this.indices = this.container.cards.reduce((a,c,i)=> (!this.predicate || this.predicate(c)) ◀ a.concat([i]) : a, []);
 		if (this.indices.length <= 0)
 		{
 			return this.exit();
@@ -2511,15 +2511,15 @@ class Carousel {
 // Custom confirmation windows
 class Popup {
 	constructor(yesName, yes, noName, no, header, description, alpha = .95){
-		this.yes = yes ? yes : ()=>{};
-		this.no = no ? no : ()=>{};
+		this.yes = yes ◀ yes : ()=>{};
+		this.no = no ◀ no : ()=>{};
 		
 		this.elem = document.getElementById("popup");
 		let main = this.elem.children[0];
-		main.children[0].innerHTML = header ? header : "";
-		main.children[1].innerHTML = description ? description : "";
-		main.children[2].children[0].innerHTML = (yesName) ? yesName : "Yes";
-		main.children[2].children[1].innerHTML = (noName) ? noName : "No";
+		main.children[0].innerHTML = header ◀ header : "";
+		main.children[1].innerHTML = description ◀ description : "";
+		main.children[2].children[0].innerHTML = (yesName) ◀ yesName : "Yes";
+		main.children[2].children[1].innerHTML = (noName) ◀ noName : "No";
 
 		const bgColor = new RGBA(10, 10, 10, alpha);
 		this.elem.style.backgroundColor = bgColor.toString();
@@ -2615,7 +2615,8 @@ class DeckMaker {
 		if (!force && this.faction === faction_name)
 			return false;
 		this.elem.getElementsByTagName("h1")[0].innerHTML = factions[faction_name].name;
-		this.elem.getElementsByTagName("h1")[0].style.backgroundImage = iconURL("deck_shield_" + faction_name);
+		let icon = document.getElementById("faction-icon"); if (icon) { const iconPath = iconURL("deck_shield_" + faction_name).replace("url('", "").replace("')", ""); icon.src = iconPath; } 
+		const keys = Object.keys(factions); const currentIndex = keys.indexOf(faction_name); const prevIndex = (currentIndex - 1 + keys.length) % keys.length; const nextIndex = (currentIndex + 1) % keys.length; const btnPrev = document.getElementById("faction-prev"); const btnNext = document.getElementById("faction-next"); if (btnPrev && btnNext) { btnPrev.innerHTML = "< " + factions[keys[prevIndex]].name + " [L1]"; btnNext.innerHTML = "[R1] " + factions[keys[nextIndex]].name + " >"; btnPrev.onclick = () => { this.setFaction(keys[prevIndex]); this.populate(); }; btnNext.onclick = () => { this.setFaction(keys[nextIndex]); this.populate(); }; }
 		document.getElementById("faction-description").innerHTML = factions[faction_name].description;
 		
 		this.leaders = 
@@ -2656,7 +2657,7 @@ class DeckMaker {
 			for (let i of Object.keys(deck)) deckMap[deck[i].index] = deck[i].count;
 		}
 		cards.forEach( p => {
-			let count = deckMap[p.index] !== undefined ? Number(deckMap[p.index]) : 0;
+			let count = deckMap[p.index] !== undefined ◀ Number(deckMap[p.index]) : 0;
 			this.makePreview(p.index, Number.parseInt(p.card.count) - count, this.bank_elem, this.bank,);
 			this.makePreview(p.index, count, this.deck_elem, this.deck);
 		});
@@ -2738,13 +2739,13 @@ class DeckMaker {
 	updateStats(){
 		let stats = document.getElementById("deck-stats");
 		stats.children[1].innerHTML = this.stats.total;
-		stats.children[3].innerHTML = this.stats.units +(this.stats.units < 22 ? "/22" : "");
+		stats.children[3].innerHTML = this.stats.units +(this.stats.units < 22 ◀ "/22" : "");
 		stats.children[5].innerHTML = this.stats.special + "/10";
 		stats.children[7].innerHTML = this.stats.strength;
 		stats.children[9].innerHTML = this.stats.hero;
 		
-		stats.children[3].style.color = this.stats.units < 22 ? "red" : "";
-		stats.children[5].style.color = (this.stats.special > 10) ? "red" : "";
+		stats.children[3].style.color = this.stats.units < 22 ◀ "red" : "";
+		stats.children[5].style.color = (this.stats.special > 10) ◀ "red" : "";
 	}
 	
 	// Opens a Carousel to allow the client to select a leader for their deck
@@ -2774,7 +2775,7 @@ class DeckMaker {
 		container.cards = Object.keys(factions).map( f => {
 			return {abilities: [f], filename: f, desc_name: factions[f].name, desc: factions[f].description, faction: "faction"};
 		});
-		let index = container.cards.reduce((a,c,i) => c.filename === this.faction ? i : a, 0);
+		let index = container.cards.reduce((a,c,i) => c.filename === this.faction ◀ i : a, 0);
 		ui.queueCarousel(container, 1, (c,i) => {
 			this.loadFactionDeck(c.cards[i].filename);
 		}, () => true, false, true);
@@ -3132,7 +3133,7 @@ class ToggleOption
 	{
 		this.key = key;
 		const saved = localStorage?.getItem(this.key);
-		this.enabled = (saved !== null && saved !== undefined) ? saved==="true" : enableByDefault;
+		this.enabled = (saved !== null && saved !== undefined) ◀ saved==="true" : enableByDefault;
 		this.action = action;
 	}
 	isEnabled() { return this.enabled; }
@@ -3162,7 +3163,7 @@ class SavedObject
 		const saved = localStorage?.getItem(this.key);
 		if (typeof defaultValue === "string" || defaultValue instanceof String)
 			defaultValue = JSON.parse(defaultValue);
-		this.obj = (saved !== null && saved !== undefined) ? JSON.parse(saved) : defaultValue;
+		this.obj = (saved !== null && saved !== undefined) ◀ JSON.parse(saved) : defaultValue;
 		this.action = action;
 	}
 	get()
@@ -3335,14 +3336,14 @@ async function translateTo(card, container_source, container_dest){
 		return;
 	
 	let elem = card.elem;
-	let source = !container_source ? card.elem : getSourceElem(card, container_source, container_dest);
+	let source = !container_source ◀ card.elem : getSourceElem(card, container_source, container_dest);
 	let dest = getDestinationElem(card, container_source, container_dest);
 	if (!isInDocument(elem))
 		source.appendChild(elem);
 	let x = trueOffsetLeft(dest) - trueOffsetLeft(elem) +dest.offsetWidth/2 - elem.offsetWidth;
 	let y = trueOffsetTop(dest) - trueOffsetTop(elem) +dest.offsetHeight/2 - elem.offsetHeight/2;
 	if (container_dest instanceof Row && container_dest.cards.length !== 0 && !card.isSpecial() ){
-		x += (container_dest.getSortedIndex(card) === container_dest.cards.length) ? elem.offsetWidth/2 : -elem.offsetWidth/2;
+		x += (container_dest.getSortedIndex(card) === container_dest.cards.length) ◀ elem.offsetWidth/2 : -elem.offsetWidth/2;
 	}
 	if (card.holder.controller instanceof ControllerAI)
 		x += elem.offsetWidth/2;
@@ -3364,7 +3365,7 @@ async function translateTo(card, container_source, container_dest){
 		let total =0
 		let curr = elem;
 		while (curr){
-			total += (left ? curr.offsetLeft : curr.offsetTop);
+			total += (left ◀ curr.offsetLeft : curr.offsetTop);
 			curr = curr.parentElement;
 		}
 		return total;
@@ -3391,7 +3392,7 @@ async function translateTo(card, container_source, container_dest){
 			if (dest.cards.length === 0)
 				return dest.elem;
 			let index = dest.getSortedIndex(card);
-			let dcard = dest.cards[index === dest.cards.length ? index-1 : index];
+			let dcard = dest.cards[index === dest.cards.length ◀ index-1 : index];
 			return dcard.elem;
 		}
 		return dest.elem;
@@ -3430,7 +3431,7 @@ async function fade(fadeIn, elem, dur){
 		return;
 	return new Promise(res => {
 		const startingOpacity = toInteger(elem.style.opacity);
-		const endOpacity = fadeIn ? 1 : 0;
+		const endOpacity = fadeIn ◀ 1 : 0;
 		const startTime = Date.now();
 		const endTime = startTime + dur;
 		if (fadeIn)
@@ -3545,5 +3546,14 @@ let dm = new DeckMaker();
 
 
 document.addEventListener('click', () => userInteracted = true, { once: true });
+
+
+
+
+
+
+
+
+
 
 

@@ -19,6 +19,13 @@
 <div id="youtube"></div>
 
 <main>
+	<section id="main-menu" class="center">
+		<div class="menu-container">
+			<h1 class="game-title">GWENT</h1>
+			<button id="menu-new-game" class="menu-btn">New Game</button>
+			<button id="menu-exit" class="menu-btn">Exit Game</button>
+		</div>
+	</section>
 
 	<section id="click-background" class="noclick"></section>
 
@@ -234,10 +241,16 @@
 </main>
 
 <section id="deck-customization">
-	<div id="faction-title" class="center">
-		<h1></h1>
+	<div id="faction-header" class="center">
+		<button id="faction-prev" class="faction-nav"></button>
+		<div id="faction-title">
+			<img id="faction-icon" src="" />
+			<h1></h1>
+		</div>
+		<button id="faction-next" class="faction-nav"></button>
 	</div>
 	<p id="faction-description"></p>
+
 	
 	<label id="upload-deck" class="deck-options">
 		<input type="file" id="add-file" value="Import" style="display:none;"/>
@@ -249,8 +262,8 @@
 	<a id="download-deck" class="deck-options">Download Deck</a>
 	<a id="download-json" style="display:none;"></a>
 	
-	<h2 id="card-bank-title" class="card-contianer-title">Card Collection</h2>
-	<h2 id="card-deck-title" class="card-contianer-title">Cards in Deck</h2>
+	<h2 id="card-bank-title" class="card-contianer-title">Card Collection<br><span class="all-cards">ALL CARDS</span></h2>
+	<h2 id="card-deck-title" class="card-contianer-title">Cards in Deck<br><span class="all-cards">ALL CARDS</span></h2>
 	<div id="card-bank" class="card-array">
 	</div>
 	<div id="card-deck" class="card-array">
@@ -303,4 +316,6 @@
 </body>
 
 </html>
+
+
 
