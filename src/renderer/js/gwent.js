@@ -2330,6 +2330,9 @@ class Carousel {
 		Carousel.setCurrent(this);
 		
 		if (this.title) { this.title_elem.innerHTML = this.title; this.title_elem.classList.remove("hide"); if (this.title === "FACTION") { this.elem.classList.add("faction-mode"); } else { this.elem.classList.remove("faction-mode"); } } else { this.title_elem.classList.add("hide"); this.elem.classList.remove("faction-mode"); }
+		// Show or hide the [ENTER] skip hint
+		const skipHint = this.elem.querySelector('.carousel-skip-hint');
+		if (skipHint) skipHint.style.display = this.bExit ? 'block' : 'none';
 		AudioManager.playSFX('open');
 		this.elem.classList.remove("hide");
 		ui.enablePlayer(true);

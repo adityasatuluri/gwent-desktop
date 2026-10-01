@@ -417,6 +417,18 @@ html {
     box-shadow: 0 0 1vw #ffffff54;
 }
 
+.carousel-skip-hint {
+	position: absolute;
+	bottom: 4%;
+	width: 100%;
+	text-align: center;
+	font-family: 'Cinzel', 'Palatino Linotype', serif;
+	font-size: 1.1vw;
+	color: #888;
+	letter-spacing: 0.08vw;
+	pointer-events: none;
+}
+
 /* --------------------- popup ---------------------------  */
 
 #popup {
