@@ -2300,7 +2300,7 @@ class Carousel {
 		
 		if (!Carousel.elem) {
 			Carousel.elem = document.getElementById("carousel");
-			Carousel.elem.children[0].addEventListener("click", () => Carousel.curr.cancel(), false);
+			Carousel.elem.addEventListener("click", () => Carousel.curr?.cancel(), false); Carousel.elem.children[0].addEventListener("click", (e) => e.stopPropagation(), false);
 		}
 		this.elem = Carousel.elem;
 		document.getElementsByTagName("main")[0].classList.remove("noclick");
@@ -3696,6 +3696,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   });
 
 })();
+
 
 
 

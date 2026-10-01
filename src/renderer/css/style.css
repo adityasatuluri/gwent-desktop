@@ -28,6 +28,7 @@
 
 html,body
 {
+  overflow: hidden;
 	/* eliminate whitespace */
     width: 100%;
     height: 100%;
@@ -1174,26 +1175,21 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 }
 
 #faction-title {
-	position: absolute;
-	height: 5%;
-	width: 100%;
-	top: 6%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1vw;
+}
+#faction-icon {
+	width: 5vw;
+	height: 5vw;
+	object-fit: contain;
 }
 
 #deck-customization h1 {
-    position: absolute;
     font-size: 1.45vw;
     color: #dedede;
-    line-height: 220%;
     text-transform: capitalize;
-    padding: 0 3%;
-	
-
-	
-	top: -60%;
-	
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 #faction-description {
@@ -1436,13 +1432,13 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 }
 
 #card-bank-title {
-	top: 7.45%;
+	top: 15%;
 	left: 8.5%;
 }
 
 #card-deck-title {
-	top: 7.8%;
-	left: 84.45%;
+	top: 15%;
+	left: 81.5%;
 }
 
 /* ----------- cards ------------------*/
@@ -1613,8 +1609,14 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 #card-deck         { left: 59% !important; }
 
 /* Titles */
-#card-bank-title   { top: 9% !important; left: 2% !important; text-align:left !important; font-size:1.1vw !important; }
-#card-deck-title   { top: 9% !important; right:1% !important; left:auto !important; text-align:right !important; font-size:1.1vw !important; }
+#card-bank-title {
+	top: 15%;
+	left: 8.5%;
+}
+#card-deck-title {
+	top: 15%;
+	left: 81.5%;
+}
 .all-cards         { font-size:0.85vw; color:#a49687; }
 .card-contianer-title { position:absolute !important; width:auto !important; }
 
@@ -1950,6 +1952,8 @@ main { background-image: url('../assets/img/boardtest8.png'); }
   color: #e8c97a !important;
   letter-spacing: 0.1vw !important;
 }
+
+
 
 
 
