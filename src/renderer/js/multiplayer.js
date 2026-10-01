@@ -60,14 +60,14 @@ class Multiplayer {
         // Render last 50 matches, newest first
         [...this.history].reverse().slice(0, 50).forEach(h => {
             const el = document.createElement('div');
-            el.className = history-item  + h.result;
-            el.innerHTML = 
+            el.className = `history-item ${h.result}`;
+            el.innerHTML = `
                 <div class="hist-header">
-                    <span>vs <strong> + h.opponent + </strong></span>
-                    <span> + new Date(h.time).toLocaleString() + </span>
+                    <span>vs <strong>${h.opponent}</strong></span>
+                    <span>${new Date(h.time).toLocaleString()}</span>
                 </div>
-                <div style="color:#aaa;">Result:  + h.result.toUpperCase() + </div>
-            ;
+                <div style="color:#aaa;">Result: ${h.result.toUpperCase()}</div>
+            `;
             list.appendChild(el);
         });
     }
@@ -135,10 +135,10 @@ class Multiplayer {
         servers.forEach(s => {
             const el = document.createElement('div');
             el.className = 'mp-list-item';
-            el.innerHTML = 
-                <span class="player-name"> + s.name + </span>
-                <button class="join-btn" onclick="mp.joinGame(' + s.ip + ')">JOIN</button>
-            ;
+            el.innerHTML = `
+                <span class="player-name">${s.name}</span>
+                <button class="join-btn" onclick="mp.joinGame('${s.ip}')">JOIN</button>
+            `;
             list.appendChild(el);
         });
     }
@@ -231,19 +231,19 @@ class Multiplayer {
 
     send(msgObj) {
         if (this.socket) {
-            this.socket.write(JSON.stringify(msgObj) + '\\n');
+            this.socket.write(JSON.stringify(msgObj) + '\n');
         }
     }
 
     handleNetworkMessage(rawData) {
-        const msgs = rawData.split('\\n').filter(m => m.trim().length > 0);
+        const msgs = rawData.split('\n').filter(m => m.trim().length > 0);
         msgs.forEach(m => {
             try {
                 const msg = JSON.parse(m);
                 console.log('RECV:', msg);
                 
                 if (msg.type === 'HANDSHAKE') {
-                    Popup.curr.cancel(); // Close connecting popup
+                    if (Popup.curr) Popup.curr.cancel(); // Close connecting popup
                     this.opponentName = msg.name;
                     ui.popup("OK", () => {
                         this.startGameWithOpponent();
@@ -263,7 +263,7 @@ class Multiplayer {
         
         // We need a major refactor of gwent.js to actually drive gameplay over network.
         // For this step, we just alert the user that gameplay sync is a WIP.
-        ui.popup("OK", () => location.reload(), null, null, "MULTIPLAYER ALPHA", "You have successfully connected via LAN!\\n\\nNote: Full gameplay state synchronization is extremely complex and currently being implemented. You will now return to the main menu.");
+        ui.popup("OK", () => location.reload(), null, null, "MULTIPLAYER ALPHA", "You have successfully connected via LAN!\n\nNote: Full gameplay state synchronization is extremely complex and currently being implemented. You will now return to the main menu.");
         
         // As a proof of concept, add a match history record
         this.addHistory(this.opponentName, 'draw');
