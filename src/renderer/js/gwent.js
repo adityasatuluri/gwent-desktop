@@ -1965,11 +1965,36 @@ class UI {
 		if (enable) main.remove("noclick"); else main.add("noclick");
 	}
 	
-	// Initializes the youtube background music object
+	// Initializes background music as a shuffled playlist
 	initAudio(){
 		this.youtube = document.getElementById('game-music');
-		if(this.youtube) this.youtube.volume = 0.5;
-		if(Settings.music.isEnabled() && this.youtube) this.youtube.play().catch(e=>console.log('Audio blocked', e));
+		if (!this.youtube) return;
+		this.youtube.volume = 0.5;
+		try {
+			const path = require('path');
+			const fs   = require('fs');
+			const dir  = path.join(__dirname, '..', 'assets', 'music', 'soundtracks');
+			const exts = ['.mp3','.ogg','.wav','.flac','.m4a','.opus'];
+			const shuffle = a => { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a; };
+			let files = fs.existsSync(dir) ? fs.readdirSync(dir).filter(f=>exts.includes(require('path').extname(f).toLowerCase())) : [];
+			this._playlist = files.length ? shuffle(files.map(f=>'file:///'+path.join(dir,f).replace(/\\/g,'/'))) : null;
+			this._playlistIdx = 0;
+		} catch(e) { console.warn('Playlist init failed:',e); this._playlist=null; }
+		if (this._playlist && this._playlist.length) {
+			this.youtube.src = this._playlist[0];
+			this.youtube.addEventListener('ended', ()=>this._playNextTrack());
+		} else {
+			this.youtube.src = 'assets/music/gwent_soundtrack.mp3';
+			this.youtube.loop = true;
+		}
+		if (Settings.music.isEnabled()) this.youtube.play().catch(e=>console.log('Audio blocked',e));
+	}
+	_playNextTrack(){
+		if (!this._playlist || !this._playlist.length) return;
+		this._playlistIdx = (this._playlistIdx+1) % this._playlist.length;
+		if (this._playlistIdx===0){const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};shuffle(this._playlist);}
+		this.youtube.src = this._playlist[this._playlistIdx];
+		if (Settings.music.isEnabled()) this.youtube.play().catch(e=>console.log('Track play failed',e));
 	}
 	
 	toggleMusic(){
