@@ -287,6 +287,40 @@ class Multiplayer {
                 } else if (msg.type === 'START_GAME_SYNC') {
                     this.sharedSeed = msg.seed;
                     this.beginSyncedGame();
+                } else if (msg.type === 'MOVE_TO') {
+                    if (Popup.curr && Popup.curr.title === "OPPONENT'S TURN") Popup.curr.clear();
+                    
+                    const getRef = (ref) => {
+                        if (ref === "hand-me") return player_op.hand;
+                        if (ref === "deck-me") return player_op.deck;
+                        if (ref === "grave-me") return player_op.grave;
+                        if (ref === "hand-op") return player_me.hand;
+                        if (ref === "deck-op") return player_me.deck;
+                        if (ref === "grave-op") return player_me.grave;
+                        if (ref === "weather") return weather;
+                        if (ref.startsWith("row-")) {
+                            let idx = parseInt(ref.split('-')[1]);
+                            // Opponent's row 0 is our row 5
+                            if (idx < 3) idx += 3;
+                            else idx -= 3;
+                            return board.row[idx];
+                        }
+                        if (ref === "grave" || ref === "deck" || ref === "hand") return ref;
+                        return null;
+                    };
+                    
+                    const source = getRef(msg.sourceRef);
+                    const row = getRef(msg.rowRef);
+                    
+                    if (source && source.cards) {
+                        const card = source.cards[msg.sourceIdx];
+                        if (card && row) {
+                            board.moveTo(card, row, source);
+                        }
+                    }
+                } else if (msg.type === 'PASS_ROUND') {
+                    if (Popup.curr && Popup.curr.title === "OPPONENT'S TURN") Popup.curr.clear();
+                    player_op.passRound();
                 }
         } catch(e) {
             console.error("Failed to parse network message", e);
@@ -351,7 +385,25 @@ class Multiplayer {
             if (card.holder === player_me && this.isGameActive) {
                 // Determine card index in source to sync accurately
                 const sourceIdx = source.cards.indexOf(card);
-                this.send({ type: 'MOVE_TO', sourceId: source.id, sourceIdx: sourceIdx, rowId: row.id });
+                
+                let sourceRef = "";
+                if (source === player_me.hand) sourceRef = "hand-me";
+                else if (source === player_me.deck) sourceRef = "deck-me";
+                else if (source === player_me.grave) sourceRef = "grave-me";
+                else if (source === player_op.hand) sourceRef = "hand-op";
+                else if (source === player_op.deck) sourceRef = "deck-op";
+                else if (source === player_op.grave) sourceRef = "grave-op";
+                else if (source === weather) sourceRef = "weather";
+                else if (board.row.includes(source)) sourceRef = "row-" + board.row.indexOf(source);
+                else sourceRef = "unknown";
+                
+                let rowRef = "";
+                if (row === "grave" || row === "deck" || row === "hand") rowRef = row;
+                else if (row === weather) rowRef = "weather";
+                else if (board.row.includes(row)) rowRef = "row-" + board.row.indexOf(row);
+                else rowRef = "unknown";
+                
+                this.send({ type: 'MOVE_TO', sourceRef: sourceRef, sourceIdx: sourceIdx, rowRef: rowRef });
             }
             return await ogMoveTo.call(board, card, row, source);
         };

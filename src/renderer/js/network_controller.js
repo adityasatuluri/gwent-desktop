@@ -3,6 +3,8 @@ class NetworkController {
         this.player = player;
     }
 
+    redraw() {}
+    determineAgileRow(card) { return {type: 'close'}; }
     async startTurn(player) {
         // Wait for network event to execute action
         ui.popup(null, null, null, null, "OPPONENT'S TURN", "Waiting for opponent...");
