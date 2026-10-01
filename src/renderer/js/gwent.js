@@ -3636,7 +3636,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       settingsOpenedFrom = 'menu';
       openSettings();
     } else if (idx === 2) {
-      require('electron').ipcRenderer.send('exit-app');
+      new Popup("YES", () => require('electron').ipcRenderer.send('exit-app'), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?");
     }
   }
 
@@ -3655,7 +3655,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   });
 
   const backBtn = document.getElementById('back-to-menu-btn');
-  if (backBtn) backBtn.addEventListener('click', () => { location.reload(); });
+  if (backBtn) backBtn.addEventListener('click', () => { new Popup("YES", () => location.reload(), "NO", () => {}, "MAIN MENU", "Return to main menu? Unsaved progress will be lost."); });
 
   // -- Pause Menu (in-game ESC) --------------------------------
   function showPauseMenu() {
@@ -3677,8 +3677,8 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
           const action = item.dataset.action;
           if (action === 'resume') { hidePauseMenu(); }
           else if (action === 'settings') { hidePauseMenu(); settingsOpenedFrom = 'game'; openSettings(); }
-          else if (action === 'mainmenu') { location.reload(); }
-          else if (action === 'exit') { require('electron').ipcRenderer.send('exit-app'); }
+          else if (action === 'mainmenu') { hidePauseMenu(); new Popup("YES", () => location.reload(), "NO", () => {}, "MAIN MENU", "Return to main menu? Unsaved progress will be lost."); }
+          else if (action === 'exit') { hidePauseMenu(); new Popup("YES", () => require('electron').ipcRenderer.send('exit-app'), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?"); }
         });
         item.addEventListener('mouseenter', () => {
           overlay.querySelectorAll('.pause-item').forEach(i => i.classList.remove('active'));
@@ -3696,6 +3696,15 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
   // -- Keyboard navigation ------------------------------------
   document.addEventListener('keydown', (e) => {
+    // If a popup is active, let it handle keys (Escape cancels it)
+    if (typeof Popup !== 'undefined' && Popup.curr) {
+      if (e.key === 'Escape') {
+        Popup.curr.selectNo();
+      } else if (e.key === 'Enter') {
+        Popup.curr.selectYes();
+      }
+      return;
+    }
     const pauseOverlay = document.getElementById('pause-overlay');
     const pauseVisible = pauseOverlay && pauseOverlay.style.display !== 'none';
 
@@ -3734,7 +3743,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
         if (e.key === 'Enter') {
           if (typeof dm !== 'undefined') dm.startNewGame();
         }
-        if (e.key === 'Escape') { location.reload(); }
+        if (e.key === 'Escape') { new Popup("YES", () => location.reload(), "NO", () => {}, "MAIN MENU", "Are you sure you want to return to the main menu?"); }
       } else {
         if (e.key === 'Escape') { showPauseMenu(); }
       }
