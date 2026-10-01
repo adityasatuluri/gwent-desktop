@@ -2616,7 +2616,7 @@ class DeckMaker {
 			return false;
 		this.elem.getElementsByTagName("h1")[0].innerHTML = factions[faction_name].name;
 		let icon = document.getElementById("faction-icon"); if (icon) { const iconPath = iconURL("deck_shield_" + faction_name).replace("url('", "").replace("')", ""); icon.src = iconPath; } 
-		const keys = Object.keys(factions); const currentIndex = keys.indexOf(faction_name); const prevIndex = (currentIndex - 1 + keys.length) % keys.length; const nextIndex = (currentIndex + 1) % keys.length; const btnPrev = document.getElementById("faction-prev"); const btnNext = document.getElementById("faction-next"); if (btnPrev && btnNext) { btnPrev.innerHTML = "< " + factions[keys[prevIndex]].name + " [L1]"; btnNext.innerHTML = "[R1] " + factions[keys[nextIndex]].name + " >"; btnPrev.onclick = () => { this.setFaction(keys[prevIndex]); this.populate(); }; btnNext.onclick = () => { this.setFaction(keys[nextIndex]); this.populate(); }; }
+		const keys = Object.keys(factions); const currentIndex = keys.indexOf(faction_name); const prevIndex = (currentIndex - 1 + keys.length) % keys.length; const nextIndex = (currentIndex + 1) % keys.length; const btnPrev = document.getElementById("faction-prev"); const btnNext = document.getElementById("faction-next"); if (btnPrev && btnNext) { btnPrev.innerHTML = "< " + factions[keys[prevIndex]].name + " [L1]"; btnNext.innerHTML = "[R1] " + factions[keys[nextIndex]].name + " >"; btnPrev.onclick = () => { this.loadFactionDeck(keys[prevIndex]); }; btnNext.onclick = () => { this.loadFactionDeck(keys[nextIndex]); }; }
 		document.getElementById("faction-description").innerHTML = factions[faction_name].description;
 		
 		this.leaders = 
@@ -3599,3 +3599,4 @@ document.getElementById('setting-notifications').addEventListener('change', (e) 
 
 document.getElementById('menu-new-game').addEventListener('click', () => { document.getElementById('main-menu').classList.add('hide'); });
 document.getElementById('menu-exit').addEventListener('click', () => { require('electron').ipcRenderer.send('exit-app'); });
+
