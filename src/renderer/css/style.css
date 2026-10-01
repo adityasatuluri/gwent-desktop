@@ -1853,13 +1853,14 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 /* All carousel cards */
 #carousel > :nth-child(1) > .card-lg {
   flex-shrink: 0 !important;
+  margin: 0 !important;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* Center card (selected) */
 #carousel > :nth-child(1) > :nth-child(5) {
-  width: 17vw !important;
-  height: 32vw !important;
+  width: 15.5vw !important;
+  height: 29vw !important;
   border: 0.3vw solid goldenrod !important;
   box-shadow: 0 0 3vw goldenrod !important;
   z-index: 5 !important;
@@ -1867,32 +1868,32 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 /* Adjacent cards (4 & 6) */
 #carousel > :nth-child(1) > :nth-child(4),
 #carousel > :nth-child(1) > :nth-child(6) {
-  width: 14vw !important;
-  height: 26.3vw !important;
+  width: 12.8vw !important;
+  height: 24vw !important;
   opacity: 0.95 !important;
   z-index: 4 !important;
 }
 /* Outer cards (3 & 7) */
 #carousel > :nth-child(1) > :nth-child(3),
 #carousel > :nth-child(1) > :nth-child(7) {
-  width: 11.8vw !important;
-  height: 22.1vw !important;
+  width: 10.5vw !important;
+  height: 19.7vw !important;
   opacity: 0.8 !important;
   z-index: 3 !important;
 }
 /* Far outer cards (2 & 8) */
 #carousel > :nth-child(1) > :nth-child(2),
 #carousel > :nth-child(1) > :nth-child(8) {
-  width: 9.5vw !important;
-  height: 17.8vw !important;
+  width: 8.5vw !important;
+  height: 16vw !important;
   opacity: 0.5 !important;
   z-index: 2 !important;
 }
 /* Extreme outer cards (1 & 9) */
 #carousel > :nth-child(1) > :nth-child(1),
 #carousel > :nth-child(1) > :nth-child(9) {
-  width: 7.5vw !important;
-  height: 14vw !important;
+  width: 6.5vw !important;
+  height: 12.2vw !important;
   opacity: 0.2 !important;
   z-index: 1 !important;
 }/* Container: center vertically, proper gap */
