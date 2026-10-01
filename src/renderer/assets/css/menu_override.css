@@ -38,11 +38,26 @@
    CINEMATIC MAIN MENU  –  edited_witcher3 wallpaper + SVG buttons
    ================================================================ */
 
-/* ── Fonts ──────────────────────────────────────────────────── */
+/* ── Fonts (local woff2 for offline use) ─────────────────── */
 @font-face {
   font-family: 'Cinzel';
-  src: local('Cinzel'), local('Cinzel-Regular');
-  /* fallback – will be overridden by downloaded file if present */
+  src: url('../assets/fonts/cinzel-regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal;
+}
+@font-face {
+  font-family: 'Cinzel';
+  src: url('../assets/fonts/cinzel-semibold.woff2') format('woff2');
+  font-weight: 600; font-style: normal;
+}
+@font-face {
+  font-family: 'Cinzel';
+  src: url('../assets/fonts/cinzel-bold.woff2') format('woff2');
+  font-weight: 700; font-style: normal;
+}
+@font-face {
+  font-family: 'IM Fell English';
+  src: url('../assets/fonts/imfell-regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal;
 }
 
 /* ── Animations ─────────────────────────────────────────────── */
