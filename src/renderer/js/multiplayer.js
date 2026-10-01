@@ -80,7 +80,7 @@ class Multiplayer {
 
     startDiscovery() {
         if (this.discoverClient) return;
-        this.discoverClient = dgram.createSocket('udp4');
+        this.discoverClient = dgram.createSocket({ type: 'udp4', reuseAddr: true });
         
         this.discoverClient.on('message', (msg, rinfo) => {
             try {
@@ -102,6 +102,7 @@ class Multiplayer {
         
         try {
             this.discoverClient.bind(this.broadcastPort, () => {
+                try { this.discoverClient.addMembership('224.0.0.114'); } catch(e) {}
                 this.discoverClient.setBroadcast(true);
             });
         } catch(e) {}
@@ -195,7 +196,8 @@ class Multiplayer {
         this.broadcastInterval = setInterval(() => {
             if (!this.discoverClient) return;
             const msg = Buffer.from(JSON.stringify({ type: 'GWENT_HOST', name: this.username }));
-            this.discoverClient.send(msg, 0, msg.length, this.broadcastPort, '255.255.255.255');
+            try { this.discoverClient.send(msg, 0, msg.length, this.broadcastPort, '224.0.0.114'); } catch(e) {}
+            try { this.discoverClient.send(msg, 0, msg.length, this.broadcastPort, '255.255.255.255'); } catch(e) {}
         }, 1500);
     }
 
