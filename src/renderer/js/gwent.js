@@ -3657,11 +3657,13 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       document.body.classList.add('in-game');
       inGame = true;
     } else if (idx === 1) {
+      openMultiplayerLobby();
+    } else if (idx === 2) {
       settingsOpenedFrom = 'menu';
       openSettings();
-    } else if (idx === 2) {
-      openTutorial();
     } else if (idx === 3) {
+      openTutorial();
+    } else if (idx === 4) {
       if (typeof ui !== 'undefined' && ui.popup) {
         ui.popup("YES", () => require('electron').ipcRenderer.send('exit-app'), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95);
       } else {
