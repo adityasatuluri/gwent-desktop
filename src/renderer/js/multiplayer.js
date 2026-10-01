@@ -259,7 +259,7 @@ class Multiplayer {
         }
     }
 
-    handleNetworkMessage(msgStr) {
+    async handleNetworkMessage(msgStr) {
         if (msgStr.trim().length === 0) return;
         try {
             const msg = JSON.parse(msgStr);
