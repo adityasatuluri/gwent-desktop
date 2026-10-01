@@ -3660,7 +3660,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
         if (e.key === '1') document.getElementById('faction-prev')?.click();
         if (e.key === '3') document.getElementById('faction-next')?.click();
         if (e.key === 'Enter') {
-          if (typeof game !== 'undefined') game.startNewGame();
+          if (typeof dm !== 'undefined') dm.startNewGame();
         }
         if (e.key === 'Escape') {
           location.reload();
@@ -3708,6 +3708,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   });
 
 })();
+
 
 
 
