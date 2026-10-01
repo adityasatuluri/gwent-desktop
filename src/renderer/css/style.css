@@ -496,7 +496,7 @@ html {
     width: 100%;
     height: calc(100vw * 1080 / 1920);
     z-index: 20000;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.85);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -511,26 +511,27 @@ html {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    margin-bottom: 2vw;
+    margin-bottom: 1vw;
     position: relative;
+    z-index: 1;
 }
 #end-screen > div:first-child::before {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 50vw;
-    height: 50vw;
+    width: 60vw;
+    height: 60vw;
     transform: translate(-50%, -50%);
     z-index: -1;
     pointer-events: none;
 }
 .end-draw { background-image: url('../assets/img/icons/end_draw.png'); }
-.end-draw::before { background: radial-gradient(circle, rgba(150, 150, 150, 0.4) 0%, transparent 60%); }
+.end-draw::before { background: radial-gradient(circle, rgba(150, 150, 150, 0.5) 0%, transparent 60%); }
 .end-win  { background-image: url('../assets/img/icons/end_win.png');  }
-.end-win::before { background: radial-gradient(circle, rgba(200, 150, 50, 0.4) 0%, transparent 60%); }
+.end-win::before { background: radial-gradient(circle, rgba(200, 150, 50, 0.5) 0%, transparent 60%); }
 .end-lose { background-image: url('../assets/img/icons/end_lose.png'); }
-.end-lose::before { background: radial-gradient(circle, rgba(200, 20, 20, 0.5) 0%, transparent 60%); }
+.end-lose::before { background: radial-gradient(circle, rgba(200, 20, 20, 0.6) 0%, transparent 60%); }
 
 #end-screen > table {
     width: 35vw;
@@ -538,7 +539,7 @@ html {
     background: transparent;
     border: none;
     box-shadow: none;
-    margin-bottom: 2vw;
+    margin-bottom: 3vw;
     table-layout: fixed;
 }
 
@@ -582,30 +583,37 @@ html {
 
 #end-screen .end-buttons {
     display: flex;
-    gap: 3vw;
+    gap: 5vw;
+}
+
+#end-screen .end-buttons button:nth-child(1) {
+    display: none;
 }
 
 #end-screen button {
-    height: 3.5vw;
-    width: 14vw;
+    height: auto;
+    width: auto;
+    padding: 0.5vw 2vw;
     font-family: 'Cinzel', 'Palatino Linotype', serif;
-    font-size: 1.3vw;
-    font-weight: 600;
-    color: #e5cd85;
-    background: linear-gradient(180deg, rgba(30,30,30,0.6), rgba(10,10,10,0.8));
-    border: 0.1vw solid rgba(182, 139, 68, 0.5);
-    border-radius: 0.2vw;
+    font-size: 1.5vw;
+    font-weight: normal;
+    color: #ab977c;
+    background: transparent;
+    border: none;
+    border-bottom: 0.2vw solid transparent;
+    border-radius: 0;
     cursor: pointer;
-    box-shadow: 0 0.3vw 0.6vw rgba(0,0,0,0.5);
+    box-shadow: none;
     transition: all 0.2s ease;
     text-transform: uppercase;
+    letter-spacing: 0.1vw;
 }
 
 #end-screen button:hover {
-    background: linear-gradient(180deg, rgba(50,50,50,0.8), rgba(20,20,20,0.9));
+    background: transparent;
     transform: translateY(-0.2vw);
-    box-shadow: 0 0.5vw 1vw rgba(0,0,0,0.8), 0 0 1vw rgba(182, 139, 68, 0.4);
-    color: #fff;
+    box-shadow: none;
+    color: #e5cd85;
     border-color: #b68b44;
 }
 /* --------------------- panels ---------------------------  */
