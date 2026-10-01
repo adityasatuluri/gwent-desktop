@@ -1995,14 +1995,14 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 /* ================================================================
    SETTINGS MENU (V2 - CLEAN REWRITE)
    ================================================================ */
-.settings-menu {
+#settings-menu, #tutorial-menu {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     z-index: 10000;
     display: block;
     font-family: 'Cinzel', 'Palatino Linotype', serif;
 }
-.settings-menu.hide {
+#settings-menu.hide, #tutorial-menu.hide {
     display: none !important;
 }
 
