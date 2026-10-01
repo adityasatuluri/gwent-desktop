@@ -2968,7 +2968,7 @@ class DeckMaker {
 		const buttons = ['op-preview-clear', 'op-preview-open'].map(id=>document.getElementById(id));
 		if (isEmpty(this.opponentData))
 		{
-			if(leaderElem && leaderElem.children[1]) leaderElem.children[1].innerHTML = "Random";
+			if(leaderElem && leaderElem.children[1]) if(leaderElem && leaderElem.children[1]) leaderElem.children[1].innerHTML = "Random";
 			[factionElem, ...buttons].forEach(e=>e.classList.add('hide'));
 		}
 		else
@@ -3524,7 +3524,8 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
   function flashItem(el, cb) {
     el.classList.add('flash');
-    setTimeout(() => { el.classList.remove('flash'); if(cb) cb(); }, 180);
+    if(cb) cb();
+    setTimeout(() => { el.classList.remove('flash'); }, 180);
   }
 
   function openMenu() {
@@ -3695,6 +3696,10 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   });
 
 })();
+
+
+
+
 
 
 
