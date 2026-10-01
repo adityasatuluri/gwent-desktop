@@ -46,65 +46,61 @@
 	</section>
 
 	<!-- ===== SETTINGS OVERLAY ===== -->
-	<section id="settings-menu" class="hide">
-		<div id="settings-bg"></div>
-				<div id="settings-layout">
-			<aside id="settings-sidebar">
-				<img src="assets/img/gwent_logo.png" id="settings-logo" />
-				<h3 id="settings-category-title">v 1.0<br>OPTIONS</h3>
-				<ul id="settings-categories">
-					<li class="cat-item active">GENERAL</li>
-					<li class="cat-item" id="settings-back-btn">BACK</li>
-				</ul>
-			</aside>
-			<main id="settings-content">
-				<div id="settings-items">
-
-				<div class="setting-row active" data-setting="fullscreen">
-					<span class="setting-label">Fullscreen</span>
-					<span class="setting-value"><span class="setting-toggle on" id="setting-fullscreen-val">ON</span></span>
-					<input type="checkbox" id="setting-fullscreen" class="hidden-check">
-				</div>
-
-				<div class="setting-row" data-setting="music">
-					<span class="setting-label">Music</span>
-					<span class="setting-value"><span class="setting-toggle on" id="setting-music-val">ON</span></span>
-					<input type="checkbox" id="setting-music" class="hidden-check">
-				</div>
-
-				<div class="setting-row" data-setting="sfx">
-					<span class="setting-label">Sound Effects</span>
-					<span class="setting-value"><span class="setting-toggle on" id="setting-sfx-val">ON</span></span>
-					<input type="checkbox" id="setting-sfx" class="hidden-check">
-				</div>
-
-				<div class="setting-row" data-setting="notifications">
-					<span class="setting-label">Notifications</span>
-					<span class="setting-value"><span class="setting-toggle on" id="setting-notifications-val">ON</span></span>
-					<input type="checkbox" id="setting-notifications" class="hidden-check">
-				</div>
-
-				<!-- Deck Options moved here from the deck builder UI -->
-				<div class="setting-row setting-deck-action" data-setting="upload-deck" id="settings-upload-deck">
-					<span class="setting-label">Upload Deck</span>
-					<label style="position:absolute;inset:0;cursor:pointer;" for="add-file"></label>
-					<input type="file" id="add-file" style="display:none;" accept=".json"/>
-				</div>
-
-				<div class="setting-row setting-deck-action" data-setting="change-faction" id="settings-change-faction">
-					<span class="setting-label">Change Faction</span>
-				</div>
-
-				<div class="setting-row setting-deck-action" data-setting="download-deck" id="settings-download-deck">
-					<span class="setting-label">Download Deck</span>
-				</div>
-
-				<div class="setting-row" data-setting="back" id="settings-back">
-					<span class="setting-label">&#8592; Back</span>
+		<section id="settings-menu" class="hide">
+		<div class="settings-overlay"></div>
+		<div class="settings-container">
+			<div class="settings-left-pane">
+				<img src="assets/img/gwent_logo.png" class="settings-brand-logo" alt="Gwent" />
+				<div class="settings-version">v 1.32<br>OPTIONS</div>
+				<div class="settings-nav">
+					<div class="settings-nav-item active">GENERAL</div>
+					<div class="settings-nav-item" id="settings-back-btn">BACK</div>
 				</div>
 			</div>
-			<div id="settings-hint">Up / Down &mdash; Navigate &nbsp;&nbsp; Enter &mdash; Select &nbsp;&nbsp; Esc &mdash; Back</div>
-		</main>
+			<div class="settings-right-pane">
+				<div class="settings-list">
+					
+					<div class="setting-row active" data-setting="fullscreen">
+						<span class="setting-label">Fullscreen</span>
+						<span class="setting-value"><span class="setting-toggle on" id="setting-fullscreen-val">ON</span><div class="setting-slider"></div></span>
+						<input type="checkbox" id="setting-fullscreen" class="hidden-check">
+					</div>
+					
+					<div class="setting-row" data-setting="music">
+						<span class="setting-label">Music</span>
+						<span class="setting-value"><span class="setting-toggle on" id="setting-music-val">ON</span><div class="setting-slider"></div></span>
+						<input type="checkbox" id="setting-music" class="hidden-check">
+					</div>
+					
+					<div class="setting-row" data-setting="sfx">
+						<span class="setting-label">Sound Effects</span>
+						<span class="setting-value"><span class="setting-toggle on" id="setting-sfx-val">ON</span><div class="setting-slider"></div></span>
+						<input type="checkbox" id="setting-sfx" class="hidden-check">
+					</div>
+					
+					<div class="setting-row" data-setting="notifications">
+						<span class="setting-label">Notifications</span>
+						<span class="setting-value"><span class="setting-toggle on" id="setting-notifications-val">ON</span><div class="setting-slider"></div></span>
+						<input type="checkbox" id="setting-notifications" class="hidden-check">
+					</div>
+					
+					<div class="setting-row setting-deck-action" data-setting="upload-deck" id="settings-upload-deck">
+						<span class="setting-label">Upload Deck</span>
+						<label style="position:absolute;inset:0;cursor:pointer;" for="add-file"></label>
+						<input type="file" id="add-file" style="display:none;" accept=".json"/>
+					</div>
+					
+					<div class="setting-row setting-deck-action" data-setting="change-faction" id="settings-change-faction">
+						<span class="setting-label">Change Faction</span>
+					</div>
+					
+					<div class="setting-row setting-deck-action" data-setting="download-deck" id="settings-download-deck">
+						<span class="setting-label">Download Deck</span>
+					</div>
+					
+				</div>
+				<div class="settings-footer-hint">Up / Down &mdash; Navigate &nbsp;&nbsp; Enter &mdash; Select &nbsp;&nbsp; Esc &mdash; Back</div>
+			</div>
 		</div>
 	</section>
 
