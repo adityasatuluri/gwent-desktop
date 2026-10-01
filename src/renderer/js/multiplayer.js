@@ -273,6 +273,16 @@ class Multiplayer {
                     }, false, null, "CONNECTED", "Connected to " + this.opponentName + "! Ready to play?");
                 } else if (msg.type === 'DECK_READY') {
                     this.opponentDeck = msg.deck;
+                    if (!this.myDeck) {
+                        let el = document.getElementById('mp-wait-status');
+                        if (!el) {
+                            el = document.createElement('div');
+                            el.id = 'mp-wait-status';
+                            el.style = 'position:absolute;top:20px;right:20px;color:white;font-size:18px;background:rgba(0,0,0,0.8);padding:15px;z-index:9999;border:2px solid #b78a3d;border-radius:10px;text-transform:uppercase;';
+                            document.body.appendChild(el);
+                        }
+                        el.innerHTML = this.opponentName + " has finished their deck and is waiting for you!";
+                    }
                     this.checkDecksReady();
                 } else if (msg.type === 'START_GAME_SYNC') {
                     this.sharedSeed = msg.seed;
@@ -300,14 +310,8 @@ class Multiplayer {
     checkDecksReady() {
         if (this.myDeck && this.opponentDeck) {
             if (Popup.curr) Popup.curr.clear(); // Close 'Waiting for opponent'
-            
-            // Re-initialize player_op with opponent's actual deck!
-            // Wait, player_op is global. We set it up.
-            player_op.deckData = this.opponentDeck;
-            player_op.name = this.opponentName;
-            
-            // Re-construct opponent deck explicitly using their provided data
-            player_op.deck = new Deck(player_op, this.opponentDeck);
+            let el = document.getElementById('mp-wait-status');
+            if (el) el.remove();
             
             // If I am the host, I generate the RNG seeds
             if (this.isHosting) {
@@ -320,9 +324,10 @@ class Multiplayer {
 
     beginSyncedGame() {
         Math.seed = this.sharedSeed; // Ensure RNG is synced for deck shuffle
+        this.isGameActive = true;
         
-        // Re-initialize player_op completely with opponent's actual deck
-        // We do it here so the seed is already set! Wait, no, Player constructor creates the Deck and it doesn't shuffle yet. game.startGame() calls initPlayers which calls deck.shuffle!
+        // Initialize BOTH players properly now that the seed is synced
+        player_me = new Player(0, this.username || "Player 1", this.myDeck);
         player_op = new Player(1, this.opponentName, this.opponentDeck);
         
         NavigationManager.showScreen('game-view');

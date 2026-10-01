@@ -5,5 +5,5 @@ app.whenReady().then(() => {
   });
   win.loadFile('src/renderer/index.html');
   win.webContents.on('console-message', (e, level, msg, line) => console.log('BROWSER:', msg, 'at line', line));
-  win.webContents.executeJavaScript("setTimeout(() => { console.log('Testing game start...'); mp.socket = {}; mp.isHosting = true; mp.opponentName = 'FakeOpponent'; mp.opponentDeck = { faction: 'monsters', leader: 'monsters_leader1', cards: [{index: 1, count: 2}] }; mp.myDeck = { faction: 'northern_realm', leader: 'northern_leader1', cards: [{index: 1, count: 2}] }; player_me = new Player(0, 'Player1', mp.myDeck); mp.checkDecksReady(); }, 1500);");
+  win.webContents.executeJavaScript("setTimeout(() => { console.log('Testing game start...'); mp.socket = { write: (d)=>console.log('socket write', d) }; mp.isHosting = true; mp.opponentName = 'FakeOpponent'; const leaderCard = card_dict.find(c => c.row === 'leader' && c.deck === 'monsters'); mp.opponentDeck = { faction: 'monsters', leader: leaderCard, cards: [{index: 1, count: 2}] }; mp.myDeck = { faction: 'monsters', leader: leaderCard, cards: [{index: 1, count: 2}] }; mp.checkDecksReady(); }, 1500);");
 });

@@ -12,6 +12,28 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script>
+    const fs = require('fs');
+    const path = require('path');
+    const logFile = path.join(__dirname, 'client.log');
+    fs.writeFileSync(logFile, ''); // clear log
+    const oldLog = console.log;
+    const oldErr = console.error;
+    console.log = function(...args) {
+      fs.appendFileSync(logFile, 'LOG: ' + args.join(' ') + '\n');
+      oldLog.apply(console, args);
+    };
+    console.error = function(...args) {
+      fs.appendFileSync(logFile, 'ERR: ' + args.join(' ') + '\n');
+      oldErr.apply(console, args);
+    };
+    window.onerror = function(msg, src, ln, col, err) {
+      fs.appendFileSync(logFile, 'UNCAUGHT: ' + msg + ' at ' + ln + ':' + col + '\n' + (err ? err.stack : '') + '\n');
+    };
+    window.addEventListener('unhandledrejection', function(e) {
+      fs.appendFileSync(logFile, 'UNHANDLED PROMISE: ' + e.reason + '\n' + (e.reason ? e.reason.stack : '') + '\n');
+    });
+  </script>
 </head>
 
 <body>
