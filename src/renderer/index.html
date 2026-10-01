@@ -34,7 +34,10 @@
 				<li class="menu-item" data-index="1" id="menu-settings">
 					<span class="menu-item-label">OPTIONS</span>
 				</li>
-				<li class="menu-item" data-index="2" id="menu-exit">
+				<li class="menu-item" data-index="2" id="menu-tutorial">
+					<span class="menu-item-label">TUTORIAL</span>
+				</li>
+				<li class="menu-item" data-index="3" id="menu-exit">
 					<span class="menu-item-label">EXIT</span>
 				</li>
 			</ul>
@@ -322,6 +325,103 @@
 	</section>
 	
 
+
+	<section id="tutorial-menu" class="settings-menu hide">
+		<div class="settings-container">
+			<div class="settings-left-pane">
+				<img src="assets/img/gwent_logo.png" class="settings-brand-logo" alt="Gwent" />
+				<div class="settings-version">HOW TO PLAY</div>
+				<div class="settings-nav">
+					<div class="settings-nav-item tut-category active" data-target="tut-basics">BASICS</div>
+					<div class="settings-nav-item tut-category" data-target="tut-factions">FACTIONS</div>
+					<div class="settings-nav-item tut-category" data-target="tut-types">CARD TYPES</div>
+					<div class="settings-nav-item tut-category" data-target="tut-abilities">ABILITIES</div>
+					<div class="settings-nav-item" id="tutorial-back-btn">BACK</div>
+				</div>
+			</div>
+			<div class="settings-right-pane">
+				<div class="settings-list settings-group active" id="tut-basics">
+					<div class="tut-section">
+						<h3>The Objective</h3>
+						<p>Gwent is a best-of-three rounds card game. To win a match, you must win two rounds. To win a round, you must have a higher Total Strength than your opponent when the round ends.</p>
+					</div>
+					<div class="tut-section">
+						<h3>The Turn System</h3>
+						<p>Players take turns placing exactly one card on the battlefield. You may play a Unit card to increase your strength, or a Special card to affect the board.</p>
+						<p>If you have no cards left, or strategically choose to stop playing, you must <strong>Pass</strong>. Once you pass, you cannot play any more cards for the rest of that round. The opponent may continue playing cards until they also pass.</p>
+					</div>
+					<div class="tut-section">
+						<h3>Mulligan</h3>
+						<p>At the start of the game, you draw 10 cards from your deck. You may discard up to 2 cards and redraw replacements to optimize your starting hand. Remember, you do not automatically draw new cards each round, so manage your hand carefully!</p>
+					</div>
+				</div>
+				<div class="settings-list settings-group hide" id="tut-factions">
+					<div class="tut-section">
+						<h3>Northern Realms</h3>
+						<p><strong>Passive:</strong> Grants an extra card to the player if they win a round.</p>
+						<p>Specializes in Siege weapons, Spies, and Tight Bond units. A highly consistent deck with strong synergy and card advantage capabilities.</p>
+					</div>
+					<div class="tut-section">
+						<h3>Nilfgaardian Empire</h3>
+						<p><strong>Passive:</strong> Wins any round that ends in a draw.</p>
+						<p>Features powerful Spies, strong base units, and Medics. Excellent at controlling the pace of the game and reviving fallen units.</p>
+					</div>
+					<div class="tut-section">
+						<h3>Scoia'tael</h3>
+						<p><strong>Passive:</strong> Chooses who takes the first turn in the match.</p>
+						<p>Highly agile non-human forces with many Agile units (can be placed in Melee or Ranged) and Medics. Great at adapting to weather effects.</p>
+					</div>
+					<div class="tut-section">
+						<h3>Monsters</h3>
+						<p><strong>Passive:</strong> Keeps one random Unit card on the board at the end of each round.</p>
+						<p>Relies on sheer numbers and overwhelming force. Uses Muster abilities to summon entire swarms of creatures from the deck instantly.</p>
+					</div>
+				</div>
+				<div class="settings-list settings-group hide" id="tut-types">
+					<div class="tut-section">
+						<h3>Unit Cards</h3>
+						<p>Units provide Strength to your army. They are placed in one of three rows: <strong>Melee</strong> (sword), <strong>Ranged</strong> (crossbow), or <strong>Siege</strong> (trebuchet).</p>
+					</div>
+					<div class="tut-section">
+						<h3>Hero Cards</h3>
+						<p>Hero units (marked with a golden banner) are legendary figures. They cannot be affected by any Special cards, Weather effects, or abilities—neither positive nor negative.</p>
+					</div>
+					<div class="tut-section">
+						<h3>Weather Cards</h3>
+						<p>Weather cards reduce the strength of ALL non-hero units in a specific row to 1. <strong>Biting Frost</strong> affects Melee, <strong>Impenetrable Fog</strong> affects Ranged, and <strong>Torrential Rain</strong> affects Siege. <strong>Clear Weather</strong> removes all active weather effects.</p>
+					</div>
+					<div class="tut-section">
+						<h3>Special Cards</h3>
+						<p><strong>Decoy:</strong> Swap with a non-hero unit on your board to return it to your hand. Useful for reusing Medics or stealing Spies.<br>
+						<strong>Commander's Horn:</strong> Doubles the strength of all non-hero units in a specific row.<br>
+						<strong>Scorch:</strong> Instantly destroys the strongest unit(s) on the entire battlefield (including yours).</p>
+					</div>
+				</div>
+				<div class="settings-list settings-group hide" id="tut-abilities">
+					<div class="tut-section">
+						<h3>Spy</h3>
+						<p>Place this card on your <em>opponent's</em> battlefield. Its strength is added to their total, but you immediately draw 2 new cards from your deck. Essential for gaining card advantage.</p>
+					</div>
+					<div class="tut-section">
+						<h3>Medic</h3>
+						<p>When played, choose one non-hero unit from your discard pile and play it instantly. Can be chained for massive revivals.</p>
+					</div>
+					<div class="tut-section">
+						<h3>Muster</h3>
+						<p>When played, automatically finds all cards with the exact same name in your deck and hand, and plays them instantly. Highly powerful but vulnerable to Scorch.</p>
+					</div>
+					<div class="tut-section">
+						<h3>Tight Bond</h3>
+						<p>When placed next to a card with the exact same name, both cards double their strength. Three identical cards will triple their strength!</p>
+					</div>
+					<div class="tut-section">
+						<h3>Morale Boost</h3>
+						<p>Adds +1 strength to all other units in its row. Does not affect itself.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 </main>
 
 <!-- Hidden file inputs kept for JS functionality (referenced by gwent.js) -->

@@ -3631,9 +3631,55 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       settingsOpenedFrom = 'menu';
       openSettings();
     } else if (idx === 2) {
-      new Popup("YES", () => require('electron').ipcRenderer.send('exit-app'), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?");
+      openTutorial();
+    } else if (idx === 3) {
+      if (typeof ui !== 'undefined' && ui.popup) {
+        ui.popup("YES", () => window.close(), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95);
+      } else {
+        new Popup("YES", () => window.close(), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95);
+      }
     }
   }
+
+  const tutorialMenu = document.getElementById('tutorial-menu');
+  let inTutorial = false;
+  let tutNavItems = [];
+
+  function openTutorial() {
+    mainMenu.classList.add('hide');
+    tutorialMenu.classList.remove('hide');
+    inTutorial = true;
+    tutNavItems = Array.from(document.querySelectorAll('.tut-category'));
+    setTutActive(0);
+  }
+
+  function closeTutorial() {
+    tutorialMenu.classList.add('hide');
+    mainMenu.classList.remove('hide');
+    inTutorial = false;
+    setMenuActive(2);
+  }
+
+  function setTutActive(idx) {
+    tutNavItems.forEach(el => el.classList.remove('active'));
+    if (tutNavItems[idx]) {
+      tutNavItems[idx].classList.add('active');
+      switchTutCategory(tutNavItems[idx].dataset.target);
+    }
+  }
+
+  function switchTutCategory(targetId) {
+    tutorialMenu.querySelectorAll('.settings-group').forEach(el => el.classList.add('hide'));
+    const target = document.getElementById(targetId);
+    if (target) target.classList.remove('hide');
+  }
+
+  document.getElementById('tutorial-back-btn')?.addEventListener('click', closeTutorial);
+  document.querySelectorAll('.tut-category').forEach((el, i) => {
+    el.addEventListener('click', () => {
+      setTutActive(i);
+    });
+  });
 
   menuItems.forEach((el, i) => {
     el.addEventListener('mouseenter', () => setMenuActive(i));
@@ -3677,7 +3723,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
           if (action === 'resume') { hidePauseMenu(); }
           else if (action === 'settings') { hidePauseMenu(); settingsOpenedFrom = 'game'; openSettings(); }
           else if (action === 'mainmenu') { hidePauseMenu(); new Popup("YES", () => location.reload(), "NO", () => {}, "MAIN MENU", "Return to main menu? Unsaved progress will be lost."); }
-          else if (action === 'exit') { hidePauseMenu(); new Popup("YES", () => require('electron').ipcRenderer.send('exit-app'), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?"); }
+          else if (action === 'exit') { hidePauseMenu(); if(typeof ui !== "undefined" && ui.popup) { ui.popup("YES", () => window.close(), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95); } else { new Popup("YES", () => window.close(), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95); } }
         });
         item.addEventListener('mouseenter', () => {
           overlay.querySelectorAll('.pause-item').forEach(i => i.classList.remove('active'));
@@ -3709,6 +3755,13 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
     if (pauseVisible) {
       if (e.key === 'Escape') { hidePauseMenu(); }
+      return;
+    }
+
+    if (inTutorial) {
+      if (e.key === 'Escape' || e.key === 'Backspace') {
+        closeTutorial();
+      }
       return;
     }
 
