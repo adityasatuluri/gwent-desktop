@@ -89,5 +89,5 @@ function toInteger(str)
 
 // Returns a random integer in the range [0,n)
 function randomInt(n)  {
-	return Math.floor(Math.random() * n);
+	return Math.floor((typeof mp !== 'undefined' && mp.sharedSeed ? Math.seededRandom() : Math.random()) * n);
 }
