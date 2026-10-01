@@ -3612,9 +3612,10 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
   function closeSettings() {
     settingsMenu.classList.add('hide');
+    const deckEl = document.getElementById('deck-customization');
+    if (deckEl) deckEl.style.display = '';
     if (settingsOpenedFrom === 'game') {
-      const deckEl = document.getElementById('deck-customization');
-      if (deckEl) deckEl.style.display = '';
+      // game resumes
     } else {
       mainMenu.classList.remove('hide');
     }
