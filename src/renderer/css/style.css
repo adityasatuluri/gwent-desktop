@@ -1577,296 +1577,198 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 
 
 
-/* ========================================================
-   CINEMATIC MAIN MENU
-   ======================================================== */
-@keyframes menuFadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes glowPulse {
-  0%,100% { opacity: 0.55; transform: scale(1); }
-  50%     { opacity: 0.9;  transform: scale(1.08); }
-}
-@keyframes brandSlideDown {
-  from { opacity: 0; transform: translateY(-30px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes navSlideIn {
-  from { opacity: 0; transform: translateX(-40px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes hintFade {
-  from { opacity: 0; } to { opacity: 0.6; }
-}
-@keyframes bulletExpand {
-  from { width: 0.4vw; } to { width: 1.8vw; }
-}
-@keyframes settingsFadeIn {
-  from { opacity: 0; transform: translateX(-30px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
 
+
+/* ========================================================
+   CINEMATIC MAIN MENU  –  edited_witcher3 + ornate btns
+   ======================================================== */
+
+/* Entrance animations */
+@keyframes menuFadeIn  { from{opacity:0;transform:scale(1.04)} to{opacity:1;transform:scale(1)} }
+@keyframes brandSlide  { from{opacity:0;transform:translateY(-28px)} to{opacity:1;transform:translateY(0)} }
+@keyframes navSlideIn  { from{opacity:0;transform:translateX(-50px)} to{opacity:1;transform:translateX(0)} }
+@keyframes hintFade    { from{opacity:0} to{opacity:0.55} }
+@keyframes btnGlow     { 0%,100%{filter:drop-shadow(0 0 4px rgba(200,144,0,0.4))} 50%{filter:drop-shadow(0 0 12px rgba(220,170,30,0.85))} }
+@keyframes glowPulse   { 0%,100%{opacity:0.5;transform:scale(1)} 50%{opacity:0.9;transform:scale(1.07)} }
+@keyframes settingIn   { from{opacity:0;transform:translateX(-40px)} to{opacity:1;transform:translateX(0)} }
+
+/* -- Main menu shell ------------------------------- */
 #main-menu {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  overflow: hidden;
+  position: fixed; inset: 0; z-index: 9999; overflow: hidden;
 }
 #main-menu.hide { display: none !important; }
 
 #menu-bg {
-  position: absolute;
-  inset: 0;
-  background-image: url('assets/img/main_menu.jpg');
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.04);
-  transition: transform 8s ease-out;
-  animation: menuFadeIn 1.2s ease-out forwards;
+  position: absolute; inset: 0;
+  background: url('assets/img/edited_witcher3.jpg') center/cover no-repeat;
+  animation: menuFadeIn 1.4s cubic-bezier(0.25,0.8,0.25,1) forwards;
 }
-#main-menu.loaded #menu-bg { transform: scale(1); }
 
-/* Dark gradient vignette: heavy on left+bottom where nav sits, light on right (art side) */
+/* Heavy left vignette – dark behind buttons, open on right where art is */
 #menu-vignette {
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0; pointer-events: none;
   background:
-    linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.05) 100%),
-    linear-gradient(to top,   rgba(0,0,0,0.7)  0%, transparent 50%);
-  pointer-events: none;
+    linear-gradient(to right,  rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.65) 38%, rgba(0,0,0,0.0) 68%),
+    linear-gradient(to top,    rgba(0,0,0,0.75) 0%, transparent 45%),
+    linear-gradient(to bottom, rgba(0,0,0,0.5)  0%, transparent 25%);
 }
 
-/* Teal magical glow – mirrors the glow in the reference image (center) */
+/* Subtle warm glow center (matches the fire/orange in the art) */
 #menu-glow {
-  position: absolute;
-  top: 35%; left: 38%;
-  width: 28vw; height: 28vw;
-  background: radial-gradient(ellipse, rgba(0,220,180,0.22) 0%, rgba(0,180,140,0.08) 45%, transparent 70%);
+  position: absolute; top:50%; left:44%;
+  width:30vw; height:25vw;
+  background: radial-gradient(ellipse, rgba(220,90,20,0.18) 0%, rgba(180,60,10,0.06) 50%, transparent 72%);
+  transform: translate(-50%,-50%);
   border-radius: 50%;
-  animation: glowPulse 4s ease-in-out infinite;
-  pointer-events: none;
-  mix-blend-mode: screen;
+  animation: glowPulse 5s ease-in-out infinite;
+  pointer-events: none; mix-blend-mode: screen;
 }
 
-/* Brand / logo – top-left */
+/* -- Branding (top-left) --------------------------- */
 #menu-brand {
-  position: absolute;
-  top: 8%;
-  left: 5vw;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  animation: brandSlideDown 1s cubic-bezier(0.25,0.8,0.25,1) 0.3s both;
+  position: absolute; top: 7%; left: 5vw;
+  display: flex; flex-direction: column;
+  animation: brandSlide 1s cubic-bezier(0.25,0.8,0.25,1) 0.3s both;
 }
 #menu-logo-sub {
-  font-size: 1vw;
-  color: rgba(218,165,32,0.7);
-  letter-spacing: 0.35vw;
-  text-transform: uppercase;
-  font-weight: 400;
+  font-size: 0.85vw; color: rgba(218,165,32,0.7);
+  letter-spacing: 0.4vw; text-transform: uppercase;
 }
 #menu-logo-title {
-  font-size: 5.5vw;
-  color: #e8c97a;
-  letter-spacing: 0.6vw;
-  font-weight: 700;
-  text-shadow: 0 0 2vw rgba(218,165,32,0.5), 0 0 0.5vw rgba(0,0,0,0.8);
-  line-height: 1;
+  font-size: 5.2vw; font-weight: 700; line-height: 1.0;
+  color: #e8c97a; letter-spacing: 0.5vw;
+  text-shadow: 0 0 2vw rgba(218,165,32,0.5), 0 2px 8px rgba(0,0,0,0.9);
 }
 
-/* -- Nav -- */
+/* -- Nav (bottom-left) – ornate button items ------- */
 #menu-nav {
-  position: absolute;
-  bottom: 18%;
-  left: 5vw;
-  animation: navSlideIn 0.8s cubic-bezier(0.25,0.8,0.25,1) 0.6s both;
+  position: absolute; bottom: 13%; left: 4vw;
+  animation: navSlideIn 0.9s cubic-bezier(0.25,0.8,0.25,1) 0.6s both;
 }
-#menu-items {
-  list-style: none;
-  margin: 0; padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2vw;
-}
+#menu-items { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:1.1vw; }
 
 .menu-item {
-  display: flex;
-  align-items: center;
-  gap: 1vw;
-  padding: 0.55vw 0;
-  cursor: pointer;
   position: relative;
-  transition: transform 0.2s cubic-bezier(0.25,0.8,0.25,1);
-}
-.menu-item:hover { transform: translateX(0.5vw); }
-
-.menu-item-bullet {
-  display: block;
-  height: 2px;
-  width: 0.4vw;
-  background: goldenrod;
-  border-radius: 2px;
-  transition: width 0.25s ease, background 0.2s;
-  flex-shrink: 0;
-}
-.menu-item-label {
-  font-size: 1.55vw;
-  color: rgba(255,255,255,0.55);
-  letter-spacing: 0.18vw;
-  text-transform: uppercase;
-  font-weight: 500;
-  transition: color 0.2s ease, text-shadow 0.2s ease;
+  width: 22vw; height: 5vw; min-width: 240px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  /* SVG ornate frame as bg */
+  background: url('assets/svg/btn_normal.svg') center/100% 100% no-repeat;
+  transition: transform 0.18s cubic-bezier(0.25,0.8,0.25,1),
+              filter 0.18s ease;
   user-select: none;
 }
-
-/* Active/focused state */
-.menu-item.active .menu-item-bullet {
-  width: 1.8vw;
-  background: #e8c97a;
-  box-shadow: 0 0 0.5vw rgba(218,165,32,0.8);
-  animation: bulletExpand 0.25s ease-out forwards;
+.menu-item:hover,
+.menu-item.active {
+  background-image: url('assets/svg/btn_active.svg');
+  transform: scale(1.04) translateX(6px);
+  animation: btnGlow 1.8s ease-in-out infinite;
 }
-.menu-item.active .menu-item-label {
-  color: #e8c97a;
-  text-shadow: 0 0 1.5vw rgba(218,165,32,0.5);
+.menu-item.flash { filter: brightness(2); }
+
+/* Hide the bullet – not needed with SVG buttons */
+.menu-item-bullet { display: none; }
+
+.menu-item-label {
+  font-size: 1.25vw; font-weight: 600;
+  color: rgba(230,200,120,0.75);
+  letter-spacing: 0.35vw; text-transform: uppercase;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+  transition: color 0.15s, text-shadow 0.15s;
+  pointer-events: none;
+}
+.menu-item.active .menu-item-label,
+.menu-item:hover  .menu-item-label {
+  color: #fff8d0;
+  text-shadow: 0 0 1.2vw rgba(218,165,32,0.7), 0 1px 6px rgba(0,0,0,0.9);
 }
 
-/* Hover – non-active */
-.menu-item:not(.active):hover .menu-item-label { color: rgba(255,255,255,0.85); }
-.menu-item:not(.active):hover .menu-item-bullet { width: 0.9vw; }
-
-/* Key-press flash */
-.menu-item.flash .menu-item-label {
-  color: #fff;
-  text-shadow: 0 0 2vw white;
-}
-
-/* Bottom keyboard hint */
+/* Keyboard hint */
 #menu-hint {
-  position: absolute;
-  bottom: 4%;
-  left: 5vw;
-  font-size: 0.85vw;
-  color: rgba(255,255,255,0.45);
-  letter-spacing: 0.1vw;
-  text-transform: uppercase;
-  animation: hintFade 1.5s ease 1.4s both;
+  position: absolute; bottom: 4%; left: 5vw;
+  font-size: 0.8vw; color: rgba(255,255,255,0.4);
+  letter-spacing: 0.12vw; text-transform: uppercase;
+  animation: hintFade 2s ease 1.4s both;
 }
 
 /* ========================================================
    SETTINGS PANEL
    ======================================================== */
 #settings-menu {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  overflow: hidden;
+  position: fixed; inset: 0; z-index: 10000; overflow: hidden;
 }
 #settings-menu.hide { display: none !important; }
 
 #settings-bg {
-  position: absolute;
-  inset: 0;
-  background-image: url('assets/img/main_menu.jpg');
-  background-size: cover;
-  background-position: center;
-  filter: blur(3px) brightness(0.4);
+  position: absolute; inset: 0;
+  background: url('assets/img/edited_witcher3.jpg') center/cover no-repeat;
+  filter: blur(4px) brightness(0.35);
   transform: scale(1.06);
 }
 
 #settings-panel {
-  position: absolute;
-  top: 0; left: 0;
-  width: 40vw; height: 100%;
-  background: linear-gradient(to right, rgba(0,0,0,0.92) 70%, transparent 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  position: absolute; top:0; left:0;
+  width: 42vw; height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.94) 65%, transparent);
+  display: flex; flex-direction: column; justify-content: center;
   padding: 0 5vw;
-  animation: settingsFadeIn 0.4s cubic-bezier(0.25,0.8,0.25,1) forwards;
+  animation: settingIn 0.35s cubic-bezier(0.25,0.8,0.25,1) forwards;
 }
 
 #settings-title {
-  font-size: 2.5vw;
-  color: #e8c97a;
-  letter-spacing: 0.5vw;
-  text-transform: uppercase;
-  margin-bottom: 3vw;
-  text-shadow: 0 0 1vw rgba(218,165,32,0.4);
+  font-size: 2.2vw; color: #e8c97a;
+  letter-spacing: 0.5vw; text-transform: uppercase; margin-bottom: 2.5vw;
+  text-shadow: 0 0 1.5vw rgba(218,165,32,0.4);
 }
 
 .setting-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.8vw 0;
-  border-bottom: 1px solid rgba(218,165,32,0.1);
-  cursor: pointer;
-  transition: padding-left 0.2s ease;
-  position: relative;
+  position: relative; cursor: pointer;
+  width: 28vw; height: 4.5vw; margin-bottom: 0.9vw;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5vw;
+  background: url('assets/svg/btn_normal.svg') center/100% 100% no-repeat;
+  transition: transform 0.18s ease, filter 0.18s ease;
 }
-.setting-row::before {
-  content: '';
-  position: absolute;
-  left: -1vw;
-  width: 0;
-  height: 100%;
-  background: rgba(218,165,32,0.08);
-  transition: width 0.2s ease;
+.setting-row.active,
+.setting-row:hover {
+  background-image: url('assets/svg/btn_active.svg');
+  transform: scale(1.03) translateX(4px);
 }
-.setting-row.active::before { width: calc(100% + 1vw); }
-.setting-row.active { padding-left: 0.8vw; }
+.setting-row::before { display:none; }
 
 .setting-label {
-  font-size: 1.3vw;
-  color: rgba(255,255,255,0.55);
-  text-transform: uppercase;
-  letter-spacing: 0.15vw;
-  transition: color 0.2s;
+  font-size: 1.1vw; color: rgba(220,190,110,0.75);
+  text-transform: uppercase; letter-spacing: 0.2vw;
+  transition: color 0.15s;
 }
-.setting-row.active .setting-label {
-  color: #e8c97a;
-}
+.setting-row.active .setting-label,
+.setting-row:hover  .setting-label { color: #fff8d0; }
+
+.setting-value { pointer-events: none; }
 .setting-toggle {
-  font-size: 1.1vw;
-  color: rgba(255,255,255,0.4);
-  letter-spacing: 0.1vw;
-  transition: color 0.2s, text-shadow 0.2s;
+  font-size: 1vw; letter-spacing: 0.12vw;
+  font-weight: 700;
 }
-.setting-toggle.on {
-  color: #5ef0c0;
-  text-shadow: 0 0 0.8vw rgba(0,220,180,0.6);
-}
-.setting-toggle.off {
-  color: rgba(255,80,80,0.8);
-}
+.setting-toggle.on  { color: #60f0b8; text-shadow: 0 0 0.6vw rgba(0,220,160,0.7); }
+.setting-toggle.off { color: rgba(255,80,80,0.85); }
 .hidden-check { display: none; }
+
 #settings-hint {
-  margin-top: 3vw;
-  font-size: 0.85vw;
-  color: rgba(255,255,255,0.3);
-  letter-spacing: 0.1vw;
-  text-transform: uppercase;
+  margin-top: 2.5vw; font-size: 0.8vw;
+  color: rgba(255,255,255,0.3); letter-spacing: 0.12vw; text-transform: uppercase;
 }
 
-/* Back-to-game button – bottom right of game screen */
+/* -- Back-to-menu button (in-game) ----------------- */
 #back-to-menu-btn {
-  position: fixed;
-  bottom: 2vw; right: 2vw;
-  z-index: 100;
-  background: rgba(0,0,0,0.7);
-  border: 1px solid rgba(218,165,32,0.4);
-  color: rgba(218,165,32,0.8);
-  padding: 0.6vw 1.2vw;
-  font-size: 0.9vw;
-  letter-spacing: 0.15vw;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  position: fixed; bottom: 1.5vw; right: 2vw; z-index: 100;
+  width: 10vw; height: 3.2vw;
+  background: url('assets/svg/btn_normal.svg') center/100% 100% no-repeat;
+  border: none; outline: none; cursor: pointer;
+  color: rgba(218,165,32,0.8); font-size: 0.85vw;
+  letter-spacing: 0.2vw; text-transform: uppercase;
+  transition: transform 0.15s ease, filter 0.15s ease;
 }
 #back-to-menu-btn:hover {
-  border-color: goldenrod;
-  color: goldenrod;
+  background-image: url('assets/svg/btn_active.svg');
+  color: #fff8d0; transform: scale(1.06);
 }
-

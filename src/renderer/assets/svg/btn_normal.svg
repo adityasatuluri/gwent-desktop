@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 72" fill="none">
+  <defs>
+    <linearGradient id="gld_n" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#f5d878"/>
+      <stop offset="40%"  stop-color="#b8840a"/>
+      <stop offset="60%"  stop-color="#a07008"/>
+      <stop offset="100%" stop-color="#e8c050"/>
+    </linearGradient>
+    <linearGradient id="bg_n" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#0d0a04" stop-opacity="0.96"/>
+      <stop offset="50%"  stop-color="#1c1508" stop-opacity="0.90"/>
+      <stop offset="100%" stop-color="#0d0a04" stop-opacity="0.96"/>
+    </linearGradient>
+    <linearGradient id="gem_n" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#f5d060"/>
+      <stop offset="100%" stop-color="#905800"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background fill -->
+  <polygon points="20,3 500,3 517,20 517,52 500,69 20,69 3,52 3,20" fill="url(#bg_n)"/>
+
+  <!-- Outer frame border -->
+  <polygon points="20,3 500,3 517,20 517,52 500,69 20,69 3,52 3,20"
+           stroke="url(#gld_n)" stroke-width="1.8"/>
+
+  <!-- Inner accent line -->
+  <polygon points="25,8 495,8 510,23 510,49 495,64 25,64 10,49 10,23"
+           stroke="#a07820" stroke-width="0.7" stroke-opacity="0.45"/>
+
+  <!-- Corner ornament TL -->
+  <path d="M20,3 L8,3 L3,8 L3,20" stroke="#e8c050" stroke-width="1.4" stroke-linecap="round"/>
+  <circle cx="10" cy="10" r="2" fill="#c89020"/>
+  <!-- Corner ornament TR -->
+  <path d="M500,3 L512,3 L517,8 L517,20" stroke="#e8c050" stroke-width="1.4" stroke-linecap="round"/>
+  <circle cx="510" cy="10" r="2" fill="#c89020"/>
+  <!-- Corner ornament BL -->
+  <path d="M20,69 L8,69 L3,64 L3,52" stroke="#e8c050" stroke-width="1.4" stroke-linecap="round"/>
+  <circle cx="10" cy="62" r="2" fill="#c89020"/>
+  <!-- Corner ornament BR -->
+  <path d="M500,69 L512,69 L517,64 L517,52" stroke="#e8c050" stroke-width="1.4" stroke-linecap="round"/>
+  <circle cx="510" cy="62" r="2" fill="#c89020"/>
+
+  <!-- Left side diamond gem -->
+  <polygon points="3,36 12,28 21,36 12,44" fill="url(#gem_n)" stroke="#f5d060" stroke-width="1"/>
+  <polygon points="6,36 12,31 18,36 12,41" fill="#f0c030" fill-opacity="0.55"/>
+  <line x1="3" y1="36" x2="12" y2="36" stroke="#fff8e0" stroke-width="0.6" stroke-opacity="0.4"/>
+
+  <!-- Right side diamond gem -->
+  <polygon points="517,36 508,28 499,36 508,44" fill="url(#gem_n)" stroke="#f5d060" stroke-width="1"/>
+  <polygon points="514,36 508,31 502,36 508,41" fill="#f0c030" fill-opacity="0.55"/>
+  <line x1="517" y1="36" x2="508" y2="36" stroke="#fff8e0" stroke-width="0.6" stroke-opacity="0.4"/>
+
+  <!-- Top center segment highlight -->
+  <line x1="160" y1="3" x2="360" y2="3" stroke="#f0c840" stroke-width="1.6"/>
+  <line x1="160" y1="69" x2="360" y2="69" stroke="#f0c840" stroke-width="1.6"/>
+
+  <!-- Center top diamond pip -->
+  <polygon points="260,0 266,5 260,10 254,5" fill="#c89020" stroke="#f5d060" stroke-width="0.8"/>
+  <!-- Center bottom diamond pip -->
+  <polygon points="260,72 266,67 260,62 254,67" fill="#c89020" stroke="#f5d060" stroke-width="0.8"/>
+</svg>

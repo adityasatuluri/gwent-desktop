@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 72" fill="none">
+  <defs>
+    <linearGradient id="gld_h" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#fff0a0"/>
+      <stop offset="35%"  stop-color="#e8a820"/>
+      <stop offset="65%"  stop-color="#c88c10"/>
+      <stop offset="100%" stop-color="#ffe870"/>
+    </linearGradient>
+    <linearGradient id="bg_h" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#1a1204" stop-opacity="0.97"/>
+      <stop offset="50%"  stop-color="#2e2010" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#1a1204" stop-opacity="0.97"/>
+    </linearGradient>
+    <linearGradient id="fill_h" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#3a2a08" stop-opacity="0.3"/>
+      <stop offset="50%"  stop-color="#c89020" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#3a2a08" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="gem_h" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#ffe060"/>
+      <stop offset="100%" stop-color="#b07000"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Glow halo -->
+  <polygon points="20,3 500,3 517,20 517,52 500,69 20,69 3,52 3,20"
+           fill="none" stroke="#c89020" stroke-width="6" stroke-opacity="0.25" filter="url(#glow)"/>
+
+  <!-- Background fill -->
+  <polygon points="20,3 500,3 517,20 517,52 500,69 20,69 3,52 3,20" fill="url(#bg_h)"/>
+  <!-- Subtle gold inner fill tint -->
+  <polygon points="20,3 500,3 517,20 517,52 500,69 20,69 3,52 3,20" fill="url(#fill_h)"/>
+
+  <!-- Outer frame border (brighter on hover) -->
+  <polygon points="20,3 500,3 517,20 517,52 500,69 20,69 3,52 3,20"
+           stroke="url(#gld_h)" stroke-width="2.2"/>
+
+  <!-- Inner accent -->
+  <polygon points="25,8 495,8 510,23 510,49 495,64 25,64 10,49 10,23"
+           stroke="#e8b030" stroke-width="0.9" stroke-opacity="0.6"/>
+
+  <!-- Corner ornament TL -->
+  <path d="M20,3 L8,3 L3,8 L3,20" stroke="#ffe060" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="10" cy="10" r="2.5" fill="#e8a820"/>
+  <!-- Corner ornament TR -->
+  <path d="M500,3 L512,3 L517,8 L517,20" stroke="#ffe060" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="510" cy="10" r="2.5" fill="#e8a820"/>
+  <!-- Corner ornament BL -->
+  <path d="M20,69 L8,69 L3,64 L3,52" stroke="#ffe060" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="10" cy="62" r="2.5" fill="#e8a820"/>
+  <!-- Corner ornament BR -->
+  <path d="M500,69 L512,69 L517,64 L517,52" stroke="#ffe060" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="510" cy="62" r="2.5" fill="#e8a820"/>
+
+  <!-- Left gem -->
+  <polygon points="3,36 12,26 21,36 12,46" fill="url(#gem_h)" stroke="#ffe060" stroke-width="1.2"/>
+  <polygon points="7,36 12,31 17,36 12,41" fill="#ffe880" fill-opacity="0.7"/>
+
+  <!-- Right gem -->
+  <polygon points="517,36 508,26 499,36 508,46" fill="url(#gem_h)" stroke="#ffe060" stroke-width="1.2"/>
+  <polygon points="513,36 508,31 503,36 508,41" fill="#ffe880" fill-opacity="0.7"/>
+
+  <!-- Top/bottom highlight lines -->
+  <line x1="140" y1="3" x2="380" y2="3" stroke="#ffe060" stroke-width="2"/>
+  <line x1="140" y1="69" x2="380" y2="69" stroke="#ffe060" stroke-width="2"/>
+
+  <!-- Center diamond pips -->
+  <polygon points="260,0 267,5 260,10 253,5" fill="#e8a820" stroke="#ffe060" stroke-width="0.9"/>
+  <polygon points="260,72 267,67 260,62 253,67" fill="#e8a820" stroke="#ffe060" stroke-width="0.9"/>
+</svg>
