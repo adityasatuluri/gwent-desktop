@@ -226,10 +226,10 @@ html {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	gap: 1.5vw;
 	border-top: 0.15vw solid rgba(182,139,68,0.6);
 	border-bottom: 0.15vw solid rgba(182,139,68,0.6);
 	overflow: visible;
-	position: relative;
 }
 #notification-bar > div::before {
 	content: '';
@@ -242,9 +242,6 @@ html {
 	z-index: 2; 
 }
 #notification-bar > div::after {
-	position: absolute;
-	top: 100%; /* Placed directly underneath the ribbon */
-	margin-top: 0vw;
 	font-family: 'Cinzel', 'Palatino Linotype', serif;
 	font-size: 2.2vw;
 	font-weight: 600;
@@ -252,6 +249,7 @@ html {
 	text-transform: uppercase;
 	color: #e5cd85;
 	text-shadow: 0 0 1.5vw rgba(229,205,133,0.6);
+	z-index: 2;
 }
 
 #notif-me-first::before    { background-image: url('../assets/img/icons/notif_me_coin.png'); }
