@@ -434,7 +434,7 @@ html {
 
 #carousel .card-lg {
 	display:inline-block;
-	background-size: 100% 100%;
+	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
 }
@@ -1314,6 +1314,8 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 	margin-top: 24.5%;
 	
 	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
 	border-radius: .5vw;
 }
 #card-leader > div:hover {
@@ -1472,6 +1474,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 	
 	background-size:contain;
 	background-repeat: no-repeat;
+	background-position: center;
 	
 	box-shadow: -.1vw -.1vw .5vw rgba(20,20,20, 0.5);
 	
@@ -1857,7 +1860,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 /* All carousel cards */
 #carousel > :nth-child(1) > .card-lg {
   flex-shrink: 0 !important;
-  margin: 0 !important;
+  margin: 0 0.75vw !important;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
