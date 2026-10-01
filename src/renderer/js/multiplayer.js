@@ -244,7 +244,7 @@ class Multiplayer {
         socket.on('close', () => {
             console.log('Connection closed');
             this.socket = null;
-            if (typeof ui !== 'undefined' && inGame) {
+            if (typeof ui !== 'undefined' && typeof NavigationManager !== 'undefined' && NavigationManager.isScreenActive('game-view')) {
                 ui.popup("OK", () => location.reload(), false, null, "DISCONNECTED", "The connection was lost.");
             }
         });
@@ -278,17 +278,17 @@ class Multiplayer {
     }
     
     startGameWithOpponent() {
-        // Hide lobby
-        document.getElementById('multiplayer-lobby').classList.add('hide');
-        mainMenu.classList.add('hide');
-        document.body.classList.add('in-game');
-        
-        // We need a major refactor of gwent.js to actually drive gameplay over network.
-        // For this step, we just alert the user that gameplay sync is a WIP.
-        ui.popup("OK", () => location.reload(), false, null, "MULTIPLAYER ALPHA", "You have successfully connected via LAN!\n\nNote: Full gameplay state synchronization is extremely complex and currently being implemented. You will now return to the main menu.");
+        // Hide lobby and transition to game view
+        NavigationManager.showScreen('game-view');
         
         // As a proof of concept, add a match history record
         this.addHistory(this.opponentName, 'draw');
+        
+        // We need a major refactor of gwent.js to actually drive gameplay over network.
+        // For this step, we just alert the user that gameplay sync is a WIP.
+        if (typeof ui !== 'undefined') {
+            ui.popup("RETURN TO MENU", () => location.reload(), false, null, "MULTIPLAYER ALPHA", "You have successfully connected via LAN with " + this.opponentName + "!\n\nNote: Full gameplay state synchronization is extremely complex and currently being implemented. For now, the connection is established and the match is recorded.");
+        }
     }
 }
 
