@@ -1478,7 +1478,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 	
 	transition: margin-bottom 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), margin-right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 	
-	z-index = 1;
+	z-index: 1;
 }
 
 .deck-card .card { position : absolute; }
@@ -2138,6 +2138,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
   color: #e8c97a;
   border-color: rgba(255,255,255,0.3);
 }
+
 
 
 
