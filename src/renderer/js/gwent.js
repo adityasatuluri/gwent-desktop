@@ -3603,33 +3603,42 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
   document.getElementById('settings-back-btn')?.addEventListener('click', () => closeSettings());
 
+  let settingsOpenedFrom = 'menu'; // 'menu' or 'game'
+
   function openSettings() {
     syncSettingsDisplay();
-    mainMenu.classList.add('hide');
     settingsMenu.classList.remove('hide');
+    mainMenu.classList.add('hide');
+    const deckEl = document.getElementById('deck-customization');
+    if (deckEl) deckEl.style.display = 'none';
     inSettings = true;
     setSettingActive(0);
   }
 
   function closeSettings() {
     settingsMenu.classList.add('hide');
-    mainMenu.classList.remove('hide');
+    if (settingsOpenedFrom === 'game') {
+      const deckEl = document.getElementById('deck-customization');
+      if (deckEl) deckEl.style.display = '';
+    } else {
+      mainMenu.classList.remove('hide');
+    }
     inSettings = false;
-    setMenuActive(1); // focus back on Settings item
+    if (settingsOpenedFrom === 'menu') setMenuActive(1);
   }
 
   function selectMainItem(idx) {
-    if (idx === 0) { // Play Game
+    if (idx === 0) {
       mainMenu.classList.add('hide');
       inGame = true;
-    } else if (idx === 1) { // Settings
+    } else if (idx === 1) {
+      settingsOpenedFrom = 'menu';
       openSettings();
-    } else if (idx === 2) { // Exit
+    } else if (idx === 2) {
       require('electron').ipcRenderer.send('exit-app');
     }
   }
 
-  // -- Mouse clicks on menu items -----------------------------
   menuItems.forEach((el, i) => {
     el.addEventListener('mouseenter', () => setMenuActive(i));
     el.addEventListener('click', () => {
@@ -3644,30 +3653,53 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     });
   });
 
-  // -- Back-to-menu button (in game) -------------------------
   const backBtn = document.getElementById('back-to-menu-btn');
   if (backBtn) backBtn.addEventListener('click', () => { location.reload(); });
 
+  // -- Pause Menu (in-game ESC) --------------------------------
+  function showPauseMenu() {
+    let overlay = document.getElementById('pause-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'pause-overlay';
+      overlay.innerHTML = '<div id="pause-box">' +
+        '<h2>PAUSED</h2>' +
+        '<div class="pause-item active" data-action="resume">Resume</div>' +
+        '<div class="pause-item" data-action="settings">Settings</div>' +
+        '<div class="pause-item" data-action="mainmenu">Main Menu</div>' +
+        '<div class="pause-item" data-action="exit">Exit</div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+
+      overlay.querySelectorAll('.pause-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const action = item.dataset.action;
+          if (action === 'resume') { hidePauseMenu(); }
+          else if (action === 'settings') { hidePauseMenu(); settingsOpenedFrom = 'game'; openSettings(); }
+          else if (action === 'mainmenu') { location.reload(); }
+          else if (action === 'exit') { require('electron').ipcRenderer.send('exit-app'); }
+        });
+        item.addEventListener('mouseenter', () => {
+          overlay.querySelectorAll('.pause-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+        });
+      });
+    }
+    overlay.style.display = '';
+  }
+
+  function hidePauseMenu() {
+    const overlay = document.getElementById('pause-overlay');
+    if (overlay) overlay.style.display = 'none';
+  }
+
   // -- Keyboard navigation ------------------------------------
   document.addEventListener('keydown', (e) => {
-    // Faction nav during deck customization
-    if (!inGame && !inSettings && !mainMenu.classList.contains('hide')) {
-      /* menu nav */
-    }
-    if (inGame) {
-      const deckScreen = document.getElementById('deck-customization');
-      const inDeckBuilder = deckScreen && !deckScreen.classList.contains('hide');
+    const pauseOverlay = document.getElementById('pause-overlay');
+    const pauseVisible = pauseOverlay && pauseOverlay.style.display !== 'none';
 
-      if (inDeckBuilder) {
-        if (e.key === '1') document.getElementById('faction-prev')?.click();
-        if (e.key === '3') document.getElementById('faction-next')?.click();
-        if (e.key === 'Enter') {
-          if (typeof dm !== 'undefined') dm.startNewGame();
-        }
-        if (e.key === 'Escape') {
-          location.reload();
-        }
-      }
+    if (pauseVisible) {
+      if (e.key === 'Escape') { hidePauseMenu(); }
       return;
     }
 
@@ -3691,7 +3723,23 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       return;
     }
 
-    // Main menu
+    if (inGame) {
+      const deckScreen = document.getElementById('deck-customization');
+      const inDeckBuilder = deckScreen && !deckScreen.classList.contains('hide');
+
+      if (inDeckBuilder) {
+        if (e.key === '1') document.getElementById('faction-prev')?.click();
+        if (e.key === '3') document.getElementById('faction-next')?.click();
+        if (e.key === 'Enter') {
+          if (typeof dm !== 'undefined') dm.startNewGame();
+        }
+        if (e.key === 'Escape') { location.reload(); }
+      } else {
+        if (e.key === 'Escape') { showPauseMenu(); }
+      }
+      return;
+    }
+
     if (!mainMenu.classList.contains('hide')) {
       switch(e.key) {
         case 'ArrowUp':
@@ -3710,6 +3758,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   });
 
 })();
+
 
 
 

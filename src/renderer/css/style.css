@@ -1824,7 +1824,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 
 #settings-bg {
   position: absolute; inset: 0;
-  background: rgba(0,0,0,0.85); /* Darken everything */
+  background: rgba(0,0,0,0.95);
 }
 
 #settings-layout {
@@ -2090,4 +2090,42 @@ rcase;
 
 
 
+
+
+/* ================================================================
+   PAUSE OVERLAY (in-game ESC)
+   ================================================================ */
+#pause-overlay {
+  position: fixed; inset: 0;
+  z-index: 20000;
+  background: rgba(0,0,0,0.75);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif;
+}
+#pause-box {
+  text-align: center;
+  padding: 3vw 5vw;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.6);
+}
+#pause-box h2 {
+  font-size: 1.8vw;
+  color: #e8c97a;
+  letter-spacing: 0.4vw;
+  margin-bottom: 2vw;
+}
+.pause-item {
+  color: rgba(200,200,200,0.6);
+  font-size: 1vw;
+  padding: 0.7vw 3vw;
+  cursor: pointer;
+  letter-spacing: 0.15vw;
+  border: 1px solid transparent;
+  transition: color 0.15s;
+  margin: 0.3vw 0;
+}
+.pause-item.active, .pause-item:hover {
+  color: #e8c97a;
+  border-color: rgba(255,255,255,0.3);
+}
 
