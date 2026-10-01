@@ -1175,15 +1175,16 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 }
 
 #faction-title {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 1vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vw;
+  justify-self: center;
 }
 #faction-icon {
-	width: 5vw;
-	height: 5vw;
-	object-fit: contain;
+  height: 3.5vw;
+  width: auto;
+  object-fit: contain;
 }
 
 #deck-customization h1 {
@@ -1626,15 +1627,25 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 
 /* Faction header */
 #faction-header {
-  position: absolute; top:2%; left:0; right:0;
-  display:flex; align-items:center; justify-content:center; gap:1.5vw;
-  z-index:10;
+  position: absolute; top:2%; left:0; right:0; width: 100%;
+  display: grid;
+  grid-template-columns: 33% 34% 33%;
+  align-items: center;
+  z-index: 10;
 }
 .faction-nav {
   background: none; border: none;
   color: #c8a86a; font-size: 1vw; cursor: pointer;
   padding: 0.3vw 0.8vw;
   transition: color 0.2s;
+}
+#faction-prev {
+  justify-self: end;
+  text-align: right;
+}
+#faction-next {
+  justify-self: start;
+  text-align: left;
 }
 .faction-nav:hover { color: #f5d060; }
 
@@ -1952,6 +1963,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
   color: #e8c97a !important;
   letter-spacing: 0.1vw !important;
 }
+
 
 
 
