@@ -2201,22 +2201,41 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 #carousel.faction-mode > :nth-child(1) > :nth-child(3), #carousel.faction-mode > :nth-child(1) > :nth-child(7) { width: 13.13vw !important; }
 #carousel.faction-mode > :nth-child(1) > :nth-child(2), #carousel.faction-mode > :nth-child(1) > :nth-child(8) { width: 10.66vw !important; }
 #carousel.faction-mode > :nth-child(1) > :nth-child(1), #carousel.faction-mode > :nth-child(1) > :nth-child(9) { width: 8.13vw !important; }
-.tut-section {
-	margin-bottom: 2vw;
-	padding: 1vw;
-	background: rgba(10, 10, 10, 0.4);
-	border-radius: 0.5vw;
-	border-left: 0.3vw solid goldenrod;
+.tut-row {
+	background: linear-gradient(90deg, rgba(20,20,20,0.8) 0%, rgba(10,10,10,0.4) 100%);
+	border: 1px solid #333;
+	border-left: 0.4vw solid #b68b44;
+	border-radius: 0.3vw;
+	padding: 1vw 1.5vw;
+	margin-bottom: 1.5vw;
+	display: flex;
+	align-items: center;
+	gap: 1.5vw;
 }
-.tut-section h3 {
+.tut-row-icon {
+	flex: 0 0 4vw;
+	height: 4vw;
+	object-fit: contain;
+	background: rgba(0,0,0,0.6);
+	padding: 0.5vw;
+	border-radius: 50%;
+	border: 1px solid #555;
+}
+.tut-row-content {
+	flex: 1;
+}
+.tut-row h3 {
 	color: #e5cd85;
-	font-size: 1.5vw;
+	font-size: 1.4vw;
 	margin: 0 0 0.5vw 0;
 	font-weight: 600;
 }
-.tut-section p {
-	color: #d8d8d8;
-	font-size: 1.1vw;
+.tut-row p {
+	color: #cccccc;
+	font-size: 1vw;
 	line-height: 1.4;
 	margin: 0 0 0.5vw 0;
+}
+.tut-row p:last-child {
+	margin-bottom: 0;
 }
