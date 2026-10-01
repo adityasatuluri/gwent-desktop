@@ -210,8 +210,9 @@ html {
 	z-index: 500;
 	pointer-events: none;
 	display: flex;
-	flex-direction: column;
+	justify-content: center;
 	align-items: center;
+	overflow: visible;
 }
 #notification-bar > div {
 	width: 100%;
@@ -225,22 +226,25 @@ html {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 2.5vw;
 	border-top: 0.15vw solid rgba(182,139,68,0.6);
 	border-bottom: 0.15vw solid rgba(182,139,68,0.6);
+	overflow: visible;
+	position: relative;
 }
 #notification-bar > div::before {
 	content: '';
-	width: 12vw;
-	height: 12vw;
+	width: 18vw;
+	height: 18vw;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
 	flex-shrink: 0;
-	/* Add a small negative margin to pull the text closer to the huge icon if needed */
-	margin-right: -1vw;
+	z-index: 2; 
 }
 #notification-bar > div::after {
+	position: absolute;
+	top: 100%; /* Placed directly underneath the ribbon */
+	margin-top: 0vw;
 	font-family: 'Cinzel', 'Palatino Linotype', serif;
 	font-size: 2.2vw;
 	font-weight: 600;
