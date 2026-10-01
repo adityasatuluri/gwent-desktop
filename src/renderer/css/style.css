@@ -1852,20 +1852,20 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 }
 /* Center card (selected) – bigger, golden glow */
 #carousel > :nth-child(1) > :nth-child(3) {
-  width: 17vw !important;
-  height: 32vw !important;
+  width: 14.5vw !important;
+  height: 27.2vw !important;
   border: 0.3vw solid goldenrod !important;
   box-shadow: 0 0 3vw goldenrod !important;
 }
 /* Adjacent cards (2 & 4) */
 #carousel > :nth-child(1) > :nth-child(2n) {
-  width: 14vw !important;
-  height: 26.3vw !important;
+  width: 11.9vw !important;
+  height: 22.4vw !important;
 }
 /* Outer cards (1 & 5) */
 #carousel > :nth-child(1) > :nth-child(4n - 3) {
-  width: 11.8vw !important;
-  height: 22.1vw !important;
+  width: 10vw !important;
+  height: 18.8vw !important;
 }
 /* Container: center vertically, proper gap */
 #carousel > :nth-child(1) {
@@ -1873,7 +1873,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
   align-items: center !important;
   justify-content: center !important;
   gap: 1.5vw !important;
-  top: 8% !important;
+  top: 18% !important;
   padding: 0 2% !important;
 }
 /* Description panel */
