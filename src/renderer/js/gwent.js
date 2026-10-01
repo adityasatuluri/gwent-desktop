@@ -3634,9 +3634,9 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       openTutorial();
     } else if (idx === 3) {
       if (typeof ui !== 'undefined' && ui.popup) {
-        ui.popup("YES", () => window.close(), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95);
+        ui.popup("YES", () => require('electron').ipcRenderer.send('exit-app'), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95);
       } else {
-        new Popup("YES", () => window.close(), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95);
+        new Popup("YES", () => require('electron').ipcRenderer.send('exit-app'), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95);
       }
     }
   }
@@ -3723,7 +3723,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
           if (action === 'resume') { hidePauseMenu(); }
           else if (action === 'settings') { hidePauseMenu(); settingsOpenedFrom = 'game'; openSettings(); }
           else if (action === 'mainmenu') { hidePauseMenu(); new Popup("YES", () => location.reload(), "NO", () => {}, "MAIN MENU", "Return to main menu? Unsaved progress will be lost."); }
-          else if (action === 'exit') { hidePauseMenu(); if(typeof ui !== "undefined" && ui.popup) { ui.popup("YES", () => window.close(), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95); } else { new Popup("YES", () => window.close(), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95); } }
+          else if (action === 'exit') { hidePauseMenu(); if(typeof ui !== "undefined" && ui.popup) { ui.popup("YES", () => require('electron').ipcRenderer.send('exit-app'), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95); } else { new Popup("YES", () => require('electron').ipcRenderer.send('exit-app'), "NO", () => {}, "EXIT GAME", "Are you sure you want to quit GWENT?", 0.95); } }
         });
         item.addEventListener('mouseenter', () => {
           overlay.querySelectorAll('.pause-item').forEach(i => i.classList.remove('active'));
