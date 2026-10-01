@@ -3838,6 +3838,11 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
           }
         }
       } else {
+        if (e.key === 'Enter' && Carousel.curr && Carousel.curr.bExit) {
+          e.preventDefault();
+          Carousel.curr.cancel();
+          return;
+        }
         if (e.key === 'Escape') { showPauseMenu(); }
       }
       return;
