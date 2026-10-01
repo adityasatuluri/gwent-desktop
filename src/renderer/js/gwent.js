@@ -3503,7 +3503,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   const mainMenu     = document.getElementById('main-menu');
   const settingsMenu = document.getElementById('settings-menu');
   const menuItems    = Array.from(document.querySelectorAll('.menu-item'));
-  const settingRows = Array.from(document.querySelectorAll('.setting-row'));
+  let settingRows = Array.from(document.querySelectorAll('.settings-group:not(.hide) .setting-row'));
 
   let menuIndex    = 0;  // currently focused main-menu item
   let settingIndex = 0;  // currently focused settings item
@@ -3647,10 +3647,14 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     });
   });
 
-  settingRows.forEach((el, i) => {
-    el.addEventListener('mouseenter', () => setSettingActive(i));
+  document.querySelectorAll('.setting-row').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      const idx = settingRows.indexOf(el);
+      if (idx !== -1) setSettingActive(idx);
+    });
     el.addEventListener('click', () => {
-      flashItem(el, () => applySettingAtIndex(i));
+      const idx = settingRows.indexOf(el);
+      if (idx !== -1) flashItem(el, () => applySettingAtIndex(idx));
     });
   });
 
@@ -3796,4 +3800,32 @@ document.addEventListener("contextmenu", (e) => {
     if (typeof ui !== 'undefined' && ui && ui.previewCard) {
         ui.cancel();
     }
+});
+document.addEventListener("DOMContentLoaded", () => {
+    const navCategories = document.querySelectorAll('.nav-category');
+    navCategories.forEach(cat => {
+        cat.addEventListener('click', () => {
+            // Update active category
+            navCategories.forEach(c => c.classList.remove('active'));
+            cat.classList.add('active');
+
+            // Hide all groups
+            document.querySelectorAll('.settings-group').forEach(g => {
+                g.classList.add('hide');
+                g.classList.remove('active');
+            });
+
+            // Show target group
+            const targetId = cat.dataset.target;
+            const targetGroup = document.getElementById(targetId);
+            if (targetGroup) {
+                targetGroup.classList.remove('hide');
+                targetGroup.classList.add('active');
+            }
+
+            // Update settingRows reference to only visible rows
+            settingRows = Array.from(document.querySelectorAll('.settings-group:not(.hide) .setting-row'));
+            setSettingActive(0);
+        });
+    });
 });

@@ -53,12 +53,13 @@
 				<img src="assets/img/gwent_logo.png" class="settings-brand-logo" alt="Gwent" />
 				<div class="settings-version">v 1.32<br>OPTIONS</div>
 				<div class="settings-nav">
-					<div class="settings-nav-item active">GENERAL</div>
+					<div class="settings-nav-item nav-category active" data-target="settings-group-general">GENERAL</div>
+					<div class="settings-nav-item nav-category" data-target="settings-group-deck">DECK MANAGEMENT</div>
 					<div class="settings-nav-item" id="settings-back-btn">BACK</div>
 				</div>
 			</div>
 			<div class="settings-right-pane">
-				<div class="settings-list">
+				<div class="settings-list settings-group active" id="settings-group-general">
 					
 					<div class="setting-row active" data-setting="fullscreen">
 						<span class="setting-label">Fullscreen</span>
@@ -84,6 +85,8 @@
 						<input type="checkbox" id="setting-notifications" class="hidden-check">
 					</div>
 					
+				</div>
+				<div class="settings-list settings-group hide" id="settings-group-deck">
 					<div class="setting-row setting-deck-action" data-setting="upload-deck" id="settings-upload-deck">
 						<span class="setting-label">Upload Deck</span>
 						<label style="position:absolute;inset:0;cursor:pointer;" for="add-file"></label>
