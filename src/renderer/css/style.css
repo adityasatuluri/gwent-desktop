@@ -1873,8 +1873,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
   align-items: center !important;
   justify-content: center !important;
   gap: 1.5vw !important;
-  top: 26% !important;
-  padding: 0 2% !important;
+  padding: 24% 2% 0 2% !important;
 }
 /* Description panel */
 #carousel .card-description {
