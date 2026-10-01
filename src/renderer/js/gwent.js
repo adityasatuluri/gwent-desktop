@@ -2509,8 +2509,8 @@ class DeckMaker {
 		
 		document.getElementById("download-deck").addEventListener("click", () => this.downloadDeck(), false);
 		document.getElementById("add-file").addEventListener("change", () => this.uploadPlayerDeck(), false);
-		document.getElementById("start-game").addEventListener("click", () => this.startNewGame(), false);
-		document.getElementById("start-game").addEventListener("mouseenter", CLICK_EVENT_SFX, false);
+		document.getElementById("start-game")?.addEventListener("click", () => this.startNewGame(), false);
+		document.getElementById("start-game")?.addEventListener("mouseenter", CLICK_EVENT_SFX, false);
 	}
 
 	loadFactionDeck(faction, force = false)
@@ -3652,8 +3652,19 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       /* menu nav */
     }
     if (inGame) {
-      if (e.key === '1') document.getElementById('faction-prev')?.click();
-      if (e.key === '3') document.getElementById('faction-next')?.click();
+      const deckScreen = document.getElementById('deck-customization');
+      const inDeckBuilder = deckScreen && !deckScreen.classList.contains('hide');
+
+      if (inDeckBuilder) {
+        if (e.key === '1') document.getElementById('faction-prev')?.click();
+        if (e.key === '3') document.getElementById('faction-next')?.click();
+        if (e.key === 'Enter') {
+          if (typeof game !== 'undefined') game.startNewGame();
+        }
+        if (e.key === 'Escape') {
+          location.reload();
+        }
+      }
       return;
     }
 
@@ -3696,6 +3707,10 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   });
 
 })();
+
+
+
+
 
 
 
