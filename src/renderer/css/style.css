@@ -1576,41 +1576,297 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 
 
 
-/* Main Menu */
-#main-menu { position: absolute; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); z-index: 200; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.menu-container { text-align: center; }
-.game-title { font-size: 6vw; color: goldenrod; text-shadow: 0 0 10px rgba(218,165,32,0.8); margin-bottom: 3vw; letter-spacing: 0.5vw; }
-.menu-btn { display: block; width: 20vw; margin: 1vw auto; padding: 1vw; font-size: 1.5vw; background: rgba(0,0,0,0.6); border: 2px solid goldenrod; color: #fff; cursor: pointer; transition: background 0.2s, transform 0.2s; }
-.menu-btn:hover { background: goldenrod; color: #000; transform: scale(1.05); }
+
+/* ========================================================
+   CINEMATIC MAIN MENU
+   ======================================================== */
+@keyframes menuFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes glowPulse {
+  0%,100% { opacity: 0.55; transform: scale(1); }
+  50%     { opacity: 0.9;  transform: scale(1.08); }
+}
+@keyframes brandSlideDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes navSlideIn {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes hintFade {
+  from { opacity: 0; } to { opacity: 0.6; }
+}
+@keyframes bulletExpand {
+  from { width: 0.4vw; } to { width: 1.8vw; }
+}
+@keyframes settingsFadeIn {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+#main-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+}
 #main-menu.hide { display: none !important; }
 
-#faction-header { display: flex; align-items: center; justify-content: center; gap: 2vw; margin-top: -3vw; }
-.faction-nav { background: none; border: none; color: #dedede; font-size: 1vw; cursor: pointer; }
-.faction-nav:hover { color: goldenrod; }
-#faction-title { display: flex; align-items: center; gap: 0.5vw; }
-#faction-icon { height: 2vw; }
+#menu-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/img/main_menu.jpg');
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.04);
+  transition: transform 8s ease-out;
+  animation: menuFadeIn 1.2s ease-out forwards;
+}
+#main-menu.loaded #menu-bg { transform: scale(1); }
 
-.all-cards { font-size: 0.8vw; color: #aaa; text-transform: uppercase; font-weight: normal; }
+/* Dark gradient vignette: heavy on left+bottom where nav sits, light on right (art side) */
+#menu-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.05) 100%),
+    linear-gradient(to top,   rgba(0,0,0,0.7)  0%, transparent 50%);
+  pointer-events: none;
+}
 
-#deck-customization { background-color: #0c0c0c !important; }
-.card-array { height: 75% !important; top: 20% !important; }
-#card-leader { top: 20% !important; left: 45.5% !important; height: 25% !important; width: 9% !important; }
-#deck-stats { top: 48% !important; left: 44.5% !important; width: 11% !important; }
-#faction-header { margin-top: 1vw !important; }
-.card-container-header { position: absolute; top: 12%; width: 35%; display: flex; flex-direction: column; text-align: left; }
-#card-bank-header { left: 4vw; }
-#card-deck-header { right: 4vw; text-align: right; }
-.all-cards { color: #a49687; font-size: 1vw; }
-.card-contianer-title { position: static !important; width: auto !important; height: auto !important; }
-.deck-options { display: none !important; } /* Hide old options for now */
+/* Teal magical glow – mirrors the glow in the reference image (center) */
+#menu-glow {
+  position: absolute;
+  top: 35%; left: 38%;
+  width: 28vw; height: 28vw;
+  background: radial-gradient(ellipse, rgba(0,220,180,0.22) 0%, rgba(0,180,140,0.08) 45%, transparent 70%);
+  border-radius: 50%;
+  animation: glowPulse 4s ease-in-out infinite;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
 
-#card-bank-title { top: 10% !important; left: 4% !important; text-align: left !important; }
-#card-deck-title { top: 10% !important; left: auto !important; right: 4% !important; text-align: right !important; }
-.card-contianer-title { position: absolute !important; width: auto !important; height: auto !important; }
+/* Brand / logo – top-left */
+#menu-brand {
+  position: absolute;
+  top: 8%;
+  left: 5vw;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: brandSlideDown 1s cubic-bezier(0.25,0.8,0.25,1) 0.3s both;
+}
+#menu-logo-sub {
+  font-size: 1vw;
+  color: rgba(218,165,32,0.7);
+  letter-spacing: 0.35vw;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+#menu-logo-title {
+  font-size: 5.5vw;
+  color: #e8c97a;
+  letter-spacing: 0.6vw;
+  font-weight: 700;
+  text-shadow: 0 0 2vw rgba(218,165,32,0.5), 0 0 0.5vw rgba(0,0,0,0.8);
+  line-height: 1;
+}
 
-#main-menu { z-index: 9999 !important; }
+/* -- Nav -- */
+#menu-nav {
+  position: absolute;
+  bottom: 18%;
+  left: 5vw;
+  animation: navSlideIn 0.8s cubic-bezier(0.25,0.8,0.25,1) 0.6s both;
+}
+#menu-items {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2vw;
+}
 
-#settings-menu { position: absolute; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); z-index: 10000 !important; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.setting-row { display: block; color: goldenrod; font-size: 1.5vw; margin: 1vw 0; cursor: pointer; text-align: left; width: 20vw; margin-left: auto; margin-right: auto; }
-.setting-row input { transform: scale(1.5); margin-right: 1vw; accent-color: goldenrod; }
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  padding: 0.55vw 0;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.25,0.8,0.25,1);
+}
+.menu-item:hover { transform: translateX(0.5vw); }
+
+.menu-item-bullet {
+  display: block;
+  height: 2px;
+  width: 0.4vw;
+  background: goldenrod;
+  border-radius: 2px;
+  transition: width 0.25s ease, background 0.2s;
+  flex-shrink: 0;
+}
+.menu-item-label {
+  font-size: 1.55vw;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.18vw;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+  user-select: none;
+}
+
+/* Active/focused state */
+.menu-item.active .menu-item-bullet {
+  width: 1.8vw;
+  background: #e8c97a;
+  box-shadow: 0 0 0.5vw rgba(218,165,32,0.8);
+  animation: bulletExpand 0.25s ease-out forwards;
+}
+.menu-item.active .menu-item-label {
+  color: #e8c97a;
+  text-shadow: 0 0 1.5vw rgba(218,165,32,0.5);
+}
+
+/* Hover – non-active */
+.menu-item:not(.active):hover .menu-item-label { color: rgba(255,255,255,0.85); }
+.menu-item:not(.active):hover .menu-item-bullet { width: 0.9vw; }
+
+/* Key-press flash */
+.menu-item.flash .menu-item-label {
+  color: #fff;
+  text-shadow: 0 0 2vw white;
+}
+
+/* Bottom keyboard hint */
+#menu-hint {
+  position: absolute;
+  bottom: 4%;
+  left: 5vw;
+  font-size: 0.85vw;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.1vw;
+  text-transform: uppercase;
+  animation: hintFade 1.5s ease 1.4s both;
+}
+
+/* ========================================================
+   SETTINGS PANEL
+   ======================================================== */
+#settings-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  overflow: hidden;
+}
+#settings-menu.hide { display: none !important; }
+
+#settings-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/img/main_menu.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(3px) brightness(0.4);
+  transform: scale(1.06);
+}
+
+#settings-panel {
+  position: absolute;
+  top: 0; left: 0;
+  width: 40vw; height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.92) 70%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 5vw;
+  animation: settingsFadeIn 0.4s cubic-bezier(0.25,0.8,0.25,1) forwards;
+}
+
+#settings-title {
+  font-size: 2.5vw;
+  color: #e8c97a;
+  letter-spacing: 0.5vw;
+  text-transform: uppercase;
+  margin-bottom: 3vw;
+  text-shadow: 0 0 1vw rgba(218,165,32,0.4);
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8vw 0;
+  border-bottom: 1px solid rgba(218,165,32,0.1);
+  cursor: pointer;
+  transition: padding-left 0.2s ease;
+  position: relative;
+}
+.setting-row::before {
+  content: '';
+  position: absolute;
+  left: -1vw;
+  width: 0;
+  height: 100%;
+  background: rgba(218,165,32,0.08);
+  transition: width 0.2s ease;
+}
+.setting-row.active::before { width: calc(100% + 1vw); }
+.setting-row.active { padding-left: 0.8vw; }
+
+.setting-label {
+  font-size: 1.3vw;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.15vw;
+  transition: color 0.2s;
+}
+.setting-row.active .setting-label {
+  color: #e8c97a;
+}
+.setting-toggle {
+  font-size: 1.1vw;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.1vw;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.setting-toggle.on {
+  color: #5ef0c0;
+  text-shadow: 0 0 0.8vw rgba(0,220,180,0.6);
+}
+.setting-toggle.off {
+  color: rgba(255,80,80,0.8);
+}
+.hidden-check { display: none; }
+#settings-hint {
+  margin-top: 3vw;
+  font-size: 0.85vw;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.1vw;
+  text-transform: uppercase;
+}
+
+/* Back-to-game button – bottom right of game screen */
+#back-to-menu-btn {
+  position: fixed;
+  bottom: 2vw; right: 2vw;
+  z-index: 100;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(218,165,32,0.4);
+  color: rgba(218,165,32,0.8);
+  padding: 0.6vw 1.2vw;
+  font-size: 0.9vw;
+  letter-spacing: 0.15vw;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+#back-to-menu-btn:hover {
+  border-color: goldenrod;
+  color: goldenrod;
+}
 

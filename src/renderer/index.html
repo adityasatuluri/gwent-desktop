@@ -13,31 +13,84 @@
 </head>
 
 <body>
-	<section id="main-menu" class="center">
-		<div class="menu-container">
-			<h1 class="game-title">GWENT</h1>
-			<button id="menu-new-game" class="menu-btn">New Game</button>
-			<button id="menu-settings" class="menu-btn">Settings</button>
-			<button id="menu-exit" class="menu-btn">Exit Game</button>
+
+	<!-- ===== MAIN MENU ===== -->
+	<section id="main-menu">
+		<div id="menu-bg"></div>
+		<div id="menu-vignette"></div>
+
+		<!-- Animated teal particle glow -->
+		<div id="menu-glow"></div>
+
+		<!-- Top brand -->
+		<div id="menu-brand">
+			<span id="menu-logo-sub">THE WITCHER 3 ·</span>
+			<span id="menu-logo-title">GWENT</span>
+		</div>
+
+		<!-- Left-side nav items (Witcher 3 style) -->
+		<nav id="menu-nav">
+			<ul id="menu-items">
+				<li class="menu-item active" data-index="0" id="menu-new-game">
+					<span class="menu-item-bullet"></span>
+					<span class="menu-item-label">Play Game</span>
+				</li>
+				<li class="menu-item" data-index="1" id="menu-settings">
+					<span class="menu-item-bullet"></span>
+					<span class="menu-item-label">Settings</span>
+				</li>
+				<li class="menu-item" data-index="2" id="menu-exit">
+					<span class="menu-item-bullet"></span>
+					<span class="menu-item-label">Exit</span>
+				</li>
+			</ul>
+		</nav>
+
+		<!-- Bottom hint -->
+		<div id="menu-hint">
+			<span>↑ ↓ Navigate &nbsp;&nbsp; Enter Select</span>
 		</div>
 	</section>
 
-	<section id="settings-menu" class="center hide">
-		<div class="menu-container">
-			<h1 class="game-title" style="font-size: 3vw;">SETTINGS</h1>
-			<label class="setting-row">
-				<input type="checkbox" id="setting-fullscreen"> Fullscreen
-			</label>
-			<label class="setting-row">
-				<input type="checkbox" id="setting-music"> Music
-			</label>
-			<label class="setting-row">
-				<input type="checkbox" id="setting-sfx"> Sound Effects
-			</label>
-			<label class="setting-row">
-				<input type="checkbox" id="setting-notifications"> Notifications
-			</label>
-			<button id="settings-back" class="menu-btn">Back</button>
+	<!-- ===== SETTINGS OVERLAY ===== -->
+	<section id="settings-menu" class="hide">
+		<div id="settings-bg"></div>
+		<div id="settings-panel">
+			<h2 id="settings-title">SETTINGS</h2>
+			<div id="settings-items">
+				<div class="setting-row active" data-setting="fullscreen">
+					<span class="setting-label">Fullscreen</span>
+					<span class="setting-value">
+						<span class="setting-toggle" id="setting-fullscreen-val">ON</span>
+					</span>
+					<input type="checkbox" id="setting-fullscreen" class="hidden-check">
+				</div>
+				<div class="setting-row" data-setting="music">
+					<span class="setting-label">Music</span>
+					<span class="setting-value">
+						<span class="setting-toggle" id="setting-music-val">ON</span>
+					</span>
+					<input type="checkbox" id="setting-music" class="hidden-check">
+				</div>
+				<div class="setting-row" data-setting="sfx">
+					<span class="setting-label">Sound Effects</span>
+					<span class="setting-value">
+						<span class="setting-toggle" id="setting-sfx-val">ON</span>
+					</span>
+					<input type="checkbox" id="setting-sfx" class="hidden-check">
+				</div>
+				<div class="setting-row" data-setting="notifications">
+					<span class="setting-label">Notifications</span>
+					<span class="setting-value">
+						<span class="setting-toggle" id="setting-notifications-val">ON</span>
+					</span>
+					<input type="checkbox" id="setting-notifications" class="hidden-check">
+				</div>
+				<div class="setting-row" data-setting="back" id="settings-back">
+					<span class="setting-label">← Back</span>
+				</div>
+			</div>
+			<div id="settings-hint">↑ ↓ Navigate &nbsp;&nbsp; Enter Toggle &nbsp;&nbsp; Esc Back</div>
 		</div>
 	</section>
 

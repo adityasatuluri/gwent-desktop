@@ -3492,55 +3492,199 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
 
 
-// Settings Menu Logic
-document.getElementById('menu-settings').addEventListener('click', async () => {
-	document.getElementById('main-menu').classList.add('hide');
-	document.getElementById('settings-menu').classList.remove('hide');
-	document.getElementById('setting-music').checked = Settings.music.isEnabled();
-	document.getElementById('setting-sfx').checked = Settings.soundEffects.isEnabled();
-	document.getElementById('setting-notifications').checked = Settings.notifications.isEnabled();
-	const { ipcRenderer } = require('electron');
-	const s = await ipcRenderer.invoke('get-settings');
-	document.getElementById('setting-fullscreen').checked = s.fullscreen;
-});
-
-document.getElementById('settings-back').addEventListener('click', () => {
-	document.getElementById('settings-menu').classList.add('hide');
-	document.getElementById('main-menu').classList.remove('hide');
-});
-
-document.getElementById('setting-fullscreen').addEventListener('change', (e) => {
-	require('electron').ipcRenderer.send('set-fullscreen', e.target.checked);
-});
-
-document.getElementById('setting-music').addEventListener('change', (e) => {
-	Settings.music.setEnabled(e.target.checked);
-	if(ui) { ui.toggleMusic_elem?.classList.toggle('fade', !e.target.checked); if(e.target.checked) ui.youtube?.playVideo(); else ui.youtube?.pauseVideo(); }
-});
-
-document.getElementById('setting-sfx').addEventListener('change', (e) => {
-	Settings.soundEffects.setEnabled(e.target.checked);
-	if(ui) ui.toggleSFX_elem?.classList.toggle('fade', !e.target.checked);
-});
-
-document.getElementById('setting-notifications').addEventListener('change', (e) => {
-	Settings.notifications.setEnabled(e.target.checked);
-	if(ui) ui.toggleNotifications_elem?.classList.toggle('fade', !e.target.checked);
-});
-
-document.getElementById('menu-new-game').addEventListener('click', () => { document.getElementById('main-menu').classList.add('hide'); });
-document.getElementById('menu-exit').addEventListener('click', () => { require('electron').ipcRenderer.send('exit-app'); });
 
 
+// ============================================================
+//  CINEMATIC MENU SYSTEM
+// ============================================================
+(function() {
+  // ── State ──────────────────────────────────────────────────
+  const mainMenu     = document.getElementById('main-menu');
+  const settingsMenu = document.getElementById('settings-menu');
+  const menuItems    = Array.from(document.querySelectorAll('.menu-item'));
+  const settingRows  = Array.from(document.querySelectorAll('.setting-row'));
 
+  let menuIndex    = 0;  // currently focused main-menu item
+  let settingIndex = 0;  // currently focused settings item
+  let inSettings   = false;
+  let inGame       = false;
 
+  // ── Helpers ────────────────────────────────────────────────
+  function setMenuActive(idx) {
+    menuItems.forEach(i => i.classList.remove('active'));
+    menuItems[idx].classList.add('active');
+    menuIndex = idx;
+  }
 
-document.getElementById('back-to-menu-btn').addEventListener('click', () => { location.reload(); });
+  function setSettingActive(idx) {
+    settingRows.forEach(r => r.classList.remove('active'));
+    settingRows[idx].classList.add('active');
+    settingIndex = idx;
+  }
 
+  function flashItem(el, cb) {
+    el.classList.add('flash');
+    setTimeout(() => { el.classList.remove('flash'); if(cb) cb(); }, 180);
+  }
 
-document.addEventListener('keydown', (e) => {
-	if(document.getElementById('deck-customization').classList.contains('hide')) return;
-	if(e.key === '1') document.getElementById('faction-prev')?.click();
-	if(e.key === '3') document.getElementById('faction-next')?.click();
-});
+  function openMenu() {
+    mainMenu.classList.remove('hide');
+    settingsMenu.classList.add('hide');
+    inSettings = false;
+    inGame     = false;
+    setMenuActive(0);
+  }
 
+  // ── Boot animation ─────────────────────────────────────────
+  setTimeout(() => mainMenu.classList.add('loaded'), 50);
+
+  // ── Sync setting toggle display ────────────────────────────
+  async function syncSettingsDisplay() {
+    const fullscreenCheck = document.getElementById('setting-fullscreen');
+    const musicCheck      = document.getElementById('setting-music');
+    const sfxCheck        = document.getElementById('setting-sfx');
+    const notifCheck      = document.getElementById('setting-notifications');
+
+    const s = await require('electron').ipcRenderer.invoke('get-settings');
+    fullscreenCheck.checked = s.fullscreen;
+    musicCheck.checked      = Settings.music.isEnabled();
+    sfxCheck.checked        = Settings.soundEffects.isEnabled();
+    notifCheck.checked      = Settings.notifications.isEnabled();
+
+    updateToggleLabel('fullscreen', s.fullscreen);
+    updateToggleLabel('music',      Settings.music.isEnabled());
+    updateToggleLabel('sfx',        Settings.soundEffects.isEnabled());
+    updateToggleLabel('notifications', Settings.notifications.isEnabled());
+  }
+
+  function updateToggleLabel(id, enabled) {
+    const el = document.getElementById('setting-' + id + '-val');
+    if (!el) return;
+    el.textContent = enabled ? 'ON' : 'OFF';
+    el.className   = 'setting-toggle ' + (enabled ? 'on' : 'off');
+  }
+
+  function applySettingAtIndex(idx) {
+    const row = settingRows[idx];
+    const ds  = row.dataset.setting;
+    if (ds === 'back') { closeSettings(); return; }
+    if (ds === 'fullscreen') {
+      const chk = document.getElementById('setting-fullscreen');
+      chk.checked = !chk.checked;
+      require('electron').ipcRenderer.send('set-fullscreen', chk.checked);
+      updateToggleLabel('fullscreen', chk.checked);
+    } else if (ds === 'music') {
+      const chk = document.getElementById('setting-music');
+      chk.checked = !chk.checked;
+      Settings.music.setEnabled(chk.checked);
+      if (chk.checked) ui?.youtube?.play(); else ui?.youtube?.pause();
+      updateToggleLabel('music', chk.checked);
+    } else if (ds === 'sfx') {
+      const chk = document.getElementById('setting-sfx');
+      chk.checked = !chk.checked;
+      Settings.soundEffects.setEnabled(chk.checked);
+      updateToggleLabel('sfx', chk.checked);
+    } else if (ds === 'notifications') {
+      const chk = document.getElementById('setting-notifications');
+      chk.checked = !chk.checked;
+      Settings.notifications.setEnabled(chk.checked);
+      updateToggleLabel('notifications', chk.checked);
+    }
+  }
+
+  function openSettings() {
+    syncSettingsDisplay();
+    mainMenu.classList.add('hide');
+    settingsMenu.classList.remove('hide');
+    inSettings = true;
+    setSettingActive(0);
+  }
+
+  function closeSettings() {
+    settingsMenu.classList.add('hide');
+    mainMenu.classList.remove('hide');
+    inSettings = false;
+    setMenuActive(1); // focus back on Settings item
+  }
+
+  function selectMainItem(idx) {
+    if (idx === 0) { // Play Game
+      mainMenu.classList.add('hide');
+      inGame = true;
+    } else if (idx === 1) { // Settings
+      openSettings();
+    } else if (idx === 2) { // Exit
+      require('electron').ipcRenderer.send('exit-app');
+    }
+  }
+
+  // ── Mouse clicks on menu items ─────────────────────────────
+  menuItems.forEach((el, i) => {
+    el.addEventListener('mouseenter', () => setMenuActive(i));
+    el.addEventListener('click', () => {
+      flashItem(el, () => selectMainItem(i));
+    });
+  });
+
+  settingRows.forEach((el, i) => {
+    el.addEventListener('mouseenter', () => setSettingActive(i));
+    el.addEventListener('click', () => {
+      flashItem(el, () => applySettingAtIndex(i));
+    });
+  });
+
+  // ── Back-to-menu button (in game) ─────────────────────────
+  const backBtn = document.getElementById('back-to-menu-btn');
+  if (backBtn) backBtn.addEventListener('click', () => { location.reload(); });
+
+  // ── Keyboard navigation ────────────────────────────────────
+  document.addEventListener('keydown', (e) => {
+    // Faction nav during deck customization
+    if (!inGame && !inSettings && !mainMenu.classList.contains('hide')) {
+      /* menu nav */
+    }
+    if (inGame) {
+      if (e.key === '1') document.getElementById('faction-prev')?.click();
+      if (e.key === '3') document.getElementById('faction-next')?.click();
+      return;
+    }
+
+    if (inSettings) {
+      switch(e.key) {
+        case 'ArrowUp':
+          e.preventDefault();
+          setSettingActive((settingIndex - 1 + settingRows.length) % settingRows.length);
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          setSettingActive((settingIndex + 1) % settingRows.length);
+          break;
+        case 'Enter':
+          flashItem(settingRows[settingIndex], () => applySettingAtIndex(settingIndex));
+          break;
+        case 'Escape': case 'Backspace':
+          closeSettings();
+          break;
+      }
+      return;
+    }
+
+    // Main menu
+    if (!mainMenu.classList.contains('hide')) {
+      switch(e.key) {
+        case 'ArrowUp':
+          e.preventDefault();
+          setMenuActive((menuIndex - 1 + menuItems.length) % menuItems.length);
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          setMenuActive((menuIndex + 1) % menuItems.length);
+          break;
+        case 'Enter': case ' ':
+          flashItem(menuItems[menuIndex], () => selectMainItem(menuIndex));
+          break;
+      }
+    }
+  });
+
+})();
