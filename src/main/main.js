@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
+app.commandLine.appendSwitch('enable-logging');
 const path = require('path');
 const settings = require('./settings');
 
@@ -49,3 +50,6 @@ ipcMain.handle('get-settings', () => settings.getSettings());
 ipcMain.on('set-fullscreen', (event, val) => { mainWindow.setFullScreen(val); settings.setFullscreen(val); });
 
 ipcMain.on('log-error', (e, msg) => console.error('RENDERER ERROR:', msg));
+
+
+

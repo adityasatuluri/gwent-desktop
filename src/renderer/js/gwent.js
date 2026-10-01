@@ -1,4 +1,4 @@
-﻿"use strict"
+"use strict"
 
 class Enum {constructor(val){this.val = val;} toString(){return this.val;}};
 
@@ -1943,28 +1943,7 @@ class UI {
 		document.getElementById("click-background").addEventListener("click", () => ui.cancel(), false);
 		this.youtube;
 		this.ytActive;
-		this.toggleMusic_elem = document.getElementById("toggle-music");
-		this.toggleSettings.push(this.toggleMusic_elem);
-		this.toggleMusic_elem.classList.add("fade");
-		this.toggleMusic_elem.addEventListener("click", () => this.toggleMusic(), false);
-		this.toggleNotifications_elem = document.getElementById("toggle-notifications");
-		this.toggleSettings.push(this.toggleNotifications_elem);
-		this.toggleNotifications_elem.addEventListener("click", () => this.toggleNotifications(), false);
-		if (!Settings.notifications.isEnabled())
-			this.toggleNotifications_elem.classList.add("fade");
-		this.toggleSFX_elem = document.getElementById("toggle-sfx");
-		this.toggleSettings.push(this.toggleSFX_elem);
-		this.toggleSFX_elem.addEventListener('click', () => this.toggleSFX())
-		if (!Settings.soundEffects.isEnabled())
-			this.toggleSFX_elem.classList.add("fade");
-			
-		this.toggleFullscreen_elem = document.getElementById("toggle-fullscreen");
-		this.toggleSettings.push(this.toggleFullscreen_elem);
-		this.toggleFullscreen_elem.addEventListener('click', () => {
-			const { ipcRenderer } = require('electron');
-			ipcRenderer.send('toggle-fullscreen');
-			this.toggleFullscreen_elem.classList.toggle("fade");
-		});
+
 
 		EventManager.gameOpened.bind(()=>this.toggleSettings.forEach(e=>e.classList.remove('deck-menu')));
 		EventManager.customizationOpened.bind(()=>this.toggleSettings.forEach(e=>e.classList.add('deck-menu')));
@@ -2002,7 +1981,7 @@ class UI {
 					ui.youtube.playVideo();
 				else {
 					clearInterval(timer);
-					ui.toggleMusic_elem.classList.remove("fade");
+					ui.toggleMusic_elem?.classList.remove("fade");
 					if (!Settings.music.isEnabled())
 					{
 						setTimeout(()=>ui.toggleMusic(), 10);
@@ -2017,10 +1996,10 @@ class UI {
 		const isPlaying = this.youtube?.getPlayerState() === YT.PlayerState.PLAYING;
 		if (isPlaying) {
 			this.youtube?.pauseVideo();
-			this.toggleMusic_elem.classList.add("fade");
+			this.toggleMusic_elem?.classList.add("fade");
 		} else {
 			this.youtube?.playVideo();
-			this.toggleMusic_elem.classList.remove("fade");
+			this.toggleMusic_elem?.classList.remove("fade");
 		}
 		Settings.music.setEnabled(!isPlaying);
 	}
@@ -2030,11 +2009,11 @@ class UI {
 		const useNotificaitons = Settings.notifications.isEnabled();
 		if (useNotificaitons)
 		{
-			this.toggleNotifications_elem.classList.remove("fade");
+			this.toggleNotifications_elem?.classList.remove("fade");
 		}
 		else
 		{
-			this.toggleNotifications_elem.classList.add("fade");
+			this.toggleNotifications_elem?.classList.add("fade");
 		}
 	}
 
@@ -2043,11 +2022,11 @@ class UI {
 		const useSFX = Settings.soundEffects.isEnabled();
 		if (useSFX)
 		{
-			this.toggleSFX_elem.classList.remove("fade");
+			this.toggleSFX_elem?.classList.remove("fade");
 		}
 		else
 		{
-			this.toggleSFX_elem.classList.add("fade");
+			this.toggleSFX_elem?.classList.add("fade");
 		}
 	}
 	
@@ -2630,8 +2609,8 @@ class DeckMaker {
 		const btnPrev = document.getElementById("faction-prev");
 		const btnNext = document.getElementById("faction-next");
 		if (btnPrev && btnNext) {
-			btnPrev.innerHTML = "◀ " + factions[keys[prevIndex]].name + " [L1]";
-			btnNext.innerHTML = "[R1] " + factions[keys[nextIndex]].name + " ▶";
+			btnPrev.innerHTML = "? " + factions[keys[prevIndex]].name + " [L1]";
+			btnNext.innerHTML = "[R1] " + factions[keys[nextIndex]].name + " ?";
 			btnPrev.onclick = () => this.loadFactionDeck(keys[prevIndex]);
 			btnNext.onclick = () => this.loadFactionDeck(keys[nextIndex]);
 		}
@@ -3479,7 +3458,7 @@ function smallURL(name, ext="jpg"){
 	return imgURL("sm/" + name, ext);
 }
 function imgURL(path, ext) {
-	return "url('../assets/img/" + path + "." + ext + "')";
+	return "url('assets/img/" + path + "." + ext + "')";
 }
 
 // get sound effect path
@@ -3488,7 +3467,7 @@ function audioURL(name, ext = "mp3") {
 	{
 		if (name.includes('.'))
 		{
-			return "../assets/sfx/" + name; 
+			return "assets/sfx/" + name; 
 		}
 	}
 	else if (name['name'])
@@ -3499,7 +3478,7 @@ function audioURL(name, ext = "mp3") {
 		}
 		name = name['name'];
 	}
-	return "../assets/sfx/" + name + "." + ext;
+	return "assets/sfx/" + name + "." + ext;
 }
 
 // Get audio instance
@@ -3589,19 +3568,24 @@ document.getElementById('setting-fullscreen').addEventListener('change', (e) => 
 
 document.getElementById('setting-music').addEventListener('change', (e) => {
 	Settings.music.setEnabled(e.target.checked);
-	if(ui) { ui.toggleMusic_elem.classList.toggle('fade', !e.target.checked); if(e.target.checked) ui.youtube?.playVideo(); else ui.youtube?.pauseVideo(); }
+	if(ui) { ui.toggleMusic_elem?.classList.toggle('fade', !e.target.checked); if(e.target.checked) ui.youtube?.playVideo(); else ui.youtube?.pauseVideo(); }
 });
 
 document.getElementById('setting-sfx').addEventListener('change', (e) => {
 	Settings.soundEffects.setEnabled(e.target.checked);
-	if(ui) ui.toggleSFX_elem.classList.toggle('fade', !e.target.checked);
+	if(ui) ui.toggleSFX_elem?.classList.toggle('fade', !e.target.checked);
 });
 
 document.getElementById('setting-notifications').addEventListener('change', (e) => {
 	Settings.notifications.setEnabled(e.target.checked);
-	if(ui) ui.toggleNotifications_elem.classList.toggle('fade', !e.target.checked);
+	if(ui) ui.toggleNotifications_elem?.classList.toggle('fade', !e.target.checked);
 });
 
 document.getElementById('menu-new-game').addEventListener('click', () => { document.getElementById('main-menu').classList.add('hide'); });
 document.getElementById('menu-exit').addEventListener('click', () => { require('electron').ipcRenderer.send('exit-app'); });
 
+
+
+
+
+document.getElementById('back-to-menu-btn').addEventListener('click', () => { location.reload(); });
