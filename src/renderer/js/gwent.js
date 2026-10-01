@@ -2823,7 +2823,7 @@ class DeckMaker {
 		player_me = new Player(0, "Player 1", me_deck);
 		player_op = new Player(1, "Player 2", op_deck);
 		
-		this.elem.classList.add("hide");
+		NavigationManager.showScreen('game-view');
 		game.startGame();
 	}
 
