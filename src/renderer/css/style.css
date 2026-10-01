@@ -492,89 +492,107 @@ html {
 /* --------------------- end screen ---------------------------  */
 
 #end-screen {
-	width: 100%;
-	height: calc(100vw * 1080 / 1920);
-	position: absolute;
-	z-index: 1000;
-	background-color: rgba(10,10,10,0.95);
+    position: absolute;
+    width: 100%;
+    height: calc(100vw * 1080 / 1920);
+    z-index: 20000;
+    background-color: rgba(10, 10, 10, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', 'Palatino Linotype', serif;
 }
+#end-screen.hide { display: none !important; }
 
-#end-screen * {
-	position: relative;
-}
-
-#end-screen > :nth-child(1)  {
-	top:12.6%;
-	left:32.9%;
-	width: calc(100% * 656 / 1920 );
-	height: calc(100% * 416 / 1080 );
-	margin-bottom: -21.65%;
-	background-size: contain;
+#end-screen > div:first-child {
+    width: 34vw;
+    height: 21vw;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 2vw;
+    filter: drop-shadow(0 0.5vw 1vw rgba(0,0,0,0.8));
 }
 .end-draw { background-image: url('../assets/img/icons/end_draw.png'); }
 .end-win  { background-image: url('../assets/img/icons/end_win.png');  }
 .end-lose { background-image: url('../assets/img/icons/end_lose.png'); }
 
 #end-screen > table {
-	top: 55%;
-	left: 7.6%;
-	width: 74%;
-	height: 22%;
-	margin-bottom: -12.3%;
-	table-layout: fixed;
+    width: 45vw;
+    border-collapse: collapse;
+    background: linear-gradient(180deg, rgba(30,30,30,0.9), rgba(15,15,15,0.9));
+    border: 0.1vw solid #3a3a3a;
+    border-top: 0.2vw solid #b68b44;
+    border-bottom: 0.2vw solid #b68b44;
+    box-shadow: 0 0.5vw 1vw rgba(0,0,0,0.8);
+    margin-bottom: 2vw;
+    table-layout: fixed;
 }
 
-#end-screen tbody :first-child th {
-	font-size: .9vw;
-	text-align: center;
-	color: darkslategrey;
-	color: rgb(100,100,100);
+#end-screen th, #end-screen td {
+    padding: 1vw;
+    text-align: center;
+    border-bottom: 0.1vw solid rgba(255,255,255,0.05);
+}
+
+#end-screen tbody tr:first-child th {
+    font-size: 1.1vw;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.1vw;
+    border-bottom: 0.1vw solid rgba(182, 139, 68, 0.3);
+}
+
+#end-screen tbody tr th {
+    font-size: 1.3vw;
+    color: #e5cd85;
+    text-align: right;
+    padding-right: 3vw;
 }
 
 #end-screen td {
-	font-size: 1.7vw;
-	text-align: center;
-	color: rgb(180,180,180);
+    font-size: 1.8vw;
+    color: #dedede;
+    font-weight: bold;
 }
 
-#end-screen tr :first-child {
-	font-size: 1.2vw;
-	text-align: right;
-	color:darkorange;
-	padding-right: 5%;
+#end-screen p {
+    font-size: 1.2vw;
+    color: #d8d8d8;
+    text-align: center;
+    max-width: 50vw;
+    margin-bottom: 2vw;
 }
+#end-screen p.hide { display: none !important; }
 
-#end-screen > p {
-	top: 80%;
-	left: 30.1%;
-	width: 41%;
-	height: 3%;
-	font-size: 1.21vw;
-	color: rgb(180,180,180);
+#end-screen .end-buttons {
+    display: flex;
+    gap: 3vw;
 }
 
 #end-screen button {
-    position: absolute;
-    height: 3vw;
-    width: 10vw;
-    top: 87%;
-	font-family: 'Cinzel', 'Palatino Linotype', serif;
-    font-size: 1.5vw;
-    color: goldenrod;
-    background-color: #4c390a66;
-    border: .2vw solid #1d180b;
-    border-radius: 0.1vw;
-    box-shadow: 0 0 .5vw #6d5210;
+    height: 3.5vw;
+    width: 14vw;
+    font-family: 'Cinzel', 'Palatino Linotype', serif;
+    font-size: 1.3vw;
+    font-weight: 600;
+    color: #e5cd85;
+    background: linear-gradient(180deg, rgba(60,60,60,0.9), rgba(20,20,20,0.9));
+    border: 0.15vw solid #b68b44;
+    border-radius: 0.2vw;
+    cursor: pointer;
+    box-shadow: 0 0.3vw 0.6vw rgba(0,0,0,0.8);
+    transition: all 0.2s ease;
+    text-transform: uppercase;
 }
 
 #end-screen button:hover {
-	box-shadow: 0 0 2vw #6d5210;
+    background: linear-gradient(180deg, rgba(80,80,80,0.9), rgba(40,40,40,0.9));
+    transform: translateY(-0.2vw);
+    box-shadow: 0 0.5vw 1vw rgba(0,0,0,0.9), 0 0 1vw rgba(182, 139, 68, 0.4);
+    color: #fff;
 }
-
-#end-screen button:nth-of-type(1) { left: 31%; }
-#end-screen button:nth-of-type(2) { left: 45%; }
-#end-screen button:nth-of-type(3) { left: 59%; }
-
 /* --------------------- panels ---------------------------  */
 
 .panel {
