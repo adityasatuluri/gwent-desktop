@@ -1866,7 +1866,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 
 /* Center card (selected) */
 #carousel > :nth-child(1) > :nth-child(5) {
-  width: 15.5vw !important;
+  width: 15.34vw !important;
   height: 29vw !important;
   border: 0.3vw solid goldenrod !important;
   box-shadow: 0 0 3vw goldenrod !important;
@@ -1875,7 +1875,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 /* Adjacent cards (4 & 6) */
 #carousel > :nth-child(1) > :nth-child(4),
 #carousel > :nth-child(1) > :nth-child(6) {
-  width: 12.8vw !important;
+  width: 12.7vw !important;
   height: 24vw !important;
   opacity: 0.95 !important;
   z-index: 4 !important;
@@ -1883,7 +1883,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 /* Outer cards (3 & 7) */
 #carousel > :nth-child(1) > :nth-child(3),
 #carousel > :nth-child(1) > :nth-child(7) {
-  width: 10.5vw !important;
+  width: 10.42vw !important;
   height: 19.7vw !important;
   opacity: 0.8 !important;
   z-index: 3 !important;
@@ -1891,7 +1891,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 /* Far outer cards (2 & 8) */
 #carousel > :nth-child(1) > :nth-child(2),
 #carousel > :nth-child(1) > :nth-child(8) {
-  width: 8.5vw !important;
+  width: 8.46vw !important;
   height: 16vw !important;
   opacity: 0.5 !important;
   z-index: 2 !important;
@@ -1899,7 +1899,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 /* Extreme outer cards (1 & 9) */
 #carousel > :nth-child(1) > :nth-child(1),
 #carousel > :nth-child(1) > :nth-child(9) {
-  width: 6.5vw !important;
+  width: 6.45vw !important;
   height: 12.2vw !important;
   opacity: 0.2 !important;
   z-index: 1 !important;
