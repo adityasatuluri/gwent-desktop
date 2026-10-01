@@ -199,87 +199,89 @@ html {
 
 /* ----------- notification bar ------------------ */
 
-#notification-bar {
-	position:absolute;
-	width:100%;
-	height: 14%;
-	top: 43%;
-	background-color: rgba(10,10,10,0.95);
-	opacity: 0;
-	z-index: 100;
-}
 
-#notification-bar > div { 
-	width: 22.1%;
-	height: 207.25%;
-	top: -66.6%;
-	left: 22.55%;
+/* ---- Cinematic turn / round notification bar ---- */
+#notification-bar {
 	position: absolute;
-	background-repeat: no-repeat;
-	background-size: contain;
-	background-position: center;
-}
-#notification-bar > div::after {
-	position: absolute;
-	left: 100.5%;
-	top: 32.1%;
-	width: 205%;
-	height: 47.25%;
-	color: goldenrod;
-	font-size: 1.6vw;
-	text-align:left;
-	font-weight:bold;
+	width: 100%;
+	top: 50%;
+	transform: translateY(-50%);
+	opacity: 0;
+	z-index: 500;
+	pointer-events: none;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 }
+#notification-bar > div {
+	width: 100%;
+	height: 8vw;
+	background: linear-gradient(90deg,
+		transparent 0%,
+		rgba(5,5,5,0.88) 12%,
+		rgba(5,5,5,0.96) 50%,
+		rgba(5,5,5,0.88) 88%,
+		transparent 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 2.5vw;
+	border-top: 0.15vw solid rgba(182,139,68,0.6);
+	border-bottom: 0.15vw solid rgba(182,139,68,0.6);
+}
+#notification-bar > div::before {
+	content: '';
+	width: 5.5vw;
+	height: 5.5vw;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	flex-shrink: 0;
+}
+#notification-bar > div::after {
+	font-family: 'Cinzel', 'Palatino Linotype', serif;
+	font-size: 2.2vw;
+	font-weight: 600;
+	letter-spacing: 0.15vw;
+	text-transform: uppercase;
+	color: #e5cd85;
+	text-shadow: 0 0 1.5vw rgba(229,205,133,0.6);
+}
 
-#notif-me-first::after { content:"You will go first"; }
-#notif-op-first::after { content:"Your opponent will go first"; }
-
-#notif-me-coin { background-image: url('../assets/img/icons/notif_me_coin.png'); }
-#notif-me-coin::after { content:"You will go first"; }
-
-#notif-op-coin { background-image: url('../assets/img/icons/notif_op_coin.png'); }
-#notif-op-coin::after { content:"Your opponent will go first"; }
-
-#notif-round-start { background-image: url('../assets/img/icons/notif_round_start.png'); }
-#notif-round-start::after { content:"Round Start"; }
-
-#notif-me-pass { background-image: url('../assets/img/icons/notif_round_passed.png'); }
-#notif-me-pass::after { content:"Round passed"; }
-
-#notif-op-pass { background-image: url('../assets/img/icons/notif_round_passed.png'); }
-#notif-op-pass::after { content:"Your opponent has passed"; }
-
-#notif-win-round { background-image: url('../assets/img/icons/notif_win_round.png'); } 
-#notif-win-round::after { content:"You won the round!"; }
-
-#notif-lose-round { background-image: url('../assets/img/icons/notif_lose_round.png'); }
-#notif-lose-round::after { content:"Your opponent won the round"; }
-
-#notif-draw-round { background-image: url('../assets/img/icons/notif_draw_round.png'); }
-#notif-draw-round::after {content:"The round ended in a draw"; }
-
-#notif-me-turn { background-image: url('../assets/img/icons/notif_me_turn.png'); } 
-#notif-me-turn::after { content:"Your turn!"; }
-
-#notif-op-turn { background-image: url('../assets/img/icons/notif_op_turn.png'); }
-#notif-op-turn::after { content:"Opponent's turn"; }
-
-#notif-north { background-image: url('../assets/img/icons/notif_north.png'); }
-#notif-north::after { content:"Northern Realms faction ability triggered - North draws an additional card."; }
-
-#notif-monsters { background-image: url('../assets/img/icons/notif_monsters.png'); }
-#notif-monsters::after { content: "Monsters faction ability triggered - one randomly-chosen Monster Unit Card stays on the board"; }
-
-#notif-scoiatael { background-image: url('../assets/img/icons/notif_scoiatael.png'); }
-#notif-scoiatael::after { content: "Opponent used the Scoia'tael faction perk to go first."; }
-
-#notif-skellige-op{ background-image: url('../assets/img/icons/notif_skellige.png'); }
-#notif-skellige-op::after { content: "Opponent Skellige Ability Triggered!"; }
-
-#notif-skellige-me{ background-image: url('../assets/img/icons/notif_skellige.png'); }
-#notif-skellige-me::after { content: "Skellige Ability Triggered!"; }
+#notif-me-first::before    { background-image: url('../assets/img/icons/notif_me_coin.png'); }
+#notif-me-first::after     { content: "You Go First"; }
+#notif-op-first::before    { background-image: url('../assets/img/icons/notif_op_coin.png'); }
+#notif-op-first::after     { content: "Opponent Goes First"; }
+#notif-me-coin::before     { background-image: url('../assets/img/icons/notif_me_coin.png'); }
+#notif-me-coin::after      { content: "You Go First"; }
+#notif-op-coin::before     { background-image: url('../assets/img/icons/notif_op_coin.png'); }
+#notif-op-coin::after      { content: "Opponent Goes First"; }
+#notif-round-start::before { background-image: url('../assets/img/icons/notif_round_start.png'); }
+#notif-round-start::after  { content: "Round Start"; }
+#notif-me-pass::before     { background-image: url('../assets/img/icons/notif_round_passed.png'); }
+#notif-me-pass::after      { content: "You Passed"; color: #aaaaaa; text-shadow: none; }
+#notif-op-pass::before     { background-image: url('../assets/img/icons/notif_round_passed.png'); }
+#notif-op-pass::after      { content: "Opponent Passed"; color: #aaaaaa; text-shadow: none; }
+#notif-win-round::before   { background-image: url('../assets/img/icons/notif_win_round.png'); }
+#notif-win-round::after    { content: "You Won The Round!"; }
+#notif-lose-round::before  { background-image: url('../assets/img/icons/notif_lose_round.png'); }
+#notif-lose-round::after   { content: "Round Lost"; color: #cc4444; text-shadow: 0 0 1vw rgba(200,30,30,0.7); }
+#notif-draw-round::before  { background-image: url('../assets/img/icons/notif_draw_round.png'); }
+#notif-draw-round::after   { content: "Round Draw"; color: #aaaaaa; text-shadow: none; }
+#notif-me-turn::before     { background-image: url('../assets/img/icons/notif_me_turn.png'); }
+#notif-me-turn::after      { content: "Your Turn"; }
+#notif-op-turn::before     { background-image: url('../assets/img/icons/notif_op_turn.png'); }
+#notif-op-turn::after      { content: "Opponent's Turn"; color: #aaaaaa; text-shadow: none; }
+#notif-north::before       { background-image: url('../assets/img/icons/notif_north.png'); }
+#notif-north::after        { content: "Northern Realms: Extra Card Drawn"; }
+#notif-monsters::before    { background-image: url('../assets/img/icons/notif_monsters.png'); }
+#notif-monsters::after     { content: "Monsters: Unit Stays On Board"; }
+#notif-scoiatael::before   { background-image: url('../assets/img/icons/notif_scoiatael.png'); }
+#notif-scoiatael::after    { content: "Scoiatael: Opponent Goes First"; color: #aaaaaa; text-shadow: none; }
+#notif-skellige-op::before { background-image: url('../assets/img/icons/notif_skellige.png'); }
+#notif-skellige-op::after  { content: "Skellige: Opponent Revives Cards"; color: #aaaaaa; text-shadow: none; }
+#notif-skellige-me::before { background-image: url('../assets/img/icons/notif_skellige.png'); }
+#notif-skellige-me::after  { content: "Skellige: Cards Revived"; }
 
 /* ------- card preview ------------- */
 

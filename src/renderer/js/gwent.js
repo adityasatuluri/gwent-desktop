@@ -1414,6 +1414,8 @@ class Game {
 		this.customize_elem.addEventListener("click", () => this.returnToCustomization(), false);
 		this.rematch_elem.addEventListener("click", () => this.rematchGame(), false);
 		this.newGame_elem.addEventListener("click", () => this.newOpponentGame(), false);
+		const mainMenuBtn = document.getElementById('end-main-menu-btn');
+		if (mainMenuBtn) mainMenuBtn.addEventListener('click', () => location.reload(), false);
 		this.state = GameState.CUSTOMIZE;
 		this.reset();
 	}
