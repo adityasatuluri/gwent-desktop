@@ -39,6 +39,17 @@ html,body
 }
 
 /* remove spacing between html elements */
+
+
+/* Hide game content until menu transitions to game */
+body > main {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+body.in-game > main {
+  opacity: 1;
+}
+
 body {
 	font-size: 0px;
 	/*font-family: Impact;*/
@@ -1813,7 +1824,10 @@ main { background-image: url('../assets/img/boardtest8.png'); }
   color: rgba(255,255,255,0.38);
   letter-spacing: 0.15vw;
   text-transform: uppercase;
-  animation: hi/* ================================================================
+  animation: hintFade 2s ease 1.6s both;
+}
+
+/* ================================================================
    SETTINGS PANEL
    ================================================================ */
 #settings-menu {
@@ -1959,8 +1973,6 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 }
 
 .hidden-check { display: none !important; }
-rcase;
-}
 
 /* ── Back-to-menu button (in-game) ──────────────────────────── */
 #back-to-menu-btn {
@@ -2128,4 +2140,5 @@ rcase;
   color: #e8c97a;
   border-color: rgba(255,255,255,0.3);
 }
+
 

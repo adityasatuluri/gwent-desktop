@@ -3630,6 +3630,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   function selectMainItem(idx) {
     if (idx === 0) {
       mainMenu.classList.add('hide');
+      document.body.classList.add('in-game');
       inGame = true;
     } else if (idx === 1) {
       settingsOpenedFrom = 'menu';
