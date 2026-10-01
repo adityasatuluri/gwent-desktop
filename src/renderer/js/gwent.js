@@ -3557,3 +3557,45 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
 
 
+
+
+// Settings Menu Logic
+document.getElementById('menu-settings').addEventListener('click', async () => {
+	document.getElementById('main-menu').classList.add('hide');
+	document.getElementById('settings-menu').classList.remove('hide');
+	document.getElementById('setting-music').checked = Settings.music.isEnabled();
+	document.getElementById('setting-sfx').checked = Settings.soundEffects.isEnabled();
+	document.getElementById('setting-notifications').checked = Settings.notifications.isEnabled();
+	const { ipcRenderer } = require('electron');
+	const s = await ipcRenderer.invoke('get-settings');
+	document.getElementById('setting-fullscreen').checked = s.fullscreen;
+});
+
+document.getElementById('settings-back').addEventListener('click', () => {
+	document.getElementById('settings-menu').classList.add('hide');
+	document.getElementById('main-menu').classList.remove('hide');
+});
+
+document.getElementById('setting-fullscreen').addEventListener('change', (e) => {
+	require('electron').ipcRenderer.send('set-fullscreen', e.target.checked);
+});
+
+document.getElementById('setting-music').addEventListener('change', (e) => {
+	Settings.music.setEnabled(!e.target.checked); // Wait, toggleMusic reverses it, let's just use setEnabled directly? No, Settings.music is a ToggleOption. Its setEnabled is already simple.
+	Settings.music.setEnabled(e.target.checked);
+	if(ui) { ui.toggleMusic_elem.classList.toggle('fade', !e.target.checked); if(e.target.checked) ui.youtube?.playVideo(); else ui.youtube?.pauseVideo(); }
+});
+
+document.getElementById('setting-sfx').addEventListener('change', (e) => {
+	Settings.soundEffects.setEnabled(e.target.checked);
+	if(ui) ui.toggleSFX_elem.classList.toggle('fade', !e.target.checked);
+});
+
+document.getElementById('setting-notifications').addEventListener('change', (e) => {
+	Settings.notifications.setEnabled(e.target.checked);
+	if(ui) ui.toggleNotifications_elem.classList.toggle('fade', !e.target.checked);
+});
+
+
+document.getElementById('menu-new-game').addEventListener('click', () => { document.getElementById('main-menu').classList.add('hide'); });
+document.getElementById('menu-exit').addEventListener('click', () => { require('electron').ipcRenderer.send('exit-app'); });

@@ -44,3 +44,8 @@ ipcMain.on('toggle-fullscreen', (event) => {
 });
 
 ipcMain.on('exit-app', () => { app.quit(); });
+
+ipcMain.handle('get-settings', () => settings.getSettings());
+ipcMain.on('set-fullscreen', (event, val) => { mainWindow.setFullScreen(val); settings.setFullscreen(val); });
+
+ipcMain.on('log-error', (e, msg) => console.error('RENDERER ERROR:', msg));

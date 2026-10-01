@@ -13,19 +13,39 @@
 </head>
 
 <body>
+	<section id="main-menu" class="center">
+		<div class="menu-container">
+			<h1 class="game-title">GWENT</h1>
+			<button id="menu-new-game" class="menu-btn">New Game</button>
+			<button id="menu-settings" class="menu-btn">Settings</button>
+			<button id="menu-exit" class="menu-btn">Exit Game</button>
+		</div>
+	</section>
+
+	<section id="settings-menu" class="center hide">
+		<div class="menu-container">
+			<h1 class="game-title" style="font-size: 3vw;">SETTINGS</h1>
+			<label class="setting-row">
+				<input type="checkbox" id="setting-fullscreen"> Fullscreen
+			</label>
+			<label class="setting-row">
+				<input type="checkbox" id="setting-music"> Music
+			</label>
+			<label class="setting-row">
+				<input type="checkbox" id="setting-sfx"> Sound Effects
+			</label>
+			<label class="setting-row">
+				<input type="checkbox" id="setting-notifications"> Notifications
+			</label>
+			<button id="settings-back" class="menu-btn">Back</button>
+		</div>
+	</section>
 
 <div id="dimensions" style="position:fixed;width:100vw;height:calc(100vw * 1080 / 1920);"></div>
 
 <div id="youtube"></div>
 
 <main>
-	<section id="main-menu" class="center">
-		<div class="menu-container">
-			<h1 class="game-title">GWENT</h1>
-			<button id="menu-new-game" class="menu-btn">New Game</button>
-			<button id="menu-exit" class="menu-btn">Exit Game</button>
-		</div>
-	</section>
 
 	<section id="click-background" class="noclick"></section>
 
@@ -319,3 +339,6 @@
 
 
 
+
+
+<script>window.onerror = function(msg, url, line) { require('electron').ipcRenderer.send('log-error', msg + ' at ' + line); };</script>
