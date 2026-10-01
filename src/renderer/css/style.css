@@ -1067,11 +1067,10 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 }
 
 .card-selectable > .card:hover {
-	/*box-shadow: 0 0 .2vw rgba(255,255,0, 0.5);*/
 	border: .12vw outset goldenrod;
 	border-radius: .3vw;
 	margin-bottom: 1vw;
-	z-index: 1;
+	z-index: 1000 !important;
 }
 .card-selectable > .card:hover::after
 {

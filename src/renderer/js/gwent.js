@@ -3790,3 +3790,10 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
 
 
+
+document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    if (typeof ui !== 'undefined' && ui && ui.previewCard) {
+        ui.cancel();
+    }
+});
