@@ -2301,7 +2301,7 @@ class Carousel {
 		if (!Carousel.elem) {
 			Carousel.elem = document.getElementById("carousel");
 			Carousel.elem.addEventListener("click", () => Carousel.curr?.cancel(), false); Carousel.elem.children[0].addEventListener("click", (e) => e.stopPropagation(), false);
-			Carousel.elem.addEventListener('wheel', (e) => { if (Carousel.curr && !Carousel.curr.cancelled) { Carousel.curr.shift(e, e.deltaY > 0 ? 1 : -1); } }, {passive: false});
+			Carousel.elem.addEventListener('wheel', (e) => { if (Carousel.curr && !Carousel.curr.cancelled) { e.preventDefault(); let delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY; Carousel.curr.shift(e, delta > 0 ? 1 : -1); } }, {passive: false});
 		}
 		this.elem = Carousel.elem;
 		document.getElementsByTagName("main")[0].classList.remove("noclick");
@@ -2710,7 +2710,7 @@ class DeckMaker {
 			this.leader_elem.children[1].style.backgroundImage = largeURL(data.card.deck + "_" + data.card.filename);
 			Settings.getFactionSettings(this.leader.card.deck).setLeader(this.leader);
 			AudioManager.playSFX('ui_card_bank');
-		}, () => true, false, true);
+		}, () => true, false, true, "LEADER");
 		Carousel.curr.index = index;
 		Carousel.curr.update();
 	}
@@ -2724,7 +2724,7 @@ class DeckMaker {
 		let index = container.cards.reduce((a,c,i) => c.filename === this.faction ? i : a, 0);
 		ui.queueCarousel(container, 1, (c,i) => {
 			this.loadFactionDeck(c.cards[i].filename);
-		}, () => true, false, true);
+		}, () => true, false, true, "FACTION");
 		Carousel.curr.index = index;
 		Carousel.curr.update();
 	}
@@ -3747,7 +3747,19 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
         if (e.key === 'Enter') {
           if (typeof dm !== 'undefined') dm.startNewGame();
         }
-        if (e.key === 'Escape') { new Popup("YES", () => location.reload(), "NO", () => {}, "MAIN MENU", "Are you sure you want to return to the main menu?"); }
+        if (e.key === 'Escape') {
+          if (Carousel.curr && Carousel.curr.title === "LEADER") {
+            Carousel.curr.cancel();
+            if (typeof dm !== 'undefined') dm.selectFaction();
+          } else if (Carousel.curr && Carousel.curr.title === "FACTION") {
+            Carousel.curr.cancel();
+            new Popup("YES", () => location.reload(), "NO", () => {}, "MAIN MENU", "Are you sure you want to return to the main menu?");
+          } else if (Carousel.curr) {
+            Carousel.curr.cancel();
+          } else {
+            new Popup("YES", () => location.reload(), "NO", () => {}, "MAIN MENU", "Are you sure you want to return to the main menu?");
+          }
+        }
       } else {
         if (e.key === 'Escape') { showPauseMenu(); }
       }
