@@ -1878,9 +1878,10 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 }
 /* Description panel */
 #carousel .card-description {
-  left: 30% !important;
-  top: 75% !important;
-  width: 40% !important;
+  left: 25vw !important;
+  top: 78.5% !important;
+  width: 50vw !important;
+  height: 10vw !important;
 }
 /* Carousel header text */
 #carousel > :nth-child(2) {
@@ -2173,4 +2174,8 @@ main { background-image: url('../assets/img/boardtest8.png'); }
     font-size: 0.8vw;
     color: rgba(255, 255, 255, 0.4);
     letter-spacing: 0.1vw;
+}
+#carousel .card-description > p {
+  top: 30% !important;
+  height: 65% !important;
 }
