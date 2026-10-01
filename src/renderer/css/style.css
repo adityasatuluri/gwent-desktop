@@ -231,12 +231,14 @@ html {
 }
 #notification-bar > div::before {
 	content: '';
-	width: 5.5vw;
-	height: 5.5vw;
+	width: 12vw;
+	height: 12vw;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
 	flex-shrink: 0;
+	/* Add a small negative margin to pull the text closer to the huge icon if needed */
+	margin-right: -1vw;
 }
 #notification-bar > div::after {
 	font-family: 'Cinzel', 'Palatino Linotype', serif;
