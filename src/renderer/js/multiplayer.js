@@ -96,9 +96,15 @@ class Multiplayer {
             } catch(e) {}
         });
 
-        this.discoverClient.bind(this.broadcastPort, () => {
-            this.discoverClient.setBroadcast(true);
+        this.discoverClient.on('error', (err) => {
+            console.error('UDP discover error:', err);
         });
+        
+        try {
+            this.discoverClient.bind(this.broadcastPort, () => {
+                this.discoverClient.setBroadcast(true);
+            });
+        } catch(e) {}
 
         // Prune old servers every 3 seconds
         this.pruneInterval = setInterval(() => {
@@ -157,6 +163,12 @@ class Multiplayer {
             this.stopHostingBroadcast(); // Stop advertising once connected
         });
 
+        this.hostServer.on('error', (err) => {
+            console.error('Host server error:', err);
+            this.isHosting = false;
+            document.getElementById('mp-host-btn').innerText = 'HOST GAME';
+            if (typeof ui !== 'undefined') ui.popup("OK", ()=>{}, null, null, "HOST ERROR", "Failed to start hosting (port in use?).");
+        });
         this.hostServer.listen(this.hostPort, '0.0.0.0', () => {
             console.log('Hosting on port', this.hostPort);
             this.isHosting = true;
@@ -273,6 +285,7 @@ class Multiplayer {
 const mp = new Multiplayer();
 
 function openMultiplayerLobby() {
+    document.getElementById('main-menu').classList.add('hide');
     mp.openLobby();
 }
 function closeMultiplayerLobby() {

@@ -315,37 +315,6 @@
 		</div>
 	</section>
 	
-	<!-- MULTIPLAYER LOBBY -->
-	<section id="multiplayer-lobby" class="hide">
-		<div class="lobby-content">
-			<h1 class="lobby-title">LAN MULTIPLAYER</h1>
-			<div class="lobby-layout">
-				<!-- Left: Profile and History -->
-				<div class="lobby-panel">
-					<h2>PROFILE</h2>
-					<div class="profile-row">
-						<label>USERNAME:</label>
-						<input type="text" id="mp-username" placeholder="Enter Name..." />
-					</div>
-					<button id="mp-host-btn" class="mp-btn primary-btn">HOST GAME</button>
-					
-					<h2 style="margin-top:2vw;">MATCH HISTORY</h2>
-					<div class="history-list" id="mp-history-list">
-						<!-- history items -->
-					</div>
-				</div>
-				<!-- Right: Network Discovery -->
-				<div class="lobby-panel">
-					<h2>LOCAL PLAYERS</h2>
-					<div class="server-list" id="mp-server-list">
-						<div class="server-list-empty">Searching for players on local network...</div>
-					</div>
-				</div>
-			</div>
-			<button id="mp-back-btn" class="mp-btn" onclick="closeMultiplayerLobby()">BACK TO MENU</button>
-		</div>
-	</section>
-
 	<section id="deck-selector">
 		
 	</section>
@@ -632,6 +601,37 @@
 
 <script type="text/javascript" src="js/multiplayer.js"></script>
 <script type="text/javascript" src="js/gwent.js"></script>
+	<!-- MULTIPLAYER LOBBY -->
+	<section id="multiplayer-lobby" class="hide">
+		<div class="lobby-content">
+			<h1 class="lobby-title">LAN MULTIPLAYER</h1>
+			<div class="lobby-layout">
+				<!-- Left: Profile and History -->
+				<div class="lobby-panel">
+					<h2>PROFILE</h2>
+					<div class="profile-row">
+						<label>USERNAME:</label>
+						<input type="text" id="mp-username" placeholder="Enter Name..." />
+					</div>
+					<button id="mp-host-btn" class="mp-btn primary-btn">HOST GAME</button>
+					
+					<h2 style="margin-top:2vw;">MATCH HISTORY</h2>
+					<div class="history-list" id="mp-history-list">
+						<!-- history items -->
+					</div>
+				</div>
+				<!-- Right: Network Discovery -->
+				<div class="lobby-panel">
+					<h2>LOCAL PLAYERS</h2>
+					<div class="server-list" id="mp-server-list">
+						<div class="server-list-empty">Searching for players on local network...</div>
+					</div>
+				</div>
+			</div>
+			<button id="mp-back-btn" class="mp-btn" onclick="closeMultiplayerLobby()">BACK TO MENU</button>
+		</div>
+	</section>
+
 </body>
 
 </html>
