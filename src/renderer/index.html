@@ -6,12 +6,11 @@
 	<title>Gwent Classic from The Witcher 3: Wild Hunt</title>
 	<meta charset="utf-8" />
 	<meta name="author" content="Arun Sundaram" />
-	<meta name="description" content="Play the original Gwent minigame from The Witcher 3 in your browser! Includes cards from Hearts of Stone and Blood & Wine!" />
-	<meta name="keywords" content="arun, sundaram, programmer, gwent, tw3, witcher, card, game, gamedev, play" />
+	<meta name="description" content="Play the original Gwent minigame from The Witcher 3 in your browser!" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 
@@ -21,17 +20,13 @@
 	<section id="main-menu">
 		<div id="menu-bg"></div>
 		<div id="menu-vignette"></div>
-
-		<!-- Animated teal particle glow -->
 		<div id="menu-glow"></div>
 
-		<!-- Top brand -->
 		<div id="menu-brand">
-			<span id="menu-logo-sub">THE WITCHER 3 ·</span>
+			<span id="menu-logo-sub">THE WITCHER 3 &middot;</span>
 			<span id="menu-logo-title">GWENT</span>
 		</div>
 
-		<!-- Left-side nav items (Witcher 3 style) -->
 		<nav id="menu-nav">
 			<ul id="menu-items">
 				<li class="menu-item active" data-index="0" id="menu-new-game">
@@ -49,9 +44,8 @@
 			</ul>
 		</nav>
 
-		<!-- Bottom hint -->
 		<div id="menu-hint">
-			<span>↑ ↓ Navigate &nbsp;&nbsp; Enter Select</span>
+			<span>Up / Down &nbsp;&mdash;&nbsp; Navigate &nbsp;&nbsp;&nbsp; Enter &nbsp;&mdash;&nbsp; Select</span>
 		</div>
 	</section>
 
@@ -59,41 +53,53 @@
 	<section id="settings-menu" class="hide">
 		<div id="settings-bg"></div>
 		<div id="settings-panel">
-			<h2 id="settings-title">SETTINGS</h2>
+			<h2 id="settings-title">Settings</h2>
 			<div id="settings-items">
+
 				<div class="setting-row active" data-setting="fullscreen">
 					<span class="setting-label">Fullscreen</span>
-					<span class="setting-value">
-						<span class="setting-toggle" id="setting-fullscreen-val">ON</span>
-					</span>
+					<span class="setting-value"><span class="setting-toggle on" id="setting-fullscreen-val">ON</span></span>
 					<input type="checkbox" id="setting-fullscreen" class="hidden-check">
 				</div>
+
 				<div class="setting-row" data-setting="music">
 					<span class="setting-label">Music</span>
-					<span class="setting-value">
-						<span class="setting-toggle" id="setting-music-val">ON</span>
-					</span>
+					<span class="setting-value"><span class="setting-toggle on" id="setting-music-val">ON</span></span>
 					<input type="checkbox" id="setting-music" class="hidden-check">
 				</div>
+
 				<div class="setting-row" data-setting="sfx">
 					<span class="setting-label">Sound Effects</span>
-					<span class="setting-value">
-						<span class="setting-toggle" id="setting-sfx-val">ON</span>
-					</span>
+					<span class="setting-value"><span class="setting-toggle on" id="setting-sfx-val">ON</span></span>
 					<input type="checkbox" id="setting-sfx" class="hidden-check">
 				</div>
+
 				<div class="setting-row" data-setting="notifications">
 					<span class="setting-label">Notifications</span>
-					<span class="setting-value">
-						<span class="setting-toggle" id="setting-notifications-val">ON</span>
-					</span>
+					<span class="setting-value"><span class="setting-toggle on" id="setting-notifications-val">ON</span></span>
 					<input type="checkbox" id="setting-notifications" class="hidden-check">
 				</div>
+
+				<!-- Deck Options moved here from the deck builder UI -->
+				<div class="setting-row setting-deck-action" data-setting="upload-deck" id="settings-upload-deck">
+					<span class="setting-label">Upload Deck</span>
+					<label style="position:absolute;inset:0;cursor:pointer;" for="add-file"></label>
+					<input type="file" id="add-file" style="display:none;" accept=".json"/>
+				</div>
+
+				<div class="setting-row setting-deck-action" data-setting="change-faction" id="settings-change-faction">
+					<span class="setting-label">Change Faction</span>
+				</div>
+
+				<div class="setting-row setting-deck-action" data-setting="download-deck" id="settings-download-deck">
+					<span class="setting-label">Download Deck</span>
+				</div>
+
 				<div class="setting-row" data-setting="back" id="settings-back">
-					<span class="setting-label">← Back</span>
+					<span class="setting-label">&#8592; Back</span>
 				</div>
 			</div>
-			<div id="settings-hint">↑ ↓ Navigate &nbsp;&nbsp; Enter Toggle &nbsp;&nbsp; Esc Back</div>
+			<div id="settings-hint">Up / Down &mdash; Navigate &nbsp;&nbsp; Enter &mdash; Select &nbsp;&nbsp; Esc &mdash; Back</div>
 		</div>
 	</section>
 
@@ -106,12 +112,8 @@
 	<section id="click-background" class="noclick"></section>
 
 	<section id="panel-left" class="panel">
-
-		<div id="exit-game" data-title="Exit game"></div>
-	
 		<div id="leader-op" class="leader-box">
-			<div class="leader-container center" data-title="View leader"> 
-			</div>
+			<div class="leader-container center" data-title="Opponent leader"></div>
 			<div class="leader-active">
 				<div></div>
 			</div>
@@ -316,34 +318,24 @@
 
 </main>
 
+<!-- Hidden file inputs kept for JS functionality (referenced by gwent.js) -->
+<a id="download-json" style="display:none;"></a>
+
 <section id="deck-customization">
 	<div id="faction-header" class="center">
 		<button id="faction-prev" class="faction-nav"></button>
 		<div id="faction-title">
-			<img id="faction-icon" src="" />
+			<img id="faction-icon" src="" alt="" />
 			<h1></h1>
 		</div>
 		<button id="faction-next" class="faction-nav"></button>
 	</div>
 	<p id="faction-description"></p>
 
-	
-	<label id="upload-deck" class="deck-options">
-		<input type="file" id="add-file" value="Import" style="display:none;"/>
-		Upload Deck
-	</label>
-	
-	<a id="change-faction" class="deck-options">Change Faction</a>
-	
-	<a id="download-deck" class="deck-options">Download Deck</a>
-	<a id="download-json" style="display:none;"></a>
-	
 	<h2 id="card-bank-title" class="card-contianer-title">Card Collection<br><span class="all-cards">ALL CARDS</span></h2>
 	<h2 id="card-deck-title" class="card-contianer-title">Cards in Deck<br><span class="all-cards">ALL CARDS</span></h2>
-	<div id="card-bank" class="card-array">
-	</div>
-	<div id="card-deck" class="card-array">
-	</div>
+	<div id="card-bank" class="card-array"></div>
+	<div id="card-deck" class="card-array"></div>
 	<div id="card-leader">
 		<p>Leader</p>
 		<div></div>
@@ -361,23 +353,22 @@
 		<p>0</p>
 	</div>
 	<button id="start-game">Start game</button>
-	<div id="opponent-preview" class="center">
-		<div>
-			<p>Oponent's Deck</p>
-		</div>
-		<div class="center">
-			<button id="op-preview-open" class="hide" data-title="View opponent"></button>
-			<div id="op-preview-faction" class="hide"></div>
-			<label id="op-preview-leader" for="add-opponent" data-title="Upload opponent">
-				<input type="file" id="add-opponent" style="display:none;"/>
-				<p>Random</p>
-			</label>
-			<button id="op-preview-clear" class="hide" data-title="Clear opponent"></button>
-		</div>
+
+	<!-- Opponent preview hidden (random removed per user request) -->
+	<div id="opponent-preview" style="display:none;">
+		<input type="file" id="add-opponent" style="display:none;"/>
+		<button id="op-preview-open" class="hide"></button>
+		<div id="op-preview-faction" class="hide"></div>
+		<label id="op-preview-leader" for="add-opponent"></label>
+		<button id="op-preview-clear" class="hide"></button>
 	</div>
+
+	<!-- Keep hidden deck links (still used by JS) -->
+	<a id="change-faction" style="display:none;"></a>
+	<a id="download-deck" style="display:none;"></a>
 </section>
 
-<button id="back-to-menu-btn" class="menu-btn" style="position: absolute; bottom: 2vw; right: 2vw; z-index: 100; width: 10vw; font-size: 1vw;">Main Menu</button>
+<button id="back-to-menu-btn">Main Menu</button>
 
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/cards.js"></script>
@@ -389,14 +380,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-

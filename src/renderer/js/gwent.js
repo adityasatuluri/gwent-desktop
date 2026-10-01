@@ -1,4 +1,4 @@
-﻿"use strict"
+"use strict"
 
 class Enum {constructor(val){this.val = val;} toString(){return this.val;}};
 
@@ -1931,7 +1931,7 @@ class UI {
 	constructor() {
 		this.carousels = [];
 		this.notif_elem = document.getElementById("notification-bar");
-		document.getElementById('exit-game').addEventListener('click', ()=>game.exitGame(), false);
+		document.getElementById('exit-game')?.addEventListener('click', ()=>game.exitGame(), false);
 		this.preview = document.getElementsByClassName("card-preview")[0];
 		this.previewCard = null;
 		this.lastRow = null;
@@ -2558,8 +2558,8 @@ class DeckMaker {
 		const btnPrev = document.getElementById("faction-prev");
 		const btnNext = document.getElementById("faction-next");
 		if (btnPrev && btnNext) {
-			btnPrev.innerHTML = "? " + factions[keys[prevIndex]].name + " [1]";
-			btnNext.innerHTML = "[3] " + factions[keys[nextIndex]].name + " ?";
+			btnPrev.innerHTML = "&#9664; " + factions[keys[prevIndex]].name + " [1]";
+			btnNext.innerHTML = "[3] " + factions[keys[nextIndex]].name + " &#9654;";
 			btnPrev.onclick = () => this.loadFactionDeck(keys[prevIndex]);
 			btnNext.onclick = () => this.loadFactionDeck(keys[nextIndex]);
 		}
@@ -2968,7 +2968,7 @@ class DeckMaker {
 		const buttons = ['op-preview-clear', 'op-preview-open'].map(id=>document.getElementById(id));
 		if (isEmpty(this.opponentData))
 		{
-			leaderElem.children[1].innerHTML = "Random";
+			if(leaderElem && leaderElem.children[1]) leaderElem.children[1].innerHTML = "Random";
 			[factionElem, ...buttons].forEach(e=>e.classList.add('hide'));
 		}
 		else
@@ -3498,18 +3498,18 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 //  CINEMATIC MENU SYSTEM
 // ============================================================
 (function() {
-  // ── State ──────────────────────────────────────────────────
+  // -- State --------------------------------------------------
   const mainMenu     = document.getElementById('main-menu');
   const settingsMenu = document.getElementById('settings-menu');
   const menuItems    = Array.from(document.querySelectorAll('.menu-item'));
-  const settingRows  = Array.from(document.querySelectorAll('.setting-row'));
+  const settingRows = Array.from(document.querySelectorAll('.setting-row'));
 
   let menuIndex    = 0;  // currently focused main-menu item
   let settingIndex = 0;  // currently focused settings item
   let inSettings   = false;
   let inGame       = false;
 
-  // ── Helpers ────────────────────────────────────────────────
+  // -- Helpers ------------------------------------------------
   function setMenuActive(idx) {
     menuItems.forEach(i => i.classList.remove('active'));
     menuItems[idx].classList.add('active');
@@ -3535,10 +3535,10 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     setMenuActive(0);
   }
 
-  // ── Boot animation ─────────────────────────────────────────
+  // -- Boot animation -----------------------------------------
   setTimeout(() => mainMenu.classList.add('loaded'), 50);
 
-  // ── Sync setting toggle display ────────────────────────────
+  // -- Sync setting toggle display ----------------------------
   async function syncSettingsDisplay() {
     const fullscreenCheck = document.getElementById('setting-fullscreen');
     const musicCheck      = document.getElementById('setting-music');
@@ -3589,6 +3589,13 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       chk.checked = !chk.checked;
       Settings.notifications.setEnabled(chk.checked);
       updateToggleLabel('notifications', chk.checked);
+    } else if (ds === 'upload-deck') {
+      document.getElementById('add-file').click();
+    } else if (ds === 'download-deck') {
+      document.getElementById('download-deck').click();
+    } else if (ds === 'change-faction') {
+      document.getElementById('change-faction').click();
+      closeSettings();
     }
   }
 
@@ -3618,7 +3625,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     }
   }
 
-  // ── Mouse clicks on menu items ─────────────────────────────
+  // -- Mouse clicks on menu items -----------------------------
   menuItems.forEach((el, i) => {
     el.addEventListener('mouseenter', () => setMenuActive(i));
     el.addEventListener('click', () => {
@@ -3633,11 +3640,11 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     });
   });
 
-  // ── Back-to-menu button (in game) ─────────────────────────
+  // -- Back-to-menu button (in game) -------------------------
   const backBtn = document.getElementById('back-to-menu-btn');
   if (backBtn) backBtn.addEventListener('click', () => { location.reload(); });
 
-  // ── Keyboard navigation ────────────────────────────────────
+  // -- Keyboard navigation ------------------------------------
   document.addEventListener('keydown', (e) => {
     // Faction nav during deck customization
     if (!inGame && !inSettings && !mainMenu.classList.contains('hide')) {
@@ -3688,3 +3695,10 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   });
 
 })();
+
+
+
+
+
+
+
