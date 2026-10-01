@@ -168,7 +168,7 @@ class Multiplayer {
             console.error('Host server error:', err);
             this.isHosting = false;
             document.getElementById('mp-host-btn').innerText = 'HOST GAME';
-            if (typeof ui !== 'undefined') ui.popup("OK", ()=>{}, null, null, "HOST ERROR", "Failed to start hosting (port in use?).");
+            if (typeof ui !== 'undefined') ui.popup("OK", ()=>{}, false, null, "HOST ERROR", "Failed to start hosting (port in use?).");
         });
         this.hostServer.listen(this.hostPort, '0.0.0.0', () => {
             console.log('Hosting on port', this.hostPort);
@@ -216,7 +216,7 @@ class Multiplayer {
             this.setupConnection(socket, true);
         });
         socket.on('error', (e) => {
-            if (typeof ui !== 'undefined') ui.popup("OK", ()=>{}, null, null, "CONNECTION ERROR", "Failed to connect to host: " + e.message);
+            if (typeof ui !== 'undefined') ui.popup("OK", ()=>{}, false, null, "CONNECTION ERROR", "Failed to connect to host: " + e.message);
         });
     }
 
@@ -224,23 +224,33 @@ class Multiplayer {
         this.socket = socket;
         this.stopDiscovery();
         
+        // Show loading/waiting popup FIRST to prevent race condition where data arrives before popup is created
+        ui.popup("CANCEL", () => {
+            if (this.socket) { this.socket.destroy(); this.socket = null; }
+            this.startDiscovery();
+        }, false, null, "CONNECTING", "Establishing connection...");
+
+        this.tcpBuffer = '';
         socket.on('data', (data) => {
-            this.handleNetworkMessage(data.toString());
+            this.tcpBuffer += data.toString();
+            let newlineIdx;
+            while ((newlineIdx = this.tcpBuffer.indexOf('\n')) > -1) {
+                const msgStr = this.tcpBuffer.substring(0, newlineIdx);
+                this.tcpBuffer = this.tcpBuffer.substring(newlineIdx + 1);
+                this.handleNetworkMessage(msgStr);
+            }
         });
         
         socket.on('close', () => {
             console.log('Connection closed');
             this.socket = null;
             if (typeof ui !== 'undefined' && inGame) {
-                ui.popup("OK", () => location.reload(), null, null, "DISCONNECTED", "The connection was lost.");
+                ui.popup("OK", () => location.reload(), false, null, "DISCONNECTED", "The connection was lost.");
             }
         });
 
         // Send handshake
         this.send({ type: 'HANDSHAKE', name: this.username });
-        
-        // Show loading/waiting popup
-        ui.popup(null, null, null, null, "CONNECTING", "Establishing connection...");
     }
 
     send(msgObj) {
@@ -249,11 +259,10 @@ class Multiplayer {
         }
     }
 
-    handleNetworkMessage(rawData) {
-        const msgs = rawData.split('\n').filter(m => m.trim().length > 0);
-        msgs.forEach(m => {
-            try {
-                const msg = JSON.parse(m);
+    handleNetworkMessage(msgStr) {
+        if (msgStr.trim().length === 0) return;
+        try {
+            const msg = JSON.parse(msgStr);
                 console.log('RECV:', msg);
                 
                 if (msg.type === 'HANDSHAKE') {
@@ -261,12 +270,11 @@ class Multiplayer {
                     this.opponentName = msg.name;
                     ui.popup("OK", () => {
                         this.startGameWithOpponent();
-                    }, null, null, "CONNECTED", "Connected to " + this.opponentName + "! Ready to play?");
+                    }, false, null, "CONNECTED", "Connected to " + this.opponentName + "! Ready to play?");
                 }
-            } catch(e) {
-                console.error("Failed to parse network message", e);
-            }
-        });
+        } catch(e) {
+            console.error("Failed to parse network message", e);
+        }
     }
     
     startGameWithOpponent() {
@@ -277,7 +285,7 @@ class Multiplayer {
         
         // We need a major refactor of gwent.js to actually drive gameplay over network.
         // For this step, we just alert the user that gameplay sync is a WIP.
-        ui.popup("OK", () => location.reload(), null, null, "MULTIPLAYER ALPHA", "You have successfully connected via LAN!\n\nNote: Full gameplay state synchronization is extremely complex and currently being implemented. You will now return to the main menu.");
+        ui.popup("OK", () => location.reload(), false, null, "MULTIPLAYER ALPHA", "You have successfully connected via LAN!\n\nNote: Full gameplay state synchronization is extremely complex and currently being implemented. You will now return to the main menu.");
         
         // As a proof of concept, add a match history record
         this.addHistory(this.opponentName, 'draw');
