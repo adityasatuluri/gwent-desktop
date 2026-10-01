@@ -2327,12 +2327,7 @@ class Carousel {
 		this.update();
 		Carousel.setCurrent(this);
 		
-		if (this.title) {
-			this.title_elem.innerHTML = this.title;
-			this.title_elem.classList.remove("hide");
-		} else {
-			this.title_elem.classList.add("hide");
-		}
+		if (this.title) { this.title_elem.innerHTML = this.title; this.title_elem.classList.remove("hide"); if (this.title === "FACTION") { this.elem.classList.add("faction-mode"); } else { this.elem.classList.remove("faction-mode"); } } else { this.title_elem.classList.add("hide"); this.elem.classList.remove("faction-mode"); }
 		AudioManager.playSFX('open');
 		this.elem.classList.remove("hide");
 		ui.enablePlayer(true);

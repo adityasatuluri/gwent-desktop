@@ -389,48 +389,7 @@ html {
 	transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-#carousel > :nth-child(1) > :not(:nth-child(3)):hover {
-	box-shadow: 0 0 1vw goldenrod;
-}
 
-#carousel > :nth-child(1) > .card-lg {
-	translate: calc(var(--magnitude) * 1vw);
-	transition: translate var(--carousel-trans-time), box-shadow 0.1s;
-	transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-/*  middle  (3)  */
-#carousel > :nth-child(1) > :nth-child(3){
-	border: .3vw solid goldenrod;
-	box-shadow: 0 0 4vw goldenrod;
-	background-origin: border-box;
-	transition: box-shadow 0.1s, translate calc(var(--carousel-trans-time) - 0.05s);
-}
-#carousel > :nth-child(1) > :nth-child(3):hover {
-	box-shadow: 0 0 2vw goldenrod;
-}
-
-/*  adjacent (2, 4)  */
-#carousel > :nth-child(1) > :nth-child(2n) {
-	width: 13.75vw;
-	height: 25.9vw;
-	transition: box-shadow 0.1s, translate calc(var(--carousel-trans-time) + 0.05s);
-}
-
-/* outer most (1, 5) */
-#carousel > :nth-child(1) > :nth-child(4n - 3) {
-	width: 11.3vw;
-	height: 21.3vw;
-	transition: box-shadow 0.1s, translate calc(var(--carousel-trans-time) + .2s);
-}
-
-#carousel > :nth-child(1) > :nth-child(1) {
-	margin-left: 5%
-}
-
-#carousel > :nth-child(1) > :nth-child(5) {
-	margin-right: 5%;
-}
 
 #carousel .card-lg {
 	display:inline-block;
@@ -2227,3 +2186,18 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 #carousel > :nth-child(1) > :not(:nth-child(5)):hover {
   box-shadow: 0 0 1vw goldenrod !important;
 }
+/* Hover effect for all carousel cards */
+#carousel > :nth-child(1) > .card-lg:hover {
+  box-shadow: 0 0 1vw goldenrod !important;
+}
+/* Keep center card glow strong even when hovered */
+#carousel > :nth-child(1) > :nth-child(5):hover {
+  box-shadow: 0 0 3vw goldenrod !important;
+}
+
+/* Faction mode specific widths (ratio 0.666) */
+#carousel.faction-mode > :nth-child(1) > :nth-child(5) { width: 19.33vw !important; }
+#carousel.faction-mode > :nth-child(1) > :nth-child(4), #carousel.faction-mode > :nth-child(1) > :nth-child(6) { width: 16vw !important; }
+#carousel.faction-mode > :nth-child(1) > :nth-child(3), #carousel.faction-mode > :nth-child(1) > :nth-child(7) { width: 13.13vw !important; }
+#carousel.faction-mode > :nth-child(1) > :nth-child(2), #carousel.faction-mode > :nth-child(1) > :nth-child(8) { width: 10.66vw !important; }
+#carousel.faction-mode > :nth-child(1) > :nth-child(1), #carousel.faction-mode > :nth-child(1) > :nth-child(9) { width: 8.13vw !important; }
