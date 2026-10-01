@@ -266,7 +266,7 @@ class Multiplayer {
                 console.log('RECV:', msg);
                 
                 if (msg.type === 'HANDSHAKE') {
-                    if (Popup.curr) Popup.curr.cancel(); // Close connecting popup
+                    if (Popup.curr) Popup.curr.clear(); // Close connecting popup
                     this.opponentName = msg.name;
                     ui.popup("OK", () => {
                         this.startGameWithOpponent();
