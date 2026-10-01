@@ -41,7 +41,7 @@ html,body
 body {
 	font-size: 0px;
 	/*font-family: Impact;*/
-	font-family:Arial Narrow, sans-serif;
+	font-family: 'Cinzel', 'Palatino Linotype', serif;
 	color: goldenrod;
 	background-color: black;
 }
@@ -584,7 +584,7 @@ html {
     height: 3vw;
     width: 10vw;
     top: 87%;
-	font-family: Arial Narrow;
+	font-family: 'Cinzel', 'Palatino Linotype', serif;
     font-size: 1.5vw;
     color: goldenrod;
     background-color: #4c390a66;
@@ -897,7 +897,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 	font-size: 1.1vw;
 	font-weight: bold;
 	
-	/*font-family: Arial Narrow, sans-serif;*/
+	/*font-family: 'Cinzel', 'Palatino Linotype', serif;*/
 }
 
 #name-me {
@@ -915,7 +915,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 	
 	color: tan;
 	font-size: .95vw;
-	/*font-family: Arial Narrow, sans-serif;*/
+	/*font-family: 'Cinzel', 'Palatino Linotype', serif;*/
 }
 
 #deck-name-me {
@@ -1556,7 +1556,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 	content: attr(data-title);
 	background-color: rgba(10,10,10,.95);
 	color: goldenrod;
-	font-family: Arial Narrow, sans-serif;
+	font-family: 'Cinzel', 'Palatino Linotype', serif;
 	font-size: 1.2vw;
 	position: absolute;
 	padding: 1px 5px 2px 5px;
@@ -1644,11 +1644,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
    ================================================================ */
 
 /* ── Fonts ──────────────────────────────────────────────────── */
-@font-face {
-  font-family: 'Cinzel';
-  src: local('Cinzel'), local('Cinzel-Regular');
-  /* fallback – will be overridden by downloaded file if present */
-}
+
 
 /* ── Animations ─────────────────────────────────────────────── */
 @keyframes menuFadeIn {
@@ -1954,4 +1950,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
   color: #e8c97a !important;
   letter-spacing: 0.1vw !important;
 }
+
+
+
 
