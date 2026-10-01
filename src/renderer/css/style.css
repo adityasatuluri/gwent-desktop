@@ -324,35 +324,33 @@ html {
 .card-description > * { position: relative; }
 
 .card-description > div {
-	top: 1.0vw;
-	left: 0.9vw;
-	width: 1.95vw;
-	height: 1.95vw;
-	margin-bottom: -1.9vw;
+	display: inline-block;
+	vertical-align: middle;
+	width: 1.3vw;
+	height: 1.3vw;
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
-	background-position:center;
+	background-position: center;
+	margin-top: 1vw;
+	margin-right: 0.5vw;
 }
 
 .card-description > h1 {
+	display: inline-block;
+	vertical-align: middle;
+	width: auto;
+	margin-top: 1vw;
 	font-weight: bold;
-	
-	top: 0.5vw;
-	left: 16%;
-	height: 16%;
-	width: 70%;
-	margin-bottom: -2.1vw;
 	text-transform: capitalize;
-	
-	font-size: 1vw;
+	font-size: 1.1vw;
 }
 
 .card-description > p {
-	top: 37%;
-	left: 5%;
+	display: block;
+	margin: 0 auto;
+	margin-top: 1vw;
 	width: 90%;
-	height:50%;
-	
+	height: 50%;
 	font-size: 0.9vw;
 }
 
