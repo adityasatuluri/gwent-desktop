@@ -321,6 +321,42 @@ class Multiplayer {
                 } else if (msg.type === 'PASS_ROUND') {
                     if (Popup.curr && Popup.curr.title === "OPPONENT'S TURN") Popup.curr.clear();
                     player_op.passRound();
+                } else if (msg.type === 'LEADER_PLAYED') {
+                    if (Popup.curr && Popup.curr.title === "OPPONENT'S TURN") Popup.curr.clear();
+                    player_op.activateLeader();
+                } else if (msg.type === 'REDRAW_SYNC') {
+                    // Replace opponent's hand and deck with the synced state
+                    const replaceCards = async (container, indices) => {
+                        container.cards = [];
+                        if (container === player_op.deck) {
+                            while(container.elem.children.length > 1) {
+                                container.elem.lastChild.remove();
+                            }
+                        } else {
+                            while(container.elem.firstChild) {
+                                container.elem.firstChild.remove();
+                            }
+                        }
+                        
+                        for (let idx of indices) {
+                            let c = new Card(card_dict[idx], player_op);
+                            if (container === player_op.deck) {
+                                container.cards.push(c);
+                                container.addCardElement();
+                            } else {
+                                await container.addCard(c);
+                            }
+                        }
+                        
+                        if (container === player_op.deck) {
+                            container.counter.innerHTML = container.cards.length;
+                        }
+                    };
+                    
+                    await replaceCards(player_op.hand, msg.hand);
+                    await replaceCards(player_op.deck, msg.deck);
+                    
+                    this.opponentRedrawSynced = true;
                 }
         } catch(e) {
             console.error("Failed to parse network message", e);
@@ -412,6 +448,30 @@ class Multiplayer {
         player_me.passRound = async () => {
             if (this.isGameActive) this.send({ type: 'PASS_ROUND' });
             return await ogPass.call(player_me);
+        };
+        
+        const ogActivateLeader = player_me.activateLeader;
+        player_me.activateLeader = async () => {
+            if (this.isGameActive) this.send({ type: 'LEADER_PLAYED' });
+            return await ogActivateLeader.call(player_me);
+        };
+        
+        const ogInitialRedraw = game.initialRedraw;
+        game.initialRedraw = async () => {
+            await ogInitialRedraw.call(game);
+            
+            if (this.isGameActive) {
+                // Send our finalized hand and deck state
+                const handIndices = player_me.hand.cards.map(c => card_dict.indexOf(c));
+                const deckIndices = player_me.deck.cards.map(c => card_dict.indexOf(c));
+                this.send({ type: 'REDRAW_SYNC', hand: handIndices, deck: deckIndices });
+                
+                // Wait for opponent's redraw sync
+                ui.popup(null, null, null, null, "WAITING FOR OPPONENT", "Waiting for opponent to finish their mulligan...");
+                await sleepUntil(() => this.opponentRedrawSynced);
+                if (Popup.curr && Popup.curr.title === "WAITING FOR OPPONENT") Popup.curr.clear();
+				Math.seed = this.sharedSeed + 42; // Force resync seed after mulligan divergent RNG
+            }
         };
     }
 }

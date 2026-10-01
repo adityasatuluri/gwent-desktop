@@ -91,3 +91,5 @@ function toInteger(str)
 function randomInt(n)  {
 	return Math.floor((typeof mp !== 'undefined' && mp.sharedSeed ? Math.seededRandom() : Math.random()) * n);
 }
+
+function isAutoController(controller) { return (typeof ControllerAI !== 'undefined' && controller instanceof ControllerAI) || (typeof NetworkController !== 'undefined' && controller instanceof NetworkController); }

@@ -2818,6 +2818,12 @@ class DeckMaker {
 			leader: card_dict[this.leader.index], 
 			cards: this.deck.filter(x => x.count > 0)
 		};
+		if (typeof mp !== 'undefined' && mp.socket) {
+			ui.popup('CANCEL', () => { location.reload(); }, false, null, 'WAITING FOR OPPONENT', 'Waiting for ' + mp.opponentName + ' to finish their deck...');
+			mp.sendDeck(me_deck);
+			return;
+		}
+
 		const op_deck = this.constructOpponentDeck(true);
 		
 		player_me = new Player(0, "Player 1", me_deck);
