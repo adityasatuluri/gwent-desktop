@@ -18,7 +18,7 @@
 
 	<!-- ===== MAIN MENU ===== -->
 	<section id="main-menu">
-		<div id="menu-bg"></div>
+		<video id="menu-bg" autoplay loop muted><source src="assets/videos/white_wolf.mp4" type="video/mp4"></video>
 		<div id="menu-vignette"></div>
 		<div id="menu-glow"></div>
 
@@ -48,9 +48,17 @@
 	<!-- ===== SETTINGS OVERLAY ===== -->
 	<section id="settings-menu" class="hide">
 		<div id="settings-bg"></div>
-		<div id="settings-panel">
-			<h2 id="settings-title">Settings</h2>
-			<div id="settings-items">
+				<div id="settings-layout">
+			<aside id="settings-sidebar">
+				<img src="assets/img/gwent_logo.png" id="settings-logo" />
+				<h3 id="settings-category-title">v 1.0<br>OPTIONS</h3>
+				<ul id="settings-categories">
+					<li class="cat-item active">GENERAL</li>
+					<li class="cat-item" id="settings-back-btn">BACK</li>
+				</ul>
+			</aside>
+			<main id="settings-content">
+				<div id="settings-items">
 
 				<div class="setting-row active" data-setting="fullscreen">
 					<span class="setting-label">Fullscreen</span>
@@ -96,6 +104,7 @@
 				</div>
 			</div>
 			<div id="settings-hint">Up / Down &mdash; Navigate &nbsp;&nbsp; Enter &mdash; Select &nbsp;&nbsp; Esc &mdash; Back</div>
+			</main>
 		</div>
 	</section>
 
@@ -150,10 +159,10 @@
 			<div id="name-me" class="name"></div>
 			<div id="deck-name-me" class="deck-name"></div>
 			
-			<div id="score-total-me" class="score-total"><div class="center">0</div></div>
-			
-			
-		</section>
+			<div id="score-total-me" class="score-total"><div class="center">0</div>
+			</main>
+		</div>
+	</section>
 		
 		<div id="leader-me" class="leader-box">
 			<div class="leader-container center" data-title="Play leader"></div>
@@ -185,8 +194,9 @@
 				<div class="row-special card-container"></div>
 				<div class="row-cards card-container"></div>
 				<div class="row-weather"></div>
-			</div>
-		</section>
+			</main>
+		</div>
+	</section>
 		
 		<section id="field-me" class="field">
 			<div class="field-row" data-row="close">
@@ -206,8 +216,9 @@
 				<div class="row-special card-container"></div>
 				<div class="row-cards card-container"></div>
 				<div class="row-weather"></div>
-			</div>
-		</section>
+			</main>
+		</div>
+	</section>
 		
 		<section id="field-hand">
 			<div id="hand-row" class="card-container card-selectable">
@@ -263,6 +274,7 @@
 				<button onclick="Popup.curr.selectYes()"></button>
 				<button onclick="Popup.curr.selectNo()"></button>
 			</div>
+			</main>
 		</div>
 	</section>
 	
@@ -380,5 +392,7 @@
 </body>
 
 </html>
+
+
 
 

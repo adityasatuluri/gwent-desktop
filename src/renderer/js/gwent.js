@@ -3601,6 +3601,8 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     }
   }
 
+  document.getElementById('settings-back-btn')?.addEventListener('click', () => closeSettings());
+
   function openSettings() {
     syncSettingsDisplay();
     mainMenu.classList.add('hide');
@@ -3708,6 +3710,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   });
 
 })();
+
 
 
 

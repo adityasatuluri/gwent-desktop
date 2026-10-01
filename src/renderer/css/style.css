@@ -1709,7 +1709,8 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 
 #menu-bg {
   position: absolute; inset: 0;
-  background: url('../assets/img/edited_witcher3.jpg') center/cover no-repeat;
+  width: 100%; height: 100%; object-fit: cover;
+  transform: scaleX(-1);
   animation: menuFadeIn 1.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
 
@@ -1717,9 +1718,8 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 #menu-vignette {
   position: absolute; inset: 0; pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.75) 20%, rgba(0,0,0,0.0) 40%),
-    linear-gradient(to top,   rgba(0,0,0,0.50) 0%, rgba(0,0,0,0.0) 20%),
-    linear-gradient(to bottom, rgba(0,0,0,0.50) 0%, rgba(0,0,0,0.0) 20%);
+    linear-gradient(90deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 15%, rgba(0,0,0,0.4) 30%, transparent 50%),
+    radial-gradient(ellipse at 30% 50%, rgba(0,0,0,0.4) 0%, transparent 60%);
 }
 
 /* Warm fire glow from the art center-right */
@@ -2003,6 +2003,8 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 
 
 .invisible { opacity: 0 !important; pointer-events: none !important; }
+
+
 
 
 
