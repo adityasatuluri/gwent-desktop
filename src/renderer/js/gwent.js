@@ -2402,7 +2402,7 @@ class Carousel {
 		if (this.index >= this.indices.length)
 			this.index =  this.indices.length-1;
 		for (let i=0; i<this.previews.length; i++) {
-			let curr = this.index - 2 + i;
+			let curr = this.index - Math.floor(this.previews.length / 2) + i;
 			if (curr >= 0 && curr < this.indices.length) {
 				let card = this.container.cards[this.indices[curr]];
 				this.previews[i].style.backgroundImage = largeURL(card.faction + "_" + card.filename);
