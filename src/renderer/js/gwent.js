@@ -3630,32 +3630,35 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
   function openSettings() {
     syncSettingsDisplay();
-    settingsMenu.classList.remove('hide');
-    mainMenu.classList.add('hide');
-    const deckEl = document.getElementById('deck-customization');
-    if (deckEl) deckEl.style.display = 'none';
+    NavigationManager.showScreen('settings-menu');
     inSettings = true;
     setSettingActive(0);
   }
 
   function closeSettings() {
-    settingsMenu.classList.add('hide');
-    const deckEl = document.getElementById('deck-customization');
-    if (deckEl) deckEl.style.display = '';
     if (settingsOpenedFrom === 'game') {
-      // game resumes
+      // If we came from game, we need to decide if it was deck building or mid-game
+      if (typeof game !== 'undefined' && game.state === GameState.CUSTOMIZE) {
+        NavigationManager.showScreen('deck-customization');
+      } else {
+        NavigationManager.showScreen('game-view');
+      }
     } else {
-      mainMenu.classList.remove('hide');
+      NavigationManager.showScreen('main-menu');
     }
     inSettings = false;
-    if (settingsOpenedFrom === 'menu') setMenuActive(1);
+    if (settingsOpenedFrom === 'menu') setMenuActive(2); // Wait, options is index 2 now!
   }
 
   function selectMainItem(idx) {
     if (idx === 0) {
-      mainMenu.classList.add('hide');
       document.body.classList.add('in-game');
       inGame = true;
+      // Start game logic triggers customize phase. So we don't switch screen yet, initialRedraw handles it.
+      // But wait! If we don't start the game logic here, we must transition to deck customization or game!
+      // In original code, it didn't call startGame. Wait, what DOES call startGame?
+      NavigationManager.showScreen('deck-customization'); 
+      // Actually, if inGame becomes true, ui.initialRedraw() might trigger. Let's trace it.
     } else if (idx === 1) {
       openMultiplayerLobby();
     } else if (idx === 2) {
@@ -3677,18 +3680,16 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   let tutNavItems = [];
 
   function openTutorial() {
-    mainMenu.classList.add('hide');
-    tutorialMenu.classList.remove('hide');
+    NavigationManager.showScreen('tutorial-menu');
     inTutorial = true;
     tutNavItems = Array.from(document.querySelectorAll('.tut-category'));
     setTutActive(0);
   }
 
   function closeTutorial() {
-    tutorialMenu.classList.add('hide');
-    mainMenu.classList.remove('hide');
+    NavigationManager.showScreen('main-menu');
     inTutorial = false;
-    setMenuActive(2);
+    setMenuActive(3);
   }
 
   function setTutActive(idx) {

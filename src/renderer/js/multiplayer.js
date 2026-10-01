@@ -284,14 +284,8 @@ class Multiplayer {
 
 const mp = new Multiplayer();
 
-function openMultiplayerLobby() {
-    document.getElementById('main-menu').classList.add('hide');
-    mp.openLobby();
-}
-function closeMultiplayerLobby() {
-    mp.closeLobby();
-    mainMenu.classList.remove('hide');
-}
+function openMultiplayerLobby() { NavigationManager.showScreen('multiplayer-lobby'); mp.openLobby(); }
+function closeMultiplayerLobby() { mp.closeLobby(); NavigationManager.showScreen('main-menu'); }
 
 // Init when DOM loads
 window.addEventListener('DOMContentLoaded', () => {
