@@ -557,7 +557,7 @@ class Multiplayer {
 				console.log('SENDING MOVE_TO', { sourceRef, sourceIdx, rowRef });
                 this.send({ type: 'MOVE_TO', sourceRef: sourceRef, sourceIdx: sourceIdx, rowRef: rowRef });
             }
-            return await ogMoveTo.call(board, card, row, source);
+            try { return await ogMoveTo.call(board, card, row, source); } catch (e) { console.error("Error in ogMoveTo sender:", e); throw e; }
         };
         
         const ogPass = player_me.passRound;
@@ -616,3 +616,6 @@ function closeMultiplayerLobby() { mp.closeLobby(); NavigationManager.showScreen
 window.addEventListener('DOMContentLoaded', () => {
     mp.initUI();
 });
+
+
+

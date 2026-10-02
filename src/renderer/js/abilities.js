@@ -164,8 +164,7 @@ var ability_dict = {
 					wrapper.card = cards[0];
 			} else if (isAutoController(card.holder.controller))
 				wrapper.card =  card.holder.controller.medic(card, grave);
-			else
-				await ui.queueCarousel(card.holder.grave, 1, (c, i) => wrapper.card=c.cards[i], c => c.isUnit(), true);
+			else if (card.holder === player_me) await ui.queueCarousel(card.holder.grave, 1, (c, i) => wrapper.card=c.cards[i], c => c.isUnit(), true);
 			if (wrapper.card)
 			{
 				// move card visual to top of grave
@@ -306,7 +305,7 @@ var ability_dict = {
 				return;
 			let container = new CardContainer();
 			container.cards = card.holder.opponent().hand.findCardsRandom(() => true, 3);
-			Carousel.curr.cancel();
+			if (Carousel.curr) Carousel.curr.cancel();
 			await ui.viewCardsInContainer(container);
 		},
 		weight: card => {
@@ -329,7 +328,7 @@ var ability_dict = {
 				await board.toHand(newCard, grave);
 				return;
 			}
-			Carousel.curr.cancel();
+			if (Carousel.curr) Carousel.curr.cancel();
 			await ui.queueCarousel(grave, 1, async (c,i) => {
 				let newCard = c.cards[i];
 				newCard.holder = card.holder;
@@ -355,7 +354,7 @@ var ability_dict = {
 			if (isAutoController(card.holder.controller)) {
 				newCard = card.holder.controller.medic(card, card.holder.grave)
 			} else {
-				Carousel.curr.exit();
+				if (Carousel.curr) Carousel.curr.exit();
 				await ui.queueCarousel(card.holder.grave, 1, (c,i) => newCard = c.cards[i], c => c.isUnit(), false, false);
 			}
 			if (newCard)
@@ -374,7 +373,7 @@ var ability_dict = {
 				card.holder.deck.draw(card.holder.hand);
 				return;
 			} else
-				Carousel.curr.exit();
+				if (Carousel.curr) Carousel.curr.exit();
 			await ui.queueCarousel(hand, 2, (c,i) => board.toGrave(c.cards[i], c), () => true);
 			await ui.queueCarousel(deck, 1, (c,i) => board.toHand(c.cards[i], deck), () => true, true);
 		},
@@ -392,7 +391,7 @@ var ability_dict = {
 			if (isAutoController(card.holder.controller)) {
 				await ability_dict["eredin_king"].helper(card).card.autoplay(card.holder.deck);
 			} else {
-				Carousel.curr.cancel();
+				if (Carousel.curr) Carousel.curr.cancel();
 				await ui.queueCarousel(deck, 1, (c,i) => board.toWeather(c.cards[i], deck), c => c.faction === "weather", true);
 			}
 		},
