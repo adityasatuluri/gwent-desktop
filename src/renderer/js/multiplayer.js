@@ -41,6 +41,25 @@ class Multiplayer {
     openLobby() {
         document.getElementById('multiplayer-lobby').classList.remove('hide');
         this.startDiscovery();
+
+        try {
+            const os = require('os');
+            const interfaces = os.networkInterfaces();
+            let addresses = [];
+            for (let k in interfaces) {
+                for (let k2 in interfaces[k]) {
+                    let address = interfaces[k][k2];
+                    if (address.family === 'IPv4' && !address.internal) {
+                        addresses.push(address.address);
+                    }
+                }
+            }
+            let ipElem = document.getElementById('mp-local-ip');
+            if (ipElem) ipElem.innerText = addresses.length > 0 ? addresses.join(', ') : '127.0.0.1';
+        } catch(e) {
+            let ipElem = document.getElementById('mp-local-ip');
+            if (ipElem) ipElem.innerText = 'Unknown';
+        }
     }
 
     closeLobby() {
