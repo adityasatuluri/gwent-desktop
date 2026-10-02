@@ -648,8 +648,12 @@
 				<!-- Right: Network Discovery -->
 				<div class="lobby-panel">
 					<h2>LOCAL PLAYERS</h2>
-					<div class="server-list" id="mp-server-list">
+					<div class="server-list" id="mp-server-list" style="height: calc(100% - 100px);">
 						<div class="server-list-empty">Searching for players on local network...</div>
+					</div>
+					<div style="margin-top:15px; display:flex; gap:10px;">
+						<input type="text" id="mp-direct-ip" class="mp-input" placeholder="e.g. 192.168.1.5" style="flex:1; margin-bottom:0; font-size:16px;">
+						<button id="mp-direct-connect-btn" class="mp-btn" style="width:120px; padding:10px;">JOIN IP</button>
 					</div>
 				</div>
 			</div>
