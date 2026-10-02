@@ -395,7 +395,7 @@ class Multiplayer {
                         if (container.elem) {
                             if (container === player_op.deck) {
                                 while(container.elem.children.length > 1) {
-                                    container.elem.lastChild.remove();
+                                    container.elem.firstChild.remove();
                                 }
                             } else {
                                 while(container.elem.firstChild) {
@@ -538,12 +538,21 @@ class Multiplayer {
             
             if (this.isGameActive) {
                 // Send our finalized hand and deck state
-                const handIndices = player_me.hand.cards.map(c => card_dict.findIndex(cd => cd.name === c.name && cd.filename === c.filename && cd.deck === c.faction && (cd.row === c.row || (cd.deck === 'weather' && c.row === 'weather'))));
-                const deckIndices = player_me.deck.cards.map(c => card_dict.findIndex(cd => cd.name === c.name && cd.filename === c.filename && cd.deck === c.faction && (cd.row === c.row || (cd.deck === 'weather' && c.row === 'weather'))));
+                const handIndices = player_me.hand.cards.map(c => {
+                    const idx = card_dict.findIndex(cd => cd.name === c.name && cd.filename === c.filename && cd.deck === c.faction && (cd.row === c.row || (cd.deck === 'weather' && c.row === 'weather')));
+                    if (idx === -1) console.error("Could not find card in dictionary:", c);
+                    return idx;
+                });
+                const deckIndices = player_me.deck.cards.map(c => {
+                    const idx = card_dict.findIndex(cd => cd.name === c.name && cd.filename === c.filename && cd.deck === c.faction && (cd.row === c.row || (cd.deck === 'weather' && c.row === 'weather')));
+                    if (idx === -1) console.error("Could not find card in dictionary:", c);
+                    return idx;
+                });
+                console.log("Sending REDRAW_SYNC", { handIndices, deckIndices });
                 this.send({ type: 'REDRAW_SYNC', hand: handIndices, deck: deckIndices });
                 
                 // Wait for opponent's redraw sync
-                ui.popup(null, null, null, null, "WAITING FOR OPPONENT", "Waiting for opponent to finish their mulligan...");
+                ui.popup("HIDDEN", null, null, null, "WAITING FOR OPPONENT", "Waiting for opponent to finish their mulligan...");
                 await sleepUntil(() => this.opponentRedrawSynced);
                 if (Popup.curr && Popup.curr.title === "WAITING FOR OPPONENT") Popup.curr.clear();
 				Math.seed = this.sharedSeed + 42; // Force resync seed after mulligan divergent RNG

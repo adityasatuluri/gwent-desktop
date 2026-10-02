@@ -9,7 +9,7 @@ class NetworkController {
     discardOrder(card) { return []; }
     async startTurn(player) {
         // Wait for network event to execute action
-        ui.popup(null, null, null, null, "OPPONENT'S TURN", "Waiting for opponent...");
+        ui.popup("HIDDEN", null, null, null, "OPPONENT'S TURN", "Waiting for opponent...");
         // the actual action execution will be driven from handleNetworkMessage in multiplayer.js
     }
 }
