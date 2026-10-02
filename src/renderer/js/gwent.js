@@ -1512,11 +1512,11 @@ class Game {
 	
 	// Simulated coin toss to determine who starts game
 	async coinToss(){
-		if (this.firstPlayer)
-			return;
-		this.firstPlayer = (randomInt(2) === 0) ? player_me : player_op;
-		await ui.notification(this.firstPlayer.tag + "-coin", 1200);
-	}
+		if (this.firstPlayer) return;
+		let toss = randomInt(2);
+		if (typeof mp !== 'undefined' && mp.socket && !mp.isHosting) toss = 1 - toss;
+		this.firstPlayer = (toss === 0) ? player_me : player_op;
+		await ui.notification(this.firstPlayer.tag + '-coin', 1200);
 	
 	// Allows the player to swap out up to two cards from their iniitial hand
 	async initialRedraw(){
@@ -3539,7 +3539,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   const mainMenu     = document.getElementById('main-menu');
   const settingsMenu = document.getElementById('settings-menu');
   const menuItems    = Array.from(document.querySelectorAll('.menu-item'));
-  let settingRows = Array.from(document.querySelectorAll('.settings-group:not(.hide) .setting-row'));
+			// settingRows = Array.from(document.querySelectorAll('.settings-group:not(.hide) .setting-row')); // Trapped in IIFE scope
 
   let menuIndex    = 0;  // currently focused main-menu item
   let settingIndex = 0;  // currently focused settings item

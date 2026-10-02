@@ -392,13 +392,15 @@ class Multiplayer {
                     // Replace opponent's hand and deck with the synced state
                     const replaceCards = async (container, indices) => {
                         container.cards = [];
-                        if (container === player_op.deck) {
-                            while(container.elem.children.length > 1) {
-                                container.elem.lastChild.remove();
-                            }
-                        } else {
-                            while(container.elem.firstChild) {
-                                container.elem.firstChild.remove();
+                        if (container.elem) {
+                            if (container === player_op.deck) {
+                                while(container.elem.children.length > 1) {
+                                    container.elem.lastChild.remove();
+                                }
+                            } else {
+                                while(container.elem.firstChild) {
+                                    container.elem.firstChild.remove();
+                                }
                             }
                         }
                         
@@ -406,13 +408,14 @@ class Multiplayer {
                             let c = new Card(card_dict[idx], player_op);
                             if (container === player_op.deck) {
                                 container.cards.push(c);
-                                container.addCardElement();
+                                if (container.elem) container.addCardElement();
                             } else {
-                                await container.addCard(c);
+                                if (container.elem) await container.addCard(c);
+                                else container.cards.push(c);
                             }
                         }
                         
-                        if (container === player_op.deck) {
+                        if (container === player_op.deck && container.elem) {
                             container.counter.innerHTML = container.cards.length;
                         }
                     };
