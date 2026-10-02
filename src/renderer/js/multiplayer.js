@@ -33,7 +33,7 @@ class Multiplayer {
             if (ip) {
                 ip = ip.split(',')[0].trim();
                 AudioManager.playSFX('ui_card');
-                this.connectToHost(ip);
+                this.joinGame(ip);
             }
         };
 
@@ -270,6 +270,10 @@ class Multiplayer {
     joinGame(ip) {
         console.log('Joining', ip);
         const socket = new net.Socket();
+        
+        if (typeof ui !== 'undefined') ui.popup("CANCEL", () => {
+            socket.destroy();
+        }, false, null, "CONNECTING", "Establishing connection to " + ip + "...");
         socket.connect(this.hostPort, ip, () => {
             console.log('Connected to', ip);
             this.setupConnection(socket, true);
