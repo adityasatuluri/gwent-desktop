@@ -3549,7 +3549,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   const mainMenu     = document.getElementById('main-menu');
   const settingsMenu = document.getElementById('settings-menu');
   const menuItems    = Array.from(document.querySelectorAll('.menu-item'));
-			// settingRows = Array.from(document.querySelectorAll('.settings-group:not(.hide) .setting-row')); // Trapped in IIFE scope
+			function getSettingRows() { return Array.from(document.querySelectorAll('.settings-group:not(.hide) .setting-row')); }
 
   let menuIndex    = 0;  // currently focused main-menu item
   let settingIndex = 0;  // currently focused settings item
@@ -3564,8 +3564,8 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   }
 
   function setSettingActive(idx) {
-    settingRows.forEach(r => r.classList.remove('active'));
-    settingRows[idx].classList.add('active');
+    getSettingRows().forEach(r => r.classList.remove('active'));
+    getSettingRows()[idx].classList.add('active');
     settingIndex = idx;
   }
 
@@ -3613,7 +3613,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   }
 
   function applySettingAtIndex(idx) {
-    const row = settingRows[idx];
+    const row = getSettingRows()[idx];
     const ds  = row.dataset.setting;
     if (ds === 'back') { closeSettings(); return; }
     if (ds === 'fullscreen') {
@@ -3745,11 +3745,11 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
   document.querySelectorAll('.setting-row').forEach(el => {
     el.addEventListener('mouseenter', () => {
-      const idx = settingRows.indexOf(el);
+      const idx = getSettingRows().indexOf(el);
       if (idx !== -1) setSettingActive(idx);
     });
     el.addEventListener('click', () => {
-      const idx = settingRows.indexOf(el);
+      const idx = getSettingRows().indexOf(el);
       if (idx !== -1) flashItem(el, () => applySettingAtIndex(idx));
     });
   });
@@ -3824,14 +3824,14 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       switch(e.key) {
         case 'ArrowUp':
           e.preventDefault();
-          setSettingActive((settingIndex - 1 + settingRows.length) % settingRows.length);
+          setSettingActive((settingIndex - 1 + getSettingRows().length) % getSettingRows().length);
           break;
         case 'ArrowDown':
           e.preventDefault();
-          setSettingActive((settingIndex + 1) % settingRows.length);
+          setSettingActive((settingIndex + 1) % getSettingRows().length);
           break;
         case 'Enter':
-          flashItem(settingRows[settingIndex], () => applySettingAtIndex(settingIndex));
+          flashItem(getSettingRows()[settingIndex], () => applySettingAtIndex(settingIndex));
           break;
         case 'Escape': case 'Backspace':
           closeSettings();
