@@ -421,7 +421,7 @@ class Multiplayer {
                 } else if (msg.type === 'LEADER_PLAYED') {
                     if (Popup.curr) Popup.curr.clear();
                     player_op.activateLeader();
-                } else if (msg.type === 'REDRAW_SYNC') {
+                } else if (msg.type === 'SYNC_TOSS') { this.hostWonToss = msg.hostWonToss; } else if (msg.type === 'REDRAW_SYNC') {
                     // Replace opponent's hand and deck with the synced state
                     const replaceCards = async (container, indices) => {
                         container.cards = [];
@@ -498,7 +498,7 @@ class Multiplayer {
         this.gameStarted = true;
         console.log("DEBUG: beginSyncedGame called!");
         Math.seed = this.sharedSeed; // Ensure RNG is synced for deck shuffle
-        this.isGameActive = true;
+        this.isGameActive = true; const ogStartGame = game.startGame; game.startGame = async () => { if (this.isHosting) { this.hostWonToss = Math.random() < 0.5; this.send({ type: "SYNC_TOSS", hostWonToss: this.hostWonToss }); } else { await sleepUntil(() => this.hostWonToss !== undefined); } game.turnStartToss = () => { if (game.winner) return game.winner === player_me; if (player_op.faction === "scoiatael" && player_me.faction !== "scoiatael") return false; if (player_me.faction === "scoiatael" && player_op.faction !== "scoiatael") return true; return this.isHosting ? this.hostWonToss : !this.hostWonToss; }; return await ogStartGame.call(game); };
         
         // Initialize BOTH players properly now that the seed is synced
         player_me = new Player(0, this.username || "Player 1", this.myDeck);
@@ -616,6 +616,8 @@ function closeMultiplayerLobby() { mp.closeLobby(); NavigationManager.showScreen
 window.addEventListener('DOMContentLoaded', () => {
     mp.initUI();
 });
+
+
 
 
 
