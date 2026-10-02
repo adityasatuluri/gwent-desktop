@@ -484,7 +484,8 @@ class Multiplayer {
         // Intercept player_me actions
         const ogMoveTo = board.moveTo;
         board.moveTo = async (card, row, source) => {
-            if (card.holder === player_me && this.isGameActive) {
+            const isHumanMove = (source === player_me.hand || source === player_me.grave || row === player_me.hand);
+            if (card.holder === player_me && this.isGameActive && game.state === GameState.PLAY && isHumanMove) {
                 // Determine card index in source to sync accurately
                 const sourceIdx = source.cards.indexOf(card);
                 
@@ -514,6 +515,12 @@ class Multiplayer {
         player_me.passRound = async () => {
             if (this.isGameActive) this.send({ type: 'PASS_ROUND' });
             return await ogPass.call(player_me);
+        };
+        
+        const ogEndTurn = player_me.endTurn;
+        player_me.endTurn = () => {
+            if (this.isGameActive) this.send({ type: 'END_TURN' });
+            return ogEndTurn.call(player_me);
         };
         
         const ogActivateLeader = player_me.activateLeader;
