@@ -494,6 +494,8 @@ class Multiplayer {
     }
 
     beginSyncedGame() {
+        if (this.gameStarted) return;
+        this.gameStarted = true;
         console.log("DEBUG: beginSyncedGame called!");
         Math.seed = this.sharedSeed; // Ensure RNG is synced for deck shuffle
         this.isGameActive = true;
@@ -531,7 +533,7 @@ class Multiplayer {
         const ogMoveTo = board.moveTo;
         board.moveTo = async (card, row, source) => {
             const isHumanMove = (source === player_me.hand || source === player_me.grave || row === player_me.hand);
-            if (card.holder === player_me && this.isGameActive && game.state === GameState.PLAY && isHumanMove) {
+            if (card.holder === player_me && this.isGameActive && game.state === GameState.PLAYING && isHumanMove) {
                 // Determine card index in source to sync accurately
                 const sourceIdx = source.cards.indexOf(card);
                 
