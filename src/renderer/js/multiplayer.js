@@ -394,6 +394,7 @@ class Multiplayer {
     }
 
     beginSyncedGame() {
+        console.log("DEBUG: beginSyncedGame called!");
         Math.seed = this.sharedSeed; // Ensure RNG is synced for deck shuffle
         this.isGameActive = true;
         
