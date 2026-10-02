@@ -315,7 +315,8 @@ class Multiplayer {
                     if (source && source.cards) {
                         const card = source.cards[msg.sourceIdx];
                         if (card && row) {
-                            board.moveTo(card, row, source);
+                            await board.moveTo(card, row, source);
+                            card.holder.endTurn();
                         }
                     }
                 } else if (msg.type === 'PASS_ROUND') {
@@ -462,8 +463,8 @@ class Multiplayer {
             
             if (this.isGameActive) {
                 // Send our finalized hand and deck state
-                const handIndices = player_me.hand.cards.map(c => card_dict.indexOf(c));
-                const deckIndices = player_me.deck.cards.map(c => card_dict.indexOf(c));
+                const handIndices = player_me.hand.cards.map(c => card_dict.findIndex(cd => cd.name === c.name && cd.filename === c.filename && cd.deck === c.faction && (cd.row === c.row || (cd.deck === 'weather' && c.row === 'weather'))));
+                const deckIndices = player_me.deck.cards.map(c => card_dict.findIndex(cd => cd.name === c.name && cd.filename === c.filename && cd.deck === c.faction && (cd.row === c.row || (cd.deck === 'weather' && c.row === 'weather'))));
                 this.send({ type: 'REDRAW_SYNC', hand: handIndices, deck: deckIndices });
                 
                 // Wait for opponent's redraw sync

@@ -1514,7 +1514,7 @@ class Game {
 	async coinToss(){
 		if (this.firstPlayer)
 			return;
-		this.firstPlayer = (Math.random() < 0.5) ? player_me : player_op;
+		this.firstPlayer = (randomInt(2) === 0) ? player_me : player_op;
 		await ui.notification(this.firstPlayer.tag + "-coin", 1200);
 	}
 	
