@@ -429,6 +429,7 @@ class Multiplayer {
     
     startGameWithOpponent() {
         // Transition to deck customization instead of directly to game!
+        document.body.classList.add('in-game');
         NavigationManager.showScreen('deck-customization');
         if (typeof dm !== 'undefined') {
             dm.state = GameState.CUSTOMIZE; // Assuming dm is global DeckMaker

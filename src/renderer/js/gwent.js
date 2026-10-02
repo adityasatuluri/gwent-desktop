@@ -3830,9 +3830,9 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       return;
     }
 
-    if (inGame) {
-      const deckScreen = document.getElementById('deck-customization');
-      const inDeckBuilder = deckScreen && !deckScreen.classList.contains('hide');
+    const inGameScreen = NavigationManager.isScreenActive('game-view') || NavigationManager.isScreenActive('deck-customization');
+    if (inGameScreen) {
+      const inDeckBuilder = NavigationManager.isScreenActive('deck-customization');
 
       if (inDeckBuilder) {
         if (e.key === '1') document.getElementById('faction-prev')?.click();
