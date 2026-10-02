@@ -3837,6 +3837,9 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       if (inDeckBuilder) {
         if (e.key === '1') document.getElementById('faction-prev')?.click();
         if (e.key === '3') document.getElementById('faction-next')?.click();
+        if (e.key === 'x' || e.key === 'X') {
+          if (typeof dm !== 'undefined') dm.selectLeader();
+        }
         if (e.key === 'Enter') {
           if (typeof dm !== 'undefined') dm.startNewGame();
         }

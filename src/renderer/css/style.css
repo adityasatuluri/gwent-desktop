@@ -1835,7 +1835,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 }
 #menu-hint {
   position: absolute;
-  top: 21%; left: 5vw;
+  bottom: 8vh; left: 5vw;
   font-family: 'Cinzel', serif;
   font-size: 0.75vw;
   color: rgba(255,255,255,0.38);
