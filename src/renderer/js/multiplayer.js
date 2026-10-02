@@ -294,14 +294,28 @@ class Multiplayer {
         }, false, null, "CONNECTING", "Establishing connection...");
 
         this.tcpBuffer = '';
+        this.msgQueue = [];
+        this.isProcessingQueue = false;
+
+        const processQueue = async () => {
+            if (this.isProcessingQueue) return;
+            this.isProcessingQueue = true;
+            while (this.msgQueue.length > 0) {
+                const msgStr = this.msgQueue.shift();
+                await this.handleNetworkMessage(msgStr);
+            }
+            this.isProcessingQueue = false;
+        };
+
         socket.on('data', (data) => {
             this.tcpBuffer += data.toString();
             let newlineIdx;
             while ((newlineIdx = this.tcpBuffer.indexOf('\n')) > -1) {
                 const msgStr = this.tcpBuffer.substring(0, newlineIdx);
                 this.tcpBuffer = this.tcpBuffer.substring(newlineIdx + 1);
-                this.handleNetworkMessage(msgStr);
+                this.msgQueue.push(msgStr);
             }
+            processQueue();
         });
         
         socket.on('close', () => {
@@ -351,7 +365,7 @@ class Multiplayer {
                     this.sharedSeed = msg.seed;
                     this.beginSyncedGame();
                 } else if (msg.type === 'MOVE_TO') {
-                    if (Popup.curr) Popup.curr.clear();
+                    // Popup cleared by END_TURN instead.
                     
                     const getRef = (ref) => {
                         if (ref === "hand-me") return player_op.hand;
@@ -379,7 +393,26 @@ class Multiplayer {
                         const card = source.cards[msg.sourceIdx];
                         if (card && row) {
                             await board.moveTo(card, row, source);
-                            card.holder.endTurn();
+                        }
+                    }
+                } else if (msg.type === 'MARDROEME_PLAYED') {
+                    const getRef = (ref) => {
+                        if (ref.startsWith("row-")) {
+                            let idx = parseInt(ref.split('-')[1]);
+                            idx = 5 - idx;
+                            return board.row[idx];
+                        }
+                        return null;
+                    };
+                    let r = getRef(msg.rowRef);
+                    if (r) {
+                        let c = player_op.grave.cards[player_op.grave.cards.length - 1]; // Assume it was just moved here
+                        if (c && c.name === "Mardroeme") {
+                            await ability_dict["mardroeme"].activated(c, r);
+                        } else {
+                            // Find it in grave just in case
+                            c = player_op.grave.cards.find(card => card.name === "Mardroeme");
+                            if (c) await ability_dict["mardroeme"].activated(c, r);
                         }
                     }
                 } else if (msg.type === 'PASS_ROUND') {
@@ -479,6 +512,16 @@ class Multiplayer {
         
         // Setup Network Hooks for player_me
         this.setupNetworkHooks();
+
+        const ogMardroeme = ability_dict["mardroeme"].activated;
+        ability_dict["mardroeme"].activated = async (card, row) => {
+            if (this.isGameActive && card.holder === player_me) {
+                let rRef = "unknown";
+                if (board.row.includes(row)) rRef = "row-" + board.row.indexOf(row);
+                this.send({ type: 'MARDROEME_PLAYED', rowRef: rRef });
+            }
+            return await ogMardroeme(card, row);
+        };
         
         game.startGame();
     }

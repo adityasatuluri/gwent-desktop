@@ -23,6 +23,9 @@
       fs.appendFileSync(logFile, 'LOG: ' + args.join(' ') + '\n');
       oldLog.apply(console, args);
     };
+        window.addEventListener('unhandledrejection', function(event) {
+      console.error('Unhandled Rejection:', event.reason);
+    });
     console.error = function(...args) {
       fs.appendFileSync(logFile, 'ERR: ' + args.join(' ') + '\n');
       oldErr.apply(console, args);

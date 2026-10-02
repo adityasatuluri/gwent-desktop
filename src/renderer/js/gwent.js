@@ -562,7 +562,10 @@ class Player {
 	
 	// Plays a scorch card
 	async playScorch(card){
-		await this.playCardAction(card, async () => await ability_dict["scorch"].activated(card));
+		await this.playCardAction(card, async () => {
+            await board.toGrave(card, this.hand);
+            await ability_dict["scorch"].activated(card);
+        });
 	}
 	
 	// Plays a card to a specific row
@@ -572,7 +575,10 @@ class Player {
 	
 	// Plays a card to the board
 	async playCard(card){
-		await this.playCardAction(card, async () => await card.autoplay(this.hand));
+		let source = this.hand;
+		if (this.deck.cards.includes(card)) source = this.deck;
+		else if (this.grave.cards.includes(card)) source = this.grave;
+		await this.playCardAction(card, async () => await card.autoplay(source));
 	}
 	
 	// Shows a preview of the card being played, plays it to the board and ends the turn
@@ -581,7 +587,9 @@ class Player {
 		await sleep(1000);
 		ui.hidePreview(card);
 		await action();
-		this.endTurn();
+		if (!game.placedEffectsActive) {
+			this.endTurn();
+		}
 	}
 	
 	// Handles end of turn visuals and behavior the notifies the game
@@ -2060,8 +2068,9 @@ class UI {
 		this.hidePreview();
 		this.enablePlayer(false);
 		if (card.name === "Scorch"){
-			this.hidePreview();
-			await ability_dict["scorch"].activated(card);
+  			this.hidePreview();
+            await board.toGrave(card, card.holder.hand);
+  			await ability_dict["scorch"].activated(card);
 		} else if (card.name === "Decoy") {
 			return;
 		} else {
