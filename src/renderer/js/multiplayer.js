@@ -509,6 +509,7 @@ class Multiplayer {
                 else if (board.row.includes(row)) rowRef = "row-" + board.row.indexOf(row);
                 else rowRef = "unknown";
                 
+				console.log('SENDING MOVE_TO', { sourceRef, sourceIdx, rowRef });
                 this.send({ type: 'MOVE_TO', sourceRef: sourceRef, sourceIdx: sourceIdx, rowRef: rowRef });
             }
             return await ogMoveTo.call(board, card, row, source);
