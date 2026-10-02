@@ -25,6 +25,16 @@ class Multiplayer {
             localStorage.setItem('gwent_mp_username', this.username);
         });
 
+        document.getElementById('mp-direct-connect-btn')?.addEventListener('click', () => {
+            let ip = document.getElementById('mp-direct-ip')?.value.trim();
+            if (ip) {
+                // If they pasted multiple IPs, grab the first one
+                ip = ip.split(',')[0].trim();
+                AudioManager.playSFX('ui_card');
+                this.connectToHost(ip);
+            }
+        });
+
         document.getElementById('mp-host-btn').addEventListener('click', () => {
             if (this.isHosting) {
                 this.stopHosting();
@@ -59,7 +69,7 @@ class Multiplayer {
                 }
             }
             let ipElem = document.getElementById('mp-local-ip');
-            if (ipElem) ipElem.innerText = addresses.length > 0 ? addresses.join(', ') : '127.0.0.1';
+            if (ipElem) ipElem.innerHTML = addresses.length > 0 ? addresses.join('<br>') : '127.0.0.1';
         } catch(e) {
             let ipElem = document.getElementById('mp-local-ip');
             if (ipElem) ipElem.innerText = 'Unknown';
@@ -189,7 +199,7 @@ class Multiplayer {
                 }
             }
             let ipElem = document.getElementById('mp-local-ip');
-            if (ipElem) ipElem.innerText = addresses.length > 0 ? addresses.join(', ') : '127.0.0.1';
+            if (ipElem) ipElem.innerHTML = addresses.length > 0 ? addresses.join('<br>') : '127.0.0.1';
         } catch(e) {
             let ipElem = document.getElementById('mp-local-ip');
             if (ipElem) ipElem.innerText = 'Unknown';
