@@ -3937,8 +3937,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // Update settingRows reference to only visible rows
-            settingRows = Array.from(document.querySelectorAll('.settings-group:not(.hide) .setting-row'));
-            setSettingActive(0);
+            // Note: settingRows is trapped in the IIFE above, so we cannot update it here directly.
+            // But Settings navigation is handled differently anyway.
         });
     });
 });
