@@ -364,8 +364,8 @@ class Multiplayer {
                         if (ref.startsWith("row-")) {
                             let idx = parseInt(ref.split('-')[1]);
                             // Opponent's row 0 is our row 5
-                            if (idx < 3) idx += 3;
-                            else idx -= 3;
+												idx = 5 - idx;
+
                             return board.row[idx];
                         }
                         if (ref === "grave" || ref === "deck" || ref === "hand") return ref;
