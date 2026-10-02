@@ -25,14 +25,21 @@ class Multiplayer {
             localStorage.setItem('gwent_mp_username', this.username);
         });
 
-        document.getElementById('mp-direct-connect-btn')?.addEventListener('click', () => {
-            let ip = document.getElementById('mp-direct-ip')?.value.trim();
+        const joinBtn = document.getElementById('mp-direct-connect-btn');
+        const ipInput = document.getElementById('mp-direct-ip');
+        
+        const handleJoin = () => {
+            let ip = ipInput?.value.trim();
             if (ip) {
-                // If they pasted multiple IPs, grab the first one
                 ip = ip.split(',')[0].trim();
                 AudioManager.playSFX('ui_card');
                 this.connectToHost(ip);
             }
+        };
+
+        joinBtn?.addEventListener('click', handleJoin);
+        ipInput?.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') handleJoin();
         });
 
         document.getElementById('mp-host-btn').addEventListener('click', () => {
