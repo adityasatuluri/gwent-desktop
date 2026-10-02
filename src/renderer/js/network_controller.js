@@ -4,7 +4,7 @@ class NetworkController {
     }
 
     redraw() {}
-    determineAgileRow(card) { return {type: 'close'}; }
+    determineAgileRow(card) { return "close"; }
     medic(card, grave) { return null; }
     discardOrder(card) { return []; }
     async startTurn(player) {

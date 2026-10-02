@@ -351,7 +351,7 @@ class Multiplayer {
                     this.sharedSeed = msg.seed;
                     this.beginSyncedGame();
                 } else if (msg.type === 'MOVE_TO') {
-                    if (Popup.curr && Popup.curr.title === "OPPONENT'S TURN") Popup.curr.clear();
+                    if (Popup.curr) Popup.curr.clear();
                     
                     const getRef = (ref) => {
                         if (ref === "hand-me") return player_op.hand;
@@ -383,10 +383,10 @@ class Multiplayer {
                         }
                     }
                 } else if (msg.type === 'PASS_ROUND') {
-                    if (Popup.curr && Popup.curr.title === "OPPONENT'S TURN") Popup.curr.clear();
+                    if (Popup.curr) Popup.curr.clear();
                     player_op.passRound();
                 } else if (msg.type === 'LEADER_PLAYED') {
-                    if (Popup.curr && Popup.curr.title === "OPPONENT'S TURN") Popup.curr.clear();
+                    if (Popup.curr) Popup.curr.clear();
                     player_op.activateLeader();
                 } else if (msg.type === 'REDRAW_SYNC') {
                     // Replace opponent's hand and deck with the synced state
@@ -555,7 +555,7 @@ class Multiplayer {
                 // Wait for opponent's redraw sync
                 ui.popup("HIDDEN", null, null, null, "WAITING FOR OPPONENT", "Waiting for opponent to finish their mulligan...");
                 await sleepUntil(() => this.opponentRedrawSynced);
-                if (Popup.curr && Popup.curr.title === "WAITING FOR OPPONENT") Popup.curr.clear();
+                if (Popup.curr) Popup.curr.clear();
 				Math.seed = this.sharedSeed + 42; // Force resync seed after mulligan divergent RNG
             }
         };
