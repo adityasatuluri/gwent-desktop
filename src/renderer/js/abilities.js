@@ -230,7 +230,7 @@ var ability_dict = {
 		description: "Place next to a card with the same name to double the strength of both cards. ",
 		audio: "bond",
 		placed: async card => {
-			let bonds = board.getRow(card, card.row, card.holder).findCards(c => c.name === card.name);
+			let bonds = card.row.findCards(c => c.name === card.name);
 			if (bonds.length > 1)
 				await Promise.all( bonds.map(c => c.animate("bond")) );
 		}
