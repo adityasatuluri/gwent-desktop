@@ -1517,6 +1517,7 @@ class Game {
 		if (typeof mp !== 'undefined' && mp.socket && !mp.isHosting) toss = 1 - toss;
 		this.firstPlayer = (toss === 0) ? player_me : player_op;
 		await ui.notification(this.firstPlayer.tag + '-coin', 1200);
+	}
 	
 	// Allows the player to swap out up to two cards from their iniitial hand
 	async initialRedraw(){
