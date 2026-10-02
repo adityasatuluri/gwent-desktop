@@ -29,9 +29,13 @@ class Multiplayer {
             if (this.isHosting) {
                 this.stopHosting();
                 document.getElementById('mp-host-btn').innerText = 'HOST GAME';
+                let ipContainer = document.getElementById('mp-local-ip-container');
+                if (ipContainer) ipContainer.style.display = 'none';
             } else {
                 this.startHosting();
                 document.getElementById('mp-host-btn').innerText = 'CANCEL HOSTING';
+                let ipContainer = document.getElementById('mp-local-ip-container');
+                if (ipContainer) ipContainer.style.display = 'block';
             }
         });
 
@@ -172,6 +176,25 @@ class Multiplayer {
     startHosting() {
         if (this.isHosting) return;
         
+        try {
+            const os = require('os');
+            const interfaces = os.networkInterfaces();
+            let addresses = [];
+            for (let k in interfaces) {
+                for (let k2 in interfaces[k]) {
+                    let address = interfaces[k][k2];
+                    if (address.family === 'IPv4' && !address.internal) {
+                        addresses.push(address.address);
+                    }
+                }
+            }
+            let ipElem = document.getElementById('mp-local-ip');
+            if (ipElem) ipElem.innerText = addresses.length > 0 ? addresses.join(', ') : '127.0.0.1';
+        } catch(e) {
+            let ipElem = document.getElementById('mp-local-ip');
+            if (ipElem) ipElem.innerText = 'Unknown';
+        }
+
         this.hostServer = net.createServer((socket) => {
             console.log('Client connected:', socket.remoteAddress);
             if (this.socket) {
