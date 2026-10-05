@@ -3581,7 +3581,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     sfxCheck.checked        = Settings.soundEffects.isEnabled();
     notifCheck.checked      = Settings.notifications.isEnabled();
 
-    let diffs = {"easy": "Just the Story", "normal": "Blood and Broken Bones", "hard": "Death March"}; document.getElementById("setting-difficulty-val").textContent = diffs[Settings.difficulty.get()]; updateToggleLabel('fullscreen', s.fullscreen);
+    updateToggleLabel('fullscreen', s.fullscreen);
     updateToggleLabel('music',      Settings.music.isEnabled());
     updateToggleLabel('sfx',        Settings.soundEffects.isEnabled());
     updateToggleLabel('notifications', Settings.notifications.isEnabled());
@@ -3597,7 +3597,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   function applySettingAtIndex(idx) {
     const row = getSettingRows()[idx];
     const ds  = row.dataset.setting;
-    if (ds === 'back') { closeSettings(); return; } if (ds === 'difficulty') { let vals = ["easy", "normal", "hard"]; let diffs = ["Just the Story", "Blood and Broken Bones", "Death March"]; let nextIdx = (vals.indexOf(Settings.difficulty.get()) + 1) % 3; Settings.difficulty.set(vals[nextIdx]); document.getElementById("setting-difficulty-val").textContent = diffs[nextIdx]; } else
+    if (ds === 'back') { closeSettings(); return; } 
     if (ds === 'fullscreen') {
       const chk = document.getElementById('setting-fullscreen');
       chk.checked = !chk.checked;
@@ -3962,3 +3962,5 @@ function showDifficultyPicker(callback) {
         };
     });
 }
+
+
