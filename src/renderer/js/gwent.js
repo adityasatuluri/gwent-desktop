@@ -1491,7 +1491,7 @@ class Game {
 		await this.runEffects(this.gameStart);
 		await this.coinToss();
 		AudioManager.playSFX('redraw');
-		let isAI = player_op.controller && player_op.controller.constructor.name === "ControllerAI"; let opDrawCount = 10; if (isAI) { let diff = Settings.difficulty.get(); if (diff === "hard") opDrawCount = 11; else if (diff === "easy") opDrawCount = 9; } await Promise.all([...Array(10).keys()].map( async () => { await player_me.deck.draw(player_me.hand); })); await Promise.all([...Array(opDrawCount).keys()].map( async () => { await player_op.deck.draw(player_op.hand); }));
+		await Promise.all([...Array(10).keys()].map( async () => { await player_me.deck.draw(player_me.hand); await player_op.deck.draw(player_op.hand); }));
 		AudioManager.playSFX("game_start");
 		await this.initialRedraw();
 		this.currPlayer = this.firstPlayer;
@@ -3932,6 +3932,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
 
 
 
