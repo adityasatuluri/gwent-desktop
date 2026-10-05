@@ -3,4 +3,4 @@ dist/
 build/
 .DS_Store
 *.log
-s
+ssrc/renderer/assets/videos/GWENT INTRO.mp4

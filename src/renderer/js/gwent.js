@@ -4172,11 +4172,18 @@ function onIntroMouseDown(e) {
 }
 
 if (introScreen && introVideo) {
-    // Start video
-    introVideo.play().catch(err => {
-        console.error("Intro video failed to play:", err);
-        skipIntro(); // Fallback
-    });
+    // Check if intro already played this session (via location.reload())
+    if (sessionStorage.getItem('introPlayed') === 'true') {
+        skipIntro();
+    } else {
+        sessionStorage.setItem('introPlayed', 'true');
+        // Start video
+        introVideo.play().catch(err => {
+            console.error("Intro video failed to play:", err);
+            skipIntro(); // Fallback
+        });
+    }
+
     
     introVideo.addEventListener('ended', skipIntro);
     if (skipBtn) skipBtn.addEventListener('click', skipIntro);
