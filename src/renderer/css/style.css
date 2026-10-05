@@ -2464,3 +2464,47 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 .history-item.draw { border-left: 0.3vw solid #ffeb3b; }
 
 
+
+/* Controls Screen specific overrides */
+#settings-group-controls {
+    padding-top: 1vw;
+    width: 80%; /* Don't stretch across the entire right half */
+}
+
+.setting-row.controls-row {
+    border: none !important;
+    border-bottom: none !important;
+    border-top: none !important;
+    outline: none !important;
+    padding: 0.8vw 1vw; /* More compact */
+    margin-bottom: 0.2vw;
+    background: transparent !important;
+    justify-content: space-between;
+}
+
+.setting-row.controls-row.active, .setting-row.controls-row:hover {
+    background: rgba(30, 30, 30, 0.8) !important; /* Subtle dark-grey highlight */
+    border: none !important;
+    outline: none !important;
+}
+
+.controls-row .setting-label {
+    color: rgba(200, 200, 200, 0.8);
+    font-size: 1.1vw;
+}
+
+.controls-row.active .setting-label, .controls-row:hover .setting-label {
+    color: #e5cd85; /* Warm gold/yellow */
+}
+
+.controls-row .setting-value {
+    color: rgba(200, 200, 200, 0.8) !important;
+    font-size: 1.1vw;
+    text-align: right;
+    min-width: 10vw; /* Keep them aligned */
+    justify-content: flex-end;
+}
+
+.controls-row.active .setting-value, .controls-row:hover .setting-value {
+    color: #e5cd85 !important;
+}
