@@ -2461,52 +2461,102 @@ class Carousel {
 
 // Custom confirmation windows
 class Popup {
-	constructor(yesName, yes, noName, no, header, description, alpha = .95){
+	constructor(yesName, yes, noName, no, header, description, alpha = 0.75){
 		this.yes = yes ? yes : ()=>{};
 		this.no = no ? no : ()=>{};
 		
 		this.elem = document.getElementById("popup");
-		let main = this.elem.children[0];
-		main.children[0].innerHTML = header ? header : "";
-		main.children[1].innerHTML = description ? description : "";
-		main.children[2].children[0].innerHTML = (yesName) ? yesName : "Yes";
-		main.children[2].children[1].innerHTML = (noName) ? noName : "No";
+		
+		let main = this.elem.querySelector('.popup-box');
+		main.querySelector('.popup-header').innerHTML = header ? header : "";
+		main.querySelector('.popup-description').innerHTML = description ? description : "";
+		
+		this.btnYes = document.getElementById('popup-btn-yes');
+		this.btnNo = document.getElementById('popup-btn-no');
+		
+		this.btnYes.innerHTML = (yesName) ? yesName : "Yes";
+		
+		this.hasNoBtn = !!noName;
+		if (this.hasNoBtn) {
+			this.btnNo.innerHTML = noName;
+			this.btnNo.style.display = 'block';
+		} else {
+			this.btnNo.style.display = 'none';
+		}
 
-		const bgColor = new RGBA(10, 10, 10, alpha);
-		this.elem.style.backgroundColor = bgColor.toString();
+		this.elem.style.backgroundColor = 'rgba(10, 10, 10, ' + alpha + ')';
 		
 		this.elem.classList.remove("hide");
 		Popup.setCurrent(this);
-		ui.enablePlayer(true);
+		
+		let mainEl = document.getElementsByTagName("main")[0];
+		this.wasPlayerEnabled = !mainEl.classList.contains("noclick");
+		ui.enablePlayer(false);
+		
+		this.selectedIndex = 0; // 0 for Yes, 1 for No
+		this.updateSelection();
+		
+		this.btnYes.onmouseenter = () => { this.selectedIndex = 0; this.updateSelection(); };
+		if (this.hasNoBtn) {
+			this.btnNo.onmouseenter = () => { this.selectedIndex = 1; this.updateSelection(); };
+		}
+		
+		this.keydownHandler = (e) => this.handleKeydown(e);
+		document.addEventListener('keydown', this.keydownHandler, true); // capture phase
 	}
 	
-	// Sets this as the current popup window
-	static setCurrent(curr){ this.curr = curr; }
+	updateSelection() {
+		if (this.selectedIndex === 0) {
+			this.btnYes.classList.add('active');
+			this.btnNo.classList.remove('active');
+		} else {
+			this.btnYes.classList.remove('active');
+			this.btnNo.classList.add('active');
+		}
+	}
 	
-	// Unsets this as the current popup window
+	handleKeydown(e) {
+		if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+			e.preventDefault(); e.stopPropagation();
+			this.selectedIndex = 0;
+			this.updateSelection();
+		} else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+			e.preventDefault(); e.stopPropagation();
+			if (this.hasNoBtn) {
+				this.selectedIndex = 1;
+				this.updateSelection();
+			}
+		} else if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault(); e.stopPropagation();
+			if (this.selectedIndex === 0) this.selectYes();
+			else this.selectNo();
+		} else if (e.key === 'Escape') {
+			e.preventDefault(); e.stopPropagation();
+			this.selectNo();
+		}
+	}
+	
+	static setCurrent(curr){ this.curr = curr; }
 	static clearCurrent()  { this.curr = null; }
 	
-	// Called when client selects the positive aciton
 	selectYes() {
-		this.clear()
+		this.clear();
 		this.yes();
 		return true;
 	}
 	
-	// Called when client selects the negative option
 	selectNo() {
 		this.clear();
 		this.no();
 		return false;
 	}
 	
-	// Clears the popup and diables player interraction
 	clear() {
-		ui.enablePlayer(false);
+		document.removeEventListener('keydown', this.keydownHandler, true);
 		this.elem.classList.add("hide");
+		if (this.wasPlayerEnabled) ui.enablePlayer(true);
 		Popup.clearCurrent();
 	}
-	
 }
 
 // Screen used to customize, import and export deck contents

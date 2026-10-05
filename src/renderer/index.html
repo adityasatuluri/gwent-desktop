@@ -385,12 +385,12 @@
 
 
 	<section id="popup" class="center hide">
-		<div>
-			<h3></h3>
-			<p></p>
-			<div>
-				<button onclick="Popup.curr.selectYes()"></button>
-				<button onclick="Popup.curr.selectNo()"></button>
+		<div class="popup-box">
+			<h3 class="popup-header hide"></h3>
+			<p class="popup-description"></p>
+			<div class="popup-buttons">
+				<div class="popup-btn active" id="popup-btn-yes" onclick="Popup.curr.selectYes()"></div>
+				<div class="popup-btn" id="popup-btn-no" onclick="Popup.curr.selectNo()"></div>
 			</div>
 		</div>
 	</section>
@@ -757,6 +757,7 @@
 </body>
 
 </html>
+
 
 
 

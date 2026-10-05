@@ -1,5 +1,5 @@
 /* ============================================================
-   LOCAL FONTS (offline, Cinzel – medieval/Witcher feel)
+   LOCAL FONTS (offline, Cinzel ï¿½ medieval/Witcher feel)
    ============================================================ */
 @font-face {
   font-family: 'Cinzel';
@@ -429,77 +429,90 @@ html {
 
 /* --------------------- popup ---------------------------  */
 
+
+/* ===== NATIVE GWENT POPUP ===== */
 #popup {
-	position: absolute;
-    width: 100%;
-    height: calc(100vw * 1080 / 1920);
-    background-color: rgba(10,10,10,.95);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(10, 10, 10, 0.75); /* Subtle dark overlay */
     z-index: 20000;
-    /* background-image: url('../assets/img/boardtest10.png); */
-    /* background-size: contain; */
-}
-
-
-#popup > div {
-    margin-top: -89px;
-    width: 26.5%;
-    border: .2vw solid rgb(60,60,60);
-    padding: 0 0.5vw;
-    background-color: rgb(20,20,20);
-}
-
-#popup h3 {
-    display: block;
-    font-size: 1.05vw;
-    text-transform: uppercase;
-    color: grey;
-    text-align: center;
-    line-height: 100%;
-}
-
-#popup p {
-    text-align: center;
-    font-size: 1.23vw;
-    padding-top: .6vw;
-    color: tan;
-}
-
-#popup > div > div {
-    position: relative;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-between;
-    padding: .2vw;
-    min-width: 10%;
-    width: fit-content;
-    margin: -1.4vw auto 0;
-    border: .2vw solid rgb(25,25,25);
-    background-color: black;
-    top: 1.3vw;
 }
 
-#popup button {
-
-    display: inline-block;
-    width: auto;
-    height: 1.8vw;
-    border: .2vw solid rgb(40,40,40);
-    background-color: rgb(20,20,20);
-    font-size: 1vw;
-    text-shadow: 1vw 1vw 1vw black;
-	text-transform: capitalize;
-	margin: 0 0.3vw;
-	transition: color 0.1s, border-color 0.1s;
-}
-#popup button:hover {
-	box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-	border-color: rgb(70, 70, 70);
+#popup.hide {
+    display: none !important;
 }
 
-#popup button:first-child { color: green; }
-#popup button:first-child:hover { color: lightgreen; }
-#popup button:last-child {color: darkred; }
-#popup button:last-child:hover {color: red; }
+#popup .popup-box {
+    width: 35vw;
+    max-width: 600px;
+    border: 1px solid rgba(255, 255, 255, 0.15); /* Thin elegant border */
+    padding: 3vw 2vw;
+    background-color: rgba(15, 15, 15, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 1vw 3vw rgba(0, 0, 0, 0.9);
+}
+
+#popup .popup-header {
+    display: none; /* Hide header completely per requirements */
+}
+
+#popup .popup-description {
+    text-align: center;
+    font-size: 1.3vw;
+    color: rgba(220, 220, 220, 0.9);
+    font-family: 'Cinzel', 'Palatino Linotype', serif;
+    margin-bottom: 3vw;
+    text-transform: uppercase;
+    line-height: 1.4;
+    letter-spacing: 0.05vw;
+}
+
+#popup .popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 4vw;
+}
+
+#popup .popup-btn {
+    font-size: 1.1vw;
+    font-family: Arial, sans-serif;
+    color: rgba(150, 150, 150, 0.8);
+    text-transform: uppercase;
+    cursor: pointer;
+    letter-spacing: 0.1vw;
+    padding: 0.5vw 1vw;
+    transition: color 0.1s;
+}
+
+#popup .popup-btn:hover {
+    color: rgba(200, 200, 200, 1);
+}
+
+#popup .popup-btn.active {
+    color: #e5cd85; /* Warm gold */
+}
+
+/* Add a pseudo-element subtle dark grey rectangle for active highlight just like settings menu */
+#popup .popup-btn.active::before {
+    content: '';
+    position: absolute;
+    background: rgba(30, 30, 30, 0.8);
+    z-index: -1;
+    /* We will use inline style or JS to position this if we want, or just simple background */
+}
+#popup .popup-btn.active, #popup .popup-btn:hover {
+    background: rgba(30, 30, 30, 0.8);
+    color: #e5cd85;
+}
+
 
 /* --------------------- end screen ---------------------------  */
 
@@ -1862,7 +1875,7 @@ main { background-image: url('../assets/img/boardtest8.png'); }
 
 
 /* ================================================================
-   CAROUSEL (card redraw) fixes  –  match reference image
+   CAROUSEL (card redraw) fixes  ï¿½  match reference image
    ================================================================ */
 /* Make carousel full-screen overlay */
 #carousel {
