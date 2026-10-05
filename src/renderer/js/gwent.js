@@ -4148,7 +4148,6 @@ function skipIntro() {
     }
     
     // Cleanup listeners
-    document.removeEventListener('mousemove', onIntroMouseMove);
     document.removeEventListener('keydown', onIntroKeyDown, true);
     document.removeEventListener('mousedown', onIntroMouseDown, true);
     
@@ -4158,49 +4157,18 @@ function skipIntro() {
     }
 }
 
-function onIntroMouseMove(e) {
-    if (!window.introActive) return;
-    if (initialMouseX === null || initialMouseY === null) {
-        initialMouseX = e.clientX;
-        initialMouseY = e.clientY;
-        return;
-    }
-    const dx = e.clientX - initialMouseX;
-    const dy = e.clientY - initialMouseY;
-    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
-        skipIntro();
-    }
-}
-
 function onIntroKeyDown(e) {
     if (!window.introActive) return;
-    
-    // Stop event reaching main menu
     e.stopPropagation();
-    
+    e.preventDefault();
     if (e.key === 'Escape') {
-        const now = Date.now();
-        if (now - escPressTime < 700) {
-            skipIntro();
-        } else {
-            escPressTime = now;
-            // First press, wait for second
-        }
+        skipIntro();
     }
 }
 
 function onIntroMouseDown(e) {
     if (!window.introActive) return;
-    
-    // If clicking skip button, let it bubble to the button's listener or handle here
-    if (e.target === skipBtn) {
-        skipIntro();
-    } else {
-        // Normal clicks don't skip unless it's a mouse movement? Wait, user asked for mouse movement, skip button, double esc.
-        // Did user ask for mouse click to skip? "Mouse movement -> skip, Skip button click -> skip, ESC+ESC -> skip"
-        // Let's just prevent default to stop interacting with main menu
-        e.stopPropagation();
-    }
+    skipIntro();
 }
 
 if (introScreen && introVideo) {
@@ -4214,12 +4182,6 @@ if (introScreen && introVideo) {
     if (skipBtn) skipBtn.addEventListener('click', skipIntro);
     
     // Delay adding mousemove listener so we don't instantly skip from initial browser position pulse
-    setTimeout(() => {
-        if (window.introActive) {
-            document.addEventListener('mousemove', onIntroMouseMove);
-        }
-    }, 100);
-    
     document.addEventListener('keydown', onIntroKeyDown, true); // capture phase
     document.addEventListener('mousedown', onIntroMouseDown, true); // capture phase
 }
