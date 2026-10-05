@@ -1983,19 +1983,19 @@ class UI {
 		this.youtube.src = this._playlist[0];
 		this.youtube.addEventListener('ended', ()=>this._playNextTrack());
 
-		if (Settings.music.isEnabled()) this.youtube.play().catch(e=>console.log('Audio blocked',e));
+		if (Settings.music.isEnabled() && !window.introActive) this.youtube.play().catch(e=>console.log('Audio blocked',e));
 	}
 	_playNextTrack(){
 		if (!this._playlist || !this._playlist.length) return;
 		this._playlistIdx = (this._playlistIdx+1) % this._playlist.length;
 		if (this._playlistIdx===0){const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};shuffle(this._playlist);}
 		this.youtube.src = this._playlist[this._playlistIdx];
-		if (Settings.music.isEnabled()) this.youtube.play().catch(e=>console.log('Track play failed',e));
+		if (Settings.music.isEnabled() && !window.introActive) this.youtube.play().catch(e=>console.log('Track play failed',e));
 	}
 	
 	toggleMusic(){
 		Settings.music.toggle();
-		if(Settings.music.isEnabled()) this.youtube?.play(); else this.youtube?.pause();
+		if(Settings.music.isEnabled() && !window.introActive) this.youtube?.play(); else this.youtube?.pause();
 	}
 
 	toggleNotifications() {
@@ -2009,7 +2009,7 @@ class UI {
 	setYouTubeEnabled(enable){
 		if (this.ytActive === enable)
 			return;
-		if(enable && Settings.music.isEnabled()) this.youtube?.play(); else this.youtube?.pause();
+		if(enable && Settings.music.isEnabled() && !window.introActive) this.youtube?.play(); else this.youtube?.pause();
 		this.ytActive = enable;
 	}
 	
@@ -4122,7 +4122,7 @@ function showDifficultyPicker(callback) {
 
 
 // ===== INTRO SEQUENCE =====
-let introActive = true;
+window.introActive = true;
 let introVideo = document.getElementById('intro-video');
 let introScreen = document.getElementById('intro-screen');
 let skipBtn = document.getElementById('intro-skip-btn');
@@ -4131,8 +4131,8 @@ let initialMouseY = null;
 let escPressTime = 0;
 
 function skipIntro() {
-    if (!introActive) return;
-    introActive = false;
+    if (!window.introActive) return;
+    window.introActive = false;
     
     // Stop video and audio
     if (introVideo) {
@@ -4151,10 +4151,15 @@ function skipIntro() {
     document.removeEventListener('mousemove', onIntroMouseMove);
     document.removeEventListener('keydown', onIntroKeyDown, true);
     document.removeEventListener('mousedown', onIntroMouseDown, true);
+    
+    // Resume game music
+    if (typeof ui !== 'undefined' && ui.youtube && Settings.music.isEnabled()) {
+        ui.youtube.play().catch(e => console.log('Audio blocked', e));
+    }
 }
 
 function onIntroMouseMove(e) {
-    if (!introActive) return;
+    if (!window.introActive) return;
     if (initialMouseX === null || initialMouseY === null) {
         initialMouseX = e.clientX;
         initialMouseY = e.clientY;
@@ -4168,7 +4173,7 @@ function onIntroMouseMove(e) {
 }
 
 function onIntroKeyDown(e) {
-    if (!introActive) return;
+    if (!window.introActive) return;
     
     // Stop event reaching main menu
     e.stopPropagation();
@@ -4185,7 +4190,7 @@ function onIntroKeyDown(e) {
 }
 
 function onIntroMouseDown(e) {
-    if (!introActive) return;
+    if (!window.introActive) return;
     
     // If clicking skip button, let it bubble to the button's listener or handle here
     if (e.target === skipBtn) {
@@ -4210,7 +4215,7 @@ if (introScreen && introVideo) {
     
     // Delay adding mousemove listener so we don't instantly skip from initial browser position pulse
     setTimeout(() => {
-        if (introActive) {
+        if (window.introActive) {
             document.addEventListener('mousemove', onIntroMouseMove);
         }
     }, 100);
