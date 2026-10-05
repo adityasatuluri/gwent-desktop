@@ -3225,7 +3225,10 @@ class SavedString
 
 class Settings
 {
-	static difficulty = new SavedString("gc-difficulty", "normal"); static music = new ToggleOption("gc-music", true);
+	static difficulty = new SavedString("gc-difficulty", "normal");
+	static keyConfirm = new SavedString("gc-key-confirm", "Enter");
+	static keyCancel = new SavedString("gc-key-cancel", "Escape");
+	static keyLeader = new SavedString("gc-key-leader", "x"); static music = new ToggleOption("gc-music", true);
 	static notifications = new ToggleOption("gc-notifications", true);
 	static soundEffects = new ToggleOption("gc-sound-effects", true);
 	static lastFaction = new SavedString("gc-last-faction", "realms"); 
@@ -3585,6 +3588,9 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     updateToggleLabel('music',      Settings.music.isEnabled());
     updateToggleLabel('sfx',        Settings.soundEffects.isEnabled());
     updateToggleLabel('notifications', Settings.notifications.isEnabled());
+		document.getElementById('setting-keybind-confirm-val').textContent = Settings.keyConfirm.get();
+		document.getElementById('setting-keybind-cancel-val').textContent = Settings.keyCancel.get();
+		document.getElementById('setting-keybind-leader-val').textContent = Settings.keyLeader.get().toUpperCase();
   }
 
   function updateToggleLabel(id, enabled) {
@@ -3594,6 +3600,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     el.className   = 'setting-toggle ' + (enabled ? 'on' : 'off');
   }
 
+  let capturingKey = null;
   function applySettingAtIndex(idx) {
     const row = getSettingRows()[idx];
     const ds  = row.dataset.setting;
@@ -3778,11 +3785,23 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
   // -- Keyboard navigation ------------------------------------
   document.addEventListener('keydown', (e) => {
+	if (capturingKey) {
+		let k = e.key;
+		if (k === ' ') k = 'Space';
+		else if (k.length === 1) k = k.toLowerCase();
+		if (capturingKey === 'keybind-confirm') Settings.keyConfirm.set(k);
+		else if (capturingKey === 'keybind-cancel') Settings.keyCancel.set(k);
+		else if (capturingKey === 'keybind-leader') Settings.keyLeader.set(k);
+		document.getElementById('setting-' + capturingKey + '-val').textContent = (k === ' ') ? 'Space' : k;
+		capturingKey = null;
+		e.preventDefault();
+		return;
+	}
     // If a popup is active, let it handle keys (Escape cancels it)
     if (typeof Popup !== 'undefined' && Popup.curr) {
-      if (e.key === 'Escape') {
+      if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.keyCancel.get().toLowerCase())) {
         Popup.curr.selectNo();
-      } else if (e.key === 'Enter') {
+      } else if ((e.key === 'Enter' || e.key.toLowerCase() === Settings.keyConfirm.get().toLowerCase())) {
         Popup.curr.selectYes();
       }
       return;
@@ -3791,12 +3810,12 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     const pauseVisible = pauseOverlay && pauseOverlay.style.display !== 'none';
 
     if (pauseVisible) {
-      if (e.key === 'Escape') { hidePauseMenu(); }
+      if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.keyCancel.get().toLowerCase())) { hidePauseMenu(); }
       return;
     }
 
     if (inTutorial) {
-      if (e.key === 'Escape' || e.key === 'Backspace') {
+      if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.keyCancel.get().toLowerCase()) || e.key === 'Backspace') {
         closeTutorial();
       }
       return;
@@ -3829,13 +3848,13 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       if (inDeckBuilder) {
         if (e.key === '1') document.getElementById('faction-prev')?.click();
         if (e.key === '3') document.getElementById('faction-next')?.click();
-        if (e.key === 'x' || e.key === 'X') {
+        if ((e.key.toLowerCase() === Settings.keyLeader.get().toLowerCase())) {
           if (typeof dm !== 'undefined') dm.selectLeader();
         }
-        if (e.key === 'Enter') {
+        if ((e.key === 'Enter' || e.key.toLowerCase() === Settings.keyConfirm.get().toLowerCase())) {
           if (typeof dm !== 'undefined') dm.startNewGame();
         }
-        if (e.key === 'Escape') {
+        if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.keyCancel.get().toLowerCase())) {
           if (Carousel.curr && Carousel.curr.title === "LEADER") {
             Carousel.curr.cancel();
             if (typeof dm !== 'undefined') dm.selectFaction();
@@ -3849,12 +3868,12 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
           }
         }
       } else {
-        if (e.key === 'Enter' && Carousel.curr && Carousel.curr.bExit) {
+        if ((e.key === 'Enter' || e.key.toLowerCase() === Settings.keyConfirm.get().toLowerCase()) && Carousel.curr && Carousel.curr.bExit) {
           e.preventDefault();
           Carousel.curr.cancel();
           return;
         }
-        if (e.key === 'Escape') { showPauseMenu(); }
+        if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.keyCancel.get().toLowerCase())) { showPauseMenu(); }
       }
       return;
     }
@@ -3962,6 +3981,11 @@ function showDifficultyPicker(callback) {
         };
     });
 }
+
+
+
+
+
 
 
 

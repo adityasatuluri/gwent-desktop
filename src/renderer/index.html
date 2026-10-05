@@ -86,6 +86,7 @@
 				<div class="settings-nav">
 					<div class="settings-nav-item nav-category active" data-target="settings-group-general">GENERAL</div>
 					<div class="settings-nav-item nav-category" data-target="settings-group-deck">DECK MANAGEMENT</div>
+					<div class="settings-nav-item nav-category" data-target="settings-group-controls">CONTROLS</div>
 					<div class="settings-nav-item" id="settings-back-btn">BACK</div>
 				</div>
 			</div>
@@ -132,6 +133,28 @@
 						<span class="setting-label">Download Deck</span>
 					</div>
 					
+								</div>
+				<div class="settings-list settings-group hide" id="settings-group-controls">
+					<div class="setting-row noclick" style="cursor:default">
+						<span class="setting-label" style="color:#dedede;">Select / Place Card</span>
+						<span class="setting-value" style="color:#aaa;">Left Click</span>
+					</div>
+					<div class="setting-row noclick" style="cursor:default">
+						<span class="setting-label" style="color:#dedede;">Cancel / Preview Card</span>
+						<span class="setting-value" style="color:#aaa;">Right Click</span>
+					</div>
+					<div class="setting-row" data-setting="keybind-confirm">
+						<span class="setting-label">Confirm / Pass Round (Hold)</span>
+						<span class="setting-value" id="setting-keybind-confirm-val" style="color:#e5cd85;">Enter</span>
+					</div>
+					<div class="setting-row" data-setting="keybind-cancel">
+						<span class="setting-label">Pause Menu / Close Menu</span>
+						<span class="setting-value" id="setting-keybind-cancel-val" style="color:#e5cd85;">Escape</span>
+					</div>
+					<div class="setting-row" data-setting="keybind-leader">
+						<span class="setting-label">Use Leader Ability</span>
+						<span class="setting-value" id="setting-keybind-leader-val" style="color:#e5cd85;">x</span>
+					</div>
 				</div>
 				<div class="settings-footer-hint">Up / Down &mdash; Navigate &nbsp;&nbsp; Enter &mdash; Select &nbsp;&nbsp; Esc &mdash; Back</div>
 			</div>
@@ -723,6 +746,11 @@
 </body>
 
 </html>
+
+
+
+
+
 
 
 
