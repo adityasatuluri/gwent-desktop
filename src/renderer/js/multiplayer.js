@@ -59,11 +59,7 @@ class Multiplayer {
             }
         });
 		
-		const findBtn = document.querySelector('[data-action="find"]');
-		findBtn.addEventListener('click', () => {
-			AudioManager.playSFX('ui_card');
-			this.startDiscovery();
-		});
+		
 
 		const joinIpBtn = document.querySelector('[data-action="join"]');
 		const joinIpContainer = document.getElementById('mp-join-ip-container');
@@ -78,6 +74,17 @@ class Multiplayer {
 		});
 
         this.renderHistory();
+		
+		const refreshBtn = document.getElementById('mp-refresh-btn');
+		if (refreshBtn) {
+			refreshBtn.addEventListener('click', () => {
+				AudioManager.playSFX('ui_card');
+				this.stopDiscovery();
+				this.discoveredServers = {};
+				this.updateServerList();
+				this.startDiscovery();
+			});
+		}
 		this.setupKeyboardNav();
     }
 	
