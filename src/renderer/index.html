@@ -134,26 +134,29 @@
 					</div>
 					
 								</div>
-				<div class="settings-list settings-group hide controls-group" id="settings-group-controls">
-					<div class="setting-row controls-row noclick" style="cursor:default">
-						<span class="controls-label">Select / Place Card</span>
-						<span class="controls-value">MOUSE 1</span>
+				<div class="settings-list settings-group hide" id="settings-group-controls">
+					<div class="setting-row" data-setting="keybind-selectCard">
+						<span class="setting-label">Select / Place Card</span>
+						<span class="setting-value" id="setting-keybind-selectCard-val" style="color:#e5cd85;">Mouse 1</span>
 					</div>
-					<div class="setting-row controls-row noclick" style="cursor:default">
-						<span class="controls-label">Cancel / Preview Card</span>
-						<span class="controls-value">MOUSE 2</span>
+					<div class="setting-row" data-setting="keybind-cancelPreview">
+						<span class="setting-label">Cancel / Preview Card</span>
+						<span class="setting-value" id="setting-keybind-cancelPreview-val" style="color:#e5cd85;">Mouse 2</span>
 					</div>
-					<div class="setting-row controls-row" data-setting="keybind-confirm">
-						<span class="controls-label">Confirm / Pass Round</span>
-						<span class="controls-value">[ <span id="setting-keybind-confirm-val">ENTER</span> ]</span>
+					<div class="setting-row" data-setting="keybind-confirmPass">
+						<span class="setting-label">Confirm / Pass Round</span>
+						<span class="setting-value" id="setting-keybind-confirmPass-val" style="color:#e5cd85;">Enter</span>
 					</div>
-					<div class="setting-row controls-row" data-setting="keybind-cancel">
-						<span class="controls-label">Pause / Close Menu</span>
-						<span class="controls-value">[ <span id="setting-keybind-cancel-val">ESCAPE</span> ]</span>
+					<div class="setting-row" data-setting="keybind-pauseMenu">
+						<span class="setting-label">Pause Menu / Close Menu</span>
+						<span class="setting-value" id="setting-keybind-pauseMenu-val" style="color:#e5cd85;">Escape</span>
 					</div>
-					<div class="setting-row controls-row" data-setting="keybind-leader">
-						<span class="controls-label">Use Leader Ability</span>
-						<span class="controls-value">[ <span id="setting-keybind-leader-val">X</span> ]</span>
+					<div class="setting-row" data-setting="keybind-leaderAbility">
+						<span class="setting-label">Use Leader Ability</span>
+						<span class="setting-value" id="setting-keybind-leaderAbility-val" style="color:#e5cd85;">X</span>
+					</div>
+					<div class="setting-row" data-setting="keybind-reset">
+						<span class="setting-label" style="color:#ab977c;">RESET TO DEFAULTS</span>
 					</div>
 				</div>
 				<div class="settings-footer-hint">Up / Down &mdash; Navigate &nbsp;&nbsp; Enter &mdash; Select &nbsp;&nbsp; Esc &mdash; Back</div>
@@ -746,6 +749,7 @@
 </body>
 
 </html>
+
 
 
 

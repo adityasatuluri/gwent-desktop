@@ -3223,12 +3223,20 @@ class SavedString
 	}
 }
 
+
+class SavedJSON {
+	constructor(key, defaultValue) {
+		this.key = key;
+		let saved = localStorage?.getItem(this.key);
+		this.value = saved ? JSON.parse(saved) : defaultValue;
+	}
+	get() { return this.value; }
+	set(val) { this.value = val; localStorage?.setItem(this.key, JSON.stringify(val)); }
+}
 class Settings
 {
 	static difficulty = new SavedString("gc-difficulty", "normal");
-	static keyConfirm = new SavedString("gc-key-confirm", "Enter");
-	static keyCancel = new SavedString("gc-key-cancel", "Escape");
-	static keyLeader = new SavedString("gc-key-leader", "x"); static music = new ToggleOption("gc-music", true);
+	static controls = new SavedJSON("gc-controls", { selectCard: "Mouse 1", cancelPreview: "Mouse 2", confirmPass: "Enter", pauseMenu: "Escape", leaderAbility: "X" }); static music = new ToggleOption("gc-music", true);
 	static notifications = new ToggleOption("gc-notifications", true);
 	static soundEffects = new ToggleOption("gc-sound-effects", true);
 	static lastFaction = new SavedString("gc-last-faction", "realms"); 
@@ -3588,9 +3596,11 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     updateToggleLabel('music',      Settings.music.isEnabled());
     updateToggleLabel('sfx',        Settings.soundEffects.isEnabled());
     updateToggleLabel('notifications', Settings.notifications.isEnabled());
-		document.getElementById('setting-keybind-confirm-val').textContent = Settings.keyConfirm.get().toUpperCase();
-		document.getElementById('setting-keybind-cancel-val').textContent = Settings.keyCancel.get().toUpperCase();
-		document.getElementById('setting-keybind-leader-val').textContent = Settings.keyLeader.get().toUpperCase();
+		document.getElementById('setting-keybind-confirmPass-val').textContent = Settings.controls.get().confirmPass.toUpperCase();
+		document.getElementById('setting-keybind-pauseMenu-val').textContent = Settings.controls.get().pauseMenu.toUpperCase();
+		document.getElementById('setting-keybind-leaderAbility-val').textContent = Settings.controls.get().leaderAbility.toUpperCase();
+		document.getElementById('setting-keybind-selectCard-val').textContent = Settings.controls.get().selectCard.toUpperCase();
+		document.getElementById('setting-keybind-cancelPreview-val').textContent = Settings.controls.get().cancelPreview.toUpperCase();
   }
 
   function updateToggleLabel(id, enabled) {
@@ -3638,7 +3648,83 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
   document.getElementById('settings-back-btn')?.addEventListener('click', () => closeSettings());
 
-  let settingsOpenedFrom = 'menu'; // 'menu' or 'game'
+  
+let isCapturingInput = false;
+let capturingAction = null;
+
+function formatInputName(key) {
+  if (key === ' ') return 'Space';
+  if (key.length === 1) return key.toUpperCase();
+  return key;
+}
+
+function assignBinding(action, inputName) {
+  const currentControls = Settings.controls.get();
+  
+  // Check for conflicts
+  let conflictAction = null;
+  for (const [a, k] of Object.entries(currentControls)) {
+    if (k.toLowerCase() === inputName.toLowerCase() && a !== action) {
+      conflictAction = a;
+      break;
+    }
+  }
+
+  if (conflictAction) {
+    const popupFunc = (typeof ui !== 'undefined' && ui.popup) ? ui.popup : (a, b, c, d, e, f) => new Popup(a, b, c, d, e, f);
+    popupFunc("YES", () => {
+      currentControls[conflictAction] = ""; // clear old
+      currentControls[action] = inputName;
+      Settings.controls.set(currentControls);
+      syncSettingsDisplay();
+    }, "NO", () => {
+      syncSettingsDisplay();
+    }, "CONFLICT", inputName + " is already assigned to another action. Replace it?");
+  } else {
+    currentControls[action] = inputName;
+    Settings.controls.set(currentControls);
+    syncSettingsDisplay();
+  }
+}
+
+function captureNextInput(actionName) {
+  isCapturingInput = true;
+  capturingAction = actionName;
+  
+  const handleKey = (e) => {
+    e.preventDefault();
+    if (e.key === 'Escape') {
+      cleanup();
+      syncSettingsDisplay();
+      return;
+    }
+    const inputName = formatInputName(e.key);
+    cleanup();
+    assignBinding(capturingAction, inputName);
+  };
+  
+  const handleMouse = (e) => {
+    e.preventDefault();
+    let inputName = 'Mouse ' + (e.button + 1);
+    cleanup();
+    assignBinding(capturingAction, inputName);
+  };
+  
+  const cleanup = () => {
+    isCapturingInput = false;
+    capturingAction = null;
+    document.removeEventListener('keydown', handleKey, {capture: true});
+    document.removeEventListener('mousedown', handleMouse, {capture: true});
+  };
+  
+  // Add listeners
+  setTimeout(() => {
+    document.addEventListener('keydown', handleKey, {capture: true});
+    document.addEventListener('mousedown', handleMouse, {capture: true});
+  }, 50);
+}
+
+let settingsOpenedFrom = 'menu'; // 'menu' or 'game'
 
   function openSettings() {
     syncSettingsDisplay();
@@ -3784,24 +3870,69 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   }
 
   // -- Keyboard navigation ------------------------------------
+  
+document.addEventListener("click", (e) => {
+    if (!NavigationManager.isScreenActive('game-view') && !NavigationManager.isScreenActive('deck-customization')) return;
+    const selectBind = Settings.controls.get().selectCard;
+    if (selectBind.toLowerCase() !== "mouse 1") {
+        if (e.target.closest('.card') || e.target.closest('.field') || e.target.closest('.hero-skill')) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+}, true);
+
+document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    if (isCapturingInput) return;
+    const cancelBind = Settings.controls.get().cancelPreview;
+    if (cancelBind.toLowerCase() === 'mouse 2') {
+        if (typeof ui !== 'undefined' && ui && typeof ui.cancel === 'function') ui.cancel();
+        if (typeof Carousel !== 'undefined' && Carousel.curr) Carousel.curr.cancel();
+    }
+});
+
+function handleGameplayInput(inputName) {
+    if (isCapturingInput) return false;
+    const controls = Settings.controls.get();
+    inputName = inputName.toLowerCase();
+    
+    // Select / Place Card
+    if (inputName === controls.selectCard.toLowerCase() && inputName !== "mouse 1") {
+        const hoverEls = document.querySelectorAll(':hover');
+        if (hoverEls.length > 0) {
+            let target = hoverEls[hoverEls.length - 1];
+            if (target.closest('.card') || target.closest('.field') || target.closest('.hero-skill') || target.closest('.deck-card') || target.closest('.bank-card')) {
+                target.click();
+                return true;
+            }
+        }
+    }
+    
+    // Cancel / Preview Card
+    if (inputName === controls.cancelPreview.toLowerCase() && inputName !== "mouse 2") {
+        if (typeof ui !== 'undefined' && ui && typeof ui.cancel === 'function') ui.cancel();
+        if (typeof Carousel !== 'undefined' && Carousel.curr) Carousel.curr.cancel();
+        return true;
+    }
+    return false;
+}
+
+window.addEventListener('mousedown', (e) => {
+    if (isCapturingInput) return;
+    let inputName = 'Mouse ' + (e.button + 1);
+    handleGameplayInput(inputName);
+});
+
   document.addEventListener('keydown', (e) => {
-	if (capturingKey) {
-		let k = e.key;
-		if (k === ' ') k = 'Space';
-		else if (k.length === 1) k = k.toLowerCase();
-		if (capturingKey === 'keybind-confirm') Settings.keyConfirm.set(k);
-		else if (capturingKey === 'keybind-cancel') Settings.keyCancel.set(k);
-		else if (capturingKey === 'keybind-leader') Settings.keyLeader.set(k);
-		document.getElementById('setting-' + capturingKey + '-val').textContent = ((k === ' ') ? 'Space' : k).toUpperCase();
-		capturingKey = null;
-		e.preventDefault();
-		return;
-	}
+    let kName = formatInputName(e.key);
+    if (handleGameplayInput(kName)) { e.preventDefault(); return; }
+
     // If a popup is active, let it handle keys (Escape cancels it)
     if (typeof Popup !== 'undefined' && Popup.curr) {
-      if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.keyCancel.get().toLowerCase())) {
+      if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.controls.get().pauseMenu.toLowerCase())) {
         Popup.curr.selectNo();
-      } else if ((e.key === 'Enter' || e.key.toLowerCase() === Settings.keyConfirm.get().toLowerCase())) {
+      } else if ((e.key === 'Enter' || e.key.toLowerCase() === Settings.controls.get().confirmPass.toLowerCase())) {
         Popup.curr.selectYes();
       }
       return;
@@ -3810,12 +3941,12 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     const pauseVisible = pauseOverlay && pauseOverlay.style.display !== 'none';
 
     if (pauseVisible) {
-      if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.keyCancel.get().toLowerCase())) { hidePauseMenu(); }
+      if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.controls.get().pauseMenu.toLowerCase())) { hidePauseMenu(); }
       return;
     }
 
     if (inTutorial) {
-      if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.keyCancel.get().toLowerCase()) || e.key === 'Backspace') {
+      if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.controls.get().pauseMenu.toLowerCase()) || e.key === 'Backspace') {
         closeTutorial();
       }
       return;
@@ -3848,13 +3979,13 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
       if (inDeckBuilder) {
         if (e.key === '1') document.getElementById('faction-prev')?.click();
         if (e.key === '3') document.getElementById('faction-next')?.click();
-        if ((e.key.toLowerCase() === Settings.keyLeader.get().toLowerCase())) {
+        if ((e.key.toLowerCase() === Settings.controls.get().leaderAbility.toLowerCase())) {
           if (typeof dm !== 'undefined') dm.selectLeader();
         }
-        if ((e.key === 'Enter' || e.key.toLowerCase() === Settings.keyConfirm.get().toLowerCase())) {
+        if ((e.key === 'Enter' || e.key.toLowerCase() === Settings.controls.get().confirmPass.toLowerCase())) {
           if (typeof dm !== 'undefined') dm.startNewGame();
         }
-        if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.keyCancel.get().toLowerCase())) {
+        if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.controls.get().pauseMenu.toLowerCase())) {
           if (Carousel.curr && Carousel.curr.title === "LEADER") {
             Carousel.curr.cancel();
             if (typeof dm !== 'undefined') dm.selectFaction();
@@ -3868,12 +3999,12 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
           }
         }
       } else {
-        if ((e.key === 'Enter' || e.key.toLowerCase() === Settings.keyConfirm.get().toLowerCase()) && Carousel.curr && Carousel.curr.bExit) {
+        if ((e.key === 'Enter' || e.key.toLowerCase() === Settings.controls.get().confirmPass.toLowerCase()) && Carousel.curr && Carousel.curr.bExit) {
           e.preventDefault();
           Carousel.curr.cancel();
           return;
         }
-        if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.keyCancel.get().toLowerCase())) { showPauseMenu(); }
+        if ((e.key === 'Escape' || e.key.toLowerCase() === Settings.controls.get().pauseMenu.toLowerCase())) { showPauseMenu(); }
       }
       return;
     }
@@ -3919,12 +4050,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 
 
 
-document.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-    if (typeof ui !== 'undefined' && ui && ui.previewCard) {
-        ui.cancel();
-    }
-});
+
 document.addEventListener("DOMContentLoaded", () => {
     const navCategories = document.querySelectorAll('.nav-category');
     navCategories.forEach(cat => {
