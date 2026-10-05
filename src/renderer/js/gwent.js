@@ -3588,8 +3588,8 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     updateToggleLabel('music',      Settings.music.isEnabled());
     updateToggleLabel('sfx',        Settings.soundEffects.isEnabled());
     updateToggleLabel('notifications', Settings.notifications.isEnabled());
-		document.getElementById('setting-keybind-confirm-val').textContent = Settings.keyConfirm.get();
-		document.getElementById('setting-keybind-cancel-val').textContent = Settings.keyCancel.get();
+		document.getElementById('setting-keybind-confirm-val').textContent = Settings.keyConfirm.get().toUpperCase();
+		document.getElementById('setting-keybind-cancel-val').textContent = Settings.keyCancel.get().toUpperCase();
 		document.getElementById('setting-keybind-leader-val').textContent = Settings.keyLeader.get().toUpperCase();
   }
 
@@ -3792,7 +3792,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
 		if (capturingKey === 'keybind-confirm') Settings.keyConfirm.set(k);
 		else if (capturingKey === 'keybind-cancel') Settings.keyCancel.set(k);
 		else if (capturingKey === 'keybind-leader') Settings.keyLeader.set(k);
-		document.getElementById('setting-' + capturingKey + '-val').textContent = (k === ' ') ? 'Space' : k;
+		document.getElementById('setting-' + capturingKey + '-val').textContent = ((k === ' ') ? 'Space' : k).toUpperCase();
 		capturingKey = null;
 		e.preventDefault();
 		return;
@@ -3981,6 +3981,7 @@ function showDifficultyPicker(callback) {
         };
     });
 }
+
 
 
 
