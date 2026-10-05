@@ -1678,11 +1678,11 @@ class Game {
 
 	newOpponentGame()
 	{
+		this.endScreen.classList.add("hide");
 		showDifficultyPicker(() => {
 			this.reset();
 			player_me.reset();
 			player_op = new Player('op', 'Player 2', dm.constructOpponentDeck(false));
-			this.endScreen.classList.add("hide");
 			this.startGame();
 		});
 	}
@@ -3962,5 +3962,7 @@ function showDifficultyPicker(callback) {
         };
     });
 }
+
+
 
 
