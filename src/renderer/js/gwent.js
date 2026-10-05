@@ -52,15 +52,7 @@ class ControllerAI {
 				}
 			}
 			await player.passRound();
-		} else {
-			let rand = randomInt(weightTotal);
-			for (var i=0; i < weights.length; ++i) {
-				rand -= weights[i].weight;
-				if (rand < 0)
-					break;
-			}
-			await weights[i].action();
-		}
+		} else { let diff = Settings.difficulty.get(); if (diff === "hard") { let maxWeight = -1, maxIdx = 0; for (let i = 0; i < weights.length; ++i) { if (weights[i].weight > maxWeight) { maxWeight = weights[i].weight; maxIdx = i; } } await weights[maxIdx].action(); } else if (diff === "easy") { let easyWeightTotal = weights.reduce( (a,c) => a + Math.sqrt(c.weight), 0); let rand = Math.random() * easyWeightTotal; var i = 0; for (; i < weights.length; ++i) { rand -= Math.sqrt(weights[i].weight); if (rand < 0) break; } if (i >= weights.length) i = weights.length - 1; await weights[i].action(); } else { let rand = randomInt(weightTotal); var i = 0; for (; i < weights.length; ++i) { rand -= weights[i].weight; if (rand < 0) break; } if (i >= weights.length) i = weights.length - 1; await weights[i].action(); } }
 	}
 	
 	// Collects data about card with the hightest power on the board
@@ -276,16 +268,7 @@ class ControllerAI {
 	}
 
 	// Assigns a weight for how likely the conroller is to Pass the round
-	weightPass(){
-		if (this.player.health === 1)
-			return 0;
-		let dif = this.player.opponent().total - this.player.total;
-		if (dif > 30)
-			return 100;
-		if (dif < -30 && this.player.opponent().handsize - this.player.handsize > 2)
-			return 100;
-		return Math.floor(Math.abs(dif));
-	}
+	weightPass(){ if (this.player.health === 1) return 0; let dif = this.player.opponent().total - this.player.total; let diffMode = Settings.difficulty.get(); if (diffMode === "hard") { if (dif > 40) return 100; if (dif < -20 && this.player.opponent().handsize - this.player.handsize > 1) return 100; return Math.floor(Math.abs(dif) / 1.5); } if (diffMode === "easy") { if (dif > 20) return 100; if (dif < -40 && this.player.opponent().handsize - this.player.handsize > 3) return 100; return Math.floor(Math.abs(dif) * 1.5); } if (dif > 30) return 100; if (dif < -30 && this.player.opponent().handsize - this.player.handsize > 2) return 100; return Math.floor(Math.abs(dif)); }
 	
 	// Assigns a weight for how likely the controller is to activate its leader ability
 	weightLeader(card, max, data) {
@@ -1508,10 +1491,7 @@ class Game {
 		await this.runEffects(this.gameStart);
 		await this.coinToss();
 		AudioManager.playSFX('redraw');
-		await Promise.all([...Array(10).keys()].map( async () => {
-			await player_me.deck.draw(player_me.hand);
-			await player_op.deck.draw(player_op.hand);
-		}));
+		let isAI = player_op.controller && player_op.controller.constructor.name === "ControllerAI"; let opDrawCount = 10; if (isAI) { let diff = Settings.difficulty.get(); if (diff === "hard") opDrawCount = 11; else if (diff === "easy") opDrawCount = 9; } await Promise.all([...Array(10).keys()].map( async () => { await player_me.deck.draw(player_me.hand); })); await Promise.all([...Array(opDrawCount).keys()].map( async () => { await player_op.deck.draw(player_op.hand); }));
 		AudioManager.playSFX("game_start");
 		await this.initialRedraw();
 		this.currPlayer = this.firstPlayer;
@@ -3243,7 +3223,7 @@ class SavedString
 
 class Settings
 {
-	static music = new ToggleOption("gc-music", true);
+	static difficulty = new SavedString("gc-difficulty", "normal"); static music = new ToggleOption("gc-music", true);
 	static notifications = new ToggleOption("gc-notifications", true);
 	static soundEffects = new ToggleOption("gc-sound-effects", true);
 	static lastFaction = new SavedString("gc-last-faction", "realms"); 
@@ -3599,7 +3579,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
     sfxCheck.checked        = Settings.soundEffects.isEnabled();
     notifCheck.checked      = Settings.notifications.isEnabled();
 
-    updateToggleLabel('fullscreen', s.fullscreen);
+    let diffs = {"easy": "Just the Story", "normal": "Blood and Broken Bones", "hard": "Death March"}; document.getElementById("setting-difficulty-val").textContent = diffs[Settings.difficulty.get()]; updateToggleLabel('fullscreen', s.fullscreen);
     updateToggleLabel('music',      Settings.music.isEnabled());
     updateToggleLabel('sfx',        Settings.soundEffects.isEnabled());
     updateToggleLabel('notifications', Settings.notifications.isEnabled());
@@ -3615,7 +3595,7 @@ document.addEventListener('click', () => userInteracted = true, { once: true });
   function applySettingAtIndex(idx) {
     const row = getSettingRows()[idx];
     const ds  = row.dataset.setting;
-    if (ds === 'back') { closeSettings(); return; }
+    if (ds === 'back') { closeSettings(); return; } if (ds === 'difficulty') { let vals = ["easy", "normal", "hard"]; let diffs = ["Just the Story", "Blood and Broken Bones", "Death March"]; let nextIdx = (vals.indexOf(Settings.difficulty.get()) + 1) % 3; Settings.difficulty.set(vals[nextIdx]); document.getElementById("setting-difficulty-val").textContent = diffs[nextIdx]; } else
     if (ds === 'fullscreen') {
       const chk = document.getElementById('setting-fullscreen');
       chk.checked = !chk.checked;
@@ -3952,3 +3932,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+
+
+
+
+
