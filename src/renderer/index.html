@@ -92,7 +92,7 @@
 			<div class="settings-right-pane">
 				<div class="settings-list settings-group active" id="settings-group-general">
 					
-					<div class="setting-row active" data-setting="difficulty"><span class="setting-label">Difficulty</span><span class="setting-value" style="color:#e5cd85;" id="setting-difficulty-val">Blood and Broken Bones</span></div><div class="setting-row" data-setting="fullscreen">
+					<div class="setting-row active" data-setting="fullscreen">
 						<span class="setting-label">Fullscreen</span>
 						<span class="setting-value"><span class="setting-toggle on" id="setting-fullscreen-val">ON</span><div class="setting-slider"></div></span>
 						<input type="checkbox" id="setting-fullscreen" class="hidden-check">
@@ -669,6 +669,56 @@
 			<button id="mp-back-btn" class="mp-btn" onclick="closeMultiplayerLobby()">BACK TO MENU</button>
 		</div>
 	</section>
+
+<!-- Difficulty Picker Overlay (shown before each new single-player game) -->
+<div id="difficulty-picker" class="hide" style="
+	position:fixed; inset:0; z-index:9999;
+	background: rgba(0,0,0,0.88);
+	display:flex; align-items:center; justify-content:center;
+">
+	<div style="
+		background: linear-gradient(160deg,#1a1208 0%,#2c1d0a 100%);
+		border: 2px solid #b68b44;
+		border-radius: 0.5vw;
+		padding: 2.5vw 3vw;
+		min-width: 36vw;
+		box-shadow: 0 0 4vw rgba(0,0,0,0.9);
+		display:flex; flex-direction:column; align-items:center; gap:1.5vw;
+	">
+		<img src="assets/img/gwent_logo.png" alt="Gwent" style="width:10vw; margin-bottom:0.5vw; filter:drop-shadow(0 0 1vw #b68b44);">
+		<h2 style="font-family:'Cinzel',serif; color:#e5cd85; font-size:1.6vw; letter-spacing:0.18em; margin:0;">SELECT DIFFICULTY</h2>
+		<p style="color:#aaa; font-size:0.9vw; margin:0; text-align:center; line-height:1.6;">Choose how challenging the AI opponent will be for this game.</p>
+		<div id="diff-picker-btns" style="display:flex; flex-direction:column; gap:0.8vw; width:100%; margin-top:0.5vw;">
+			<button class="diff-btn" data-diff="easy" style="
+				font-family:'Cinzel',serif; font-size:1.1vw; letter-spacing:0.12em;
+				background:linear-gradient(90deg,#2a1a06,#3d2710); color:#e5cd85;
+				border:1px solid #b68b44; padding:0.9vw 1.5vw; cursor:pointer;
+				border-radius:0.3vw; text-align:left; transition: background 0.2s;
+			">
+				<span style="font-size:1.25vw; font-weight:700;">JUST THE STORY</span>
+				<span style="display:block; color:#aaa; font-family:sans-serif; font-size:0.78vw; margin-top:0.2vw; letter-spacing:0.05em;">The AI makes sub-optimal plays and concedes rounds early. Ideal for learning the game.</span>
+			</button>
+			<button class="diff-btn" data-diff="normal" style="
+				font-family:'Cinzel',serif; font-size:1.1vw; letter-spacing:0.12em;
+				background:linear-gradient(90deg,#2a1a06,#3d2710); color:#e5cd85;
+				border:1px solid #b68b44; padding:0.9vw 1.5vw; cursor:pointer;
+				border-radius:0.3vw; text-align:left; transition: background 0.2s;
+			">
+				<span style="font-size:1.25vw; font-weight:700;">BLOOD AND BROKEN BONES</span>
+				<span style="display:block; color:#aaa; font-family:sans-serif; font-size:0.78vw; margin-top:0.2vw; letter-spacing:0.05em;">A balanced, thoughtful opponent. Recommended for most players.</span>
+			</button>
+			<button class="diff-btn" data-diff="hard" style="
+				font-family:'Cinzel',serif; font-size:1.1vw; letter-spacing:0.12em;
+				background:linear-gradient(90deg,#2a1a06,#3d2710); color:#e5cd85;
+				border:1px solid #b68b44; padding:0.9vw 1.5vw; cursor:pointer;
+				border-radius:0.3vw; text-align:left; transition: background 0.2s;
+			">
+				<span style="font-size:1.25vw; font-weight:700;">DEATH MARCH ☠</span>
+				<span style="display:block; color:#aaa; font-family:sans-serif; font-size:0.78vw; margin-top:0.2vw; letter-spacing:0.05em;">The AI always plays the optimal card and never surrenders. Only for expert Gwent players.</span>
+			</button>
+		</div>
+	</div>
+</div>
 
 </body>
 

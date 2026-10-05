@@ -1678,11 +1678,13 @@ class Game {
 
 	newOpponentGame()
 	{
-		this.reset();
-		player_me.reset();
-		player_op = new Player('op', 'Player 2', dm.constructOpponentDeck(false));
-		this.endScreen.classList.add("hide");
-		this.startGame();
+		showDifficultyPicker(() => {
+			this.reset();
+			player_me.reset();
+			player_op = new Player('op', 'Player 2', dm.constructOpponentDeck(false));
+			this.endScreen.classList.add("hide");
+			this.startGame();
+		});
 	}
 	
 	// Restarts the last game with the dame decks
@@ -2814,13 +2816,13 @@ class DeckMaker {
 			return;
 		}
 
-		const op_deck = this.constructOpponentDeck(true);
-		
-		player_me = new Player(0, "Player 1", me_deck);
-		player_op = new Player(1, "Player 2", op_deck);
-		
-		NavigationManager.showScreen('game-view');
-		game.startGame();
+		showDifficultyPicker(() => {
+			const op_deck = this.constructOpponentDeck(true);
+			player_me = new Player(0, "Player 1", me_deck);
+			player_op = new Player(1, "Player 2", op_deck);
+			NavigationManager.showScreen('game-view');
+			game.startGame();
+		});
 	}
 
 	constructOpponentDeck(useCustom = true)
@@ -3939,3 +3941,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+
+
+// Shows a difficulty picker overlay before a new single-player game.
+// Calls callback once the player clicks a difficulty button.
+function showDifficultyPicker(callback) {
+    const picker = document.getElementById('difficulty-picker');
+    if (!picker) { callback(); return; }
+    picker.classList.remove('hide');
+    const btns = picker.querySelectorAll('.diff-btn');
+    btns.forEach(btn => {
+        btn.onmouseenter = () => { btn.style.background = 'linear-gradient(90deg,#4a2a0a,#6a3a0a)'; btn.style.borderColor = '#e5cd85'; };
+        btn.onmouseleave = () => { btn.style.background = 'linear-gradient(90deg,#2a1a06,#3d2710)'; btn.style.borderColor = '#b68b44'; };
+        btn.onclick = () => {
+            Settings.difficulty.set(btn.dataset.diff);
+            picker.classList.add('hide');
+            // Reset hover states
+            btns.forEach(b => { b.style.background = 'linear-gradient(90deg,#2a1a06,#3d2710)'; b.style.borderColor = '#b68b44'; });
+            callback();
+        };
+    });
+}
